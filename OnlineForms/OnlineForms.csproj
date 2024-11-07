@@ -51,17 +51,20 @@
       <HintPath>..\packages\AngleSharp.0.14.0\lib\net472\AngleSharp.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Users\bkprothero\source\repos\WSI.OnlineForms\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Users\bkprothero\source\repos\WSI.OnlineForms\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
-    <Reference Include="itd-services">
-      <HintPath>..\_Assemblies\itd-services.dll</HintPath>
+    <Reference Include="itd-services, Version=1.0.6745.24809, Culture=neutral, PublicKeyToken=3e29298982e0d83a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Users\bkprothero\source\repos\WSI.OnlineForms\_Assemblies\itd-services.dll</HintPath>
     </Reference>
     <Reference Include="itd-utilities, Version=1.0.6745.24809, Culture=neutral, PublicKeyToken=34f437e0364bf8c7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\_Assemblies\itd-utilities.dll</HintPath>
+      <HintPath>..\..\..\..\..\Users\bkprothero\source\repos\WSI.OnlineForms\_Assemblies\itd-utilities.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Azure.ActiveDirectory.GraphClient, Version=2.1.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Azure.ActiveDirectory.GraphClient.2.1.0\lib\portable-net4+sl5+win+wpa+wp8\Microsoft.Azure.ActiveDirectory.GraphClient.dll</HintPath>
@@ -229,11 +232,13 @@
     <Reference Include="Oracle.ManagedDataAccess">
       <HintPath>\\ndgov\wsi\wsi-is_team\DEVELOP\CODE\.NET Assemblies\WSI.Utility\Oracle.ManagedDataAccess.dll</HintPath>
     </Reference>
-    <Reference Include="PnP.Core">
-      <HintPath>\\ndgov\wsi\wsi-is_team\DEVELOP\CODE\.NET Assemblies\Authentication\PnP.Core.dll</HintPath>
+    <Reference Include="PnP.Core, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Users\bkprothero\source\repos\WSI.OnlineForms\OnlineForms\PnP.Core.dll</HintPath>
     </Reference>
-    <Reference Include="PnP.Framework">
-      <HintPath>\\ndgov\wsi\wsi-is_team\DEVELOP\CODE\.NET Assemblies\Authentication\PnP.Framework.dll</HintPath>
+    <Reference Include="PnP.Framework, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Users\bkprothero\source\repos\WSI.OnlineForms\OnlineForms\PnP.Framework.dll</HintPath>
     </Reference>
     <Reference Include="SharePointPnP.IdentityModel.Extensions, Version=1.2.4.0, Culture=neutral, PublicKeyToken=5e633289e95c321a, processorArchitecture=MSIL">
       <HintPath>..\packages\SharePointPnP.IdentityModel.Extensions.1.2.4\lib\net45\SharePointPnP.IdentityModel.Extensions.dll</HintPath>
@@ -407,11 +412,13 @@
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
-    <Reference Include="WSI.Utility.Authentication">
-      <HintPath>\\ndgov\wsi\wsi-is_team\DEVELOP\CODE\.NET Assemblies\Authentication\WSI.Utility.Authentication.dll</HintPath>
+    <Reference Include="WSI.Utility.Authentication, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1661cbd636166525, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Users\bkprothero\source\repos\WSI.OnlineForms\OnlineForms\WSI.Utility.Authentication.dll</HintPath>
     </Reference>
-    <Reference Include="WSI.Utility.Database">
-      <HintPath>\\ndgov\wsi\wsi-is_team\DEVELOP\CODE\.NET Assemblies\WSI.Utility\WSI.Utility.Database.dll</HintPath>
+    <Reference Include="WSI.Utility.Database, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Users\bkprothero\source\repos\WSI.OnlineForms\OnlineForms\WSI.Utility.Database.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -679,7 +686,11 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Logging\Logging.csproj">
+    <ProjectReference Include="..\..\..\..\..\Users\bkprothero\source\repos\WSI.OnlineForms\Email\Email.csproj">
+      <Project>{508c4388-d93c-49bc-9643-32ea915bf889}</Project>
+      <Name>Email</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\Users\bkprothero\source\repos\WSI.OnlineForms\Logging\Logging.csproj">
       <Project>{1181ff1e-50a5-4c2c-b623-6d3754b90d02}</Project>
       <Name>Logging</Name>
     </ProjectReference>
