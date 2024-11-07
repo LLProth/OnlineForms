@@ -1,0 +1,424 @@
+﻿@model  OnlineForms.ViewModels.SFN52712ViewModel
+
+
+@{
+    ViewBag.Title = "Authorization for Out of State Travel";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    @section topHeader {
+        @Html.Partial("~/Views/Shared/_PrintHeader.cshtml", (Dictionary<string, string>)ViewBag.FormInfo)
+    }
+    @using (Html.BeginForm("Print/", "SFN52712", new { id = ViewBag.ID }, FormMethod.Post, new { id = "ApprovalForm" }))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="row row-cols-1 border border-dark border-bottom-0">
+            <div class="col text-start fw-bold border border-dark border-bottom-0">
+                @Html.LabelFor(m => m.TravelAuthoriztionModel.DepartmentBudget, htmlAttributes: new { @for = "departmentBudget", @class = "fw-bold" })
+                <div class="fs-7 fw-bold bg-white">
+                    @Html.DisplayFor(m => m.TravelAuthoriztionModel.DepartmentBudget)
+                </div>
+            </div>
+        </div>
+
+        <div class="row row-cols-2 border border-dark border-bottom-0">
+            <div class="col text-start fw-bold border border-dark border-bottom-0">
+                @Html.LabelFor(m => m.TravelAuthoriztionModel.Name, htmlAttributes: new { @for = "travelName", @class = "fw-bold" })
+                <div class="fs-7 fw-bold bg-white">
+                    @Html.DisplayFor(m => m.TravelAuthoriztionModel.Name)
+                </div>
+            </div>
+            <div class="col text-start fw-bold border border-dark border-bottom-0">
+                @Html.LabelFor(m => m.TravelAuthoriztionModel.Title, htmlAttributes: new { @for = "travelTitle", @class = "fw-bold" })
+                <div class="fs-7 fw-bold bg-white">
+                    @Html.DisplayFor(m => m.TravelAuthoriztionModel.Title)
+                </div>
+            </div>
+        </div>
+
+        <div class="row border border-dark border-bottom-0">
+            <div class="col-12  text-start fw-bold border border-dark border-bottom-0">Destinations(s) (City and State)</div>
+        </div>
+        for (int i = 0; i < Model.SFN52712Destinations.Count; i++)
+        {
+            var hide = "";
+            if (i > 0)
+            {
+                hide = "display: block;";
+            }
+            else
+            {
+                hide = "display: none;";
+            }
+            <div class="row mb-2" destination-item="@(i + 1)">
+                <div class="col-8 text-start fw-bold border border-dark border-bottom-0">
+                    @Html.LabelFor(m => m.SFN52712Destination.City, htmlAttributes: new { @for = "travelCity", @class = "fw-bold" })
+                    <div class="fs-7 fw-bold bg-white">
+                        @Html.DisplayFor(m => m.SFN52712Destination.City)
+                    </div>
+                </div>
+                <div class="col-4 text-start fw-bold border border-dark border-bottom-0">
+                    @Html.LabelFor(m => m.SFN52712Destination.State, htmlAttributes: new { @for = "travelState", @class = "fw-bold" })
+                    <div class="fs-7 fw-bold bg-white">
+                        @Html.DisplayFor(m => m.SFN52712Destination.State)
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div class="row row-cols-6 border border-dark border-bottom-0">
+            <div class="col text-start fw-bold border border-dark border-bottom-0">
+                @Html.LabelFor(m => m.TravelAuthoriztionModel.PreferredDepartureDate, htmlAttributes: new { @for = "PreferredDepartureDate", @class = "fw-bold" })
+                <div class="fs-7 fw-bold bg-white">
+                    @Model.TravelAuthoriztionModel.PreferredDepartureDate.ToShortDateString()
+                </div>
+            </div>
+            <div class="col text-start fw-bold border border-dark border-bottom-0">
+                @Html.LabelFor(m => m.TravelAuthoriztionModel.EventStartDate, htmlAttributes: new { @for = "EventStartDate", @class = "fw-bold" })
+                <div class="fs-7 fw-bold bg-white">
+                    @Model.TravelAuthoriztionModel.EventStartDate.ToShortDateString()
+                </div>
+            </div>
+            <div class="col  text-start fw-bold border border-dark border-bottom-0">
+                @Html.LabelFor(m => m.TravelAuthoriztionModel.EventStartTime, htmlAttributes: new { @for = "EventStartTime", @class = "fw-bold" })
+                <div class="fs-7 fw-bold bg-white">
+                    @Html.DisplayFor(m => m.TravelAuthoriztionModel.EventStartTime)
+                </div>
+            </div>
+            <div class="col text-start fw-bold border border-dark border-bottom-0">
+                @Html.LabelFor(m => m.TravelAuthoriztionModel.EventEndDate, htmlAttributes: new { @for = "EventEndDate", @class = "fw-bold" })
+                <div class="fs-7 fw-bold bg-white">
+                    @Model.TravelAuthoriztionModel.EventEndDate.ToShortDateString()
+                </div>
+            </div>
+            <div class="col text-start fw-bold border border-dark border-bottom-0">
+                @Html.LabelFor(m => m.TravelAuthoriztionModel.EventEndTime, htmlAttributes: new { @for = "EventEndTime", @class = "fw-bold" })
+                <div class="fs-7 fw-bold bg-white">
+                    @Html.DisplayFor(m => m.TravelAuthoriztionModel.EventEndTime)
+                </div>
+            </div>
+            <div class="col text-start fw-bold border border-dark border-bottom-0">
+                @Html.LabelFor(m => m.TravelAuthoriztionModel.PreferredReturnDate, htmlAttributes: new { @for = "PreferredReturnDate", @class = "fw-bold" })
+                <div class="fs-7 fw-bold bg-white">
+                    @Model.TravelAuthoriztionModel.PreferredReturnDate.ToShortDateString()
+                </div>
+            </div>
+        </div>
+
+        <div class="row row-cols-2 border border-dark border-bottom-0">
+            <div class="col text-start fw-bold border border-dark border-bottom-0">
+                @Html.LabelFor(m => m.TravelAuthoriztionModel.IncludeVacationDays, htmlAttributes: new { @for = "", @class = "fw-bold req-form-long-label" })
+                <div radio-button-control>
+                    <label class="pe-4">@Html.RadioButtonFor(m => m.TravelAuthoriztionModel.IncludeVacationDays, "true", new { @readonly = "readonly" }) Yes</label>
+                    <label>@Html.RadioButtonFor(m => m.TravelAuthoriztionModel.IncludeVacationDays, "false", new { @readonly = "readonly" }) No</label>
+                </div>
+
+            </div>
+            <div class="col text-start fw-bold border border-dark border-bottom-0">
+                @Html.LabelFor(m => m.TravelAuthoriztionModel.MethodOfTravel, htmlAttributes: new { @for = "travelMethod", @class = "fw-bold" })
+                <div class="fs-7 fw-bold bg-white">
+                    @Html.DisplayFor(m => m.TravelAuthoriztionModel.MethodOfTravel)
+                </div>
+            </div>
+        </div>
+
+        <div id="othersection" class="row row-cols-1 border border-dark border-bottom-0">
+            <div class="col text-start fw-bold border border-dark border-bottom-0">
+                @Html.Label("Other Explain", htmlAttributes: new { @for = "otherTravelMethod", @class = "fw-bold" })
+                <div class="fs-7 fw-bold bg-white">
+                    @ViewBag.OtherMethodofTravel
+                </div>
+            </div>
+        </div>
+
+        string dob;
+        if (ViewBag.FlightExist == true)
+        {
+            dob = Model.FlightInfo.DateofBirth.ToString("yyyy-MM-dd");
+        }
+        else
+        {
+            dob = "";
+        }
+
+        <div id="flightsection" class="row row-cols-1 border border-dark border-bottom-0">
+            <div class="text-start fw-bold border border-dark border-bottom-0" radio-button-control>
+                @Html.LabelFor(m => m.FlightInfo.EmpBookFlight, htmlAttributes: new { @for = "", @class = "fw-bold" })
+                <label class="pe-4">@Html.RadioButtonFor(m => m.FlightInfo.EmpBookFlight, "true") Yes</label>
+                <label>@Html.RadioButtonFor(m => m.FlightInfo.EmpBookFlight, "false") No</label>
+            </div>
+            <div class="col text-start fw-bold border border-dark border-bottom-0">
+                @Html.LabelFor(m => m.FlightInfo.FreqFlierNumber, htmlAttributes: new { @for = "", @class = "fw-bold" })
+                <div class="fs-7 fw-bold bg-white">
+                    @Html.DisplayFor(m => m.FlightInfo.FreqFlierNumber)
+                </div>
+            </div>
+            <div class="col text-start fw-bold border border-dark border-bottom-0">
+                @Html.LabelFor(m => m.FlightInfo.GovernemtIdName, htmlAttributes: new { @for = "", @class = "fw-bold" })
+                <div class="fs-7 fw-bold bg-white">
+                    @Html.DisplayFor(m => m.FlightInfo.GovernemtIdName)
+                </div>
+            </div>
+            <div class="col text-start fw-bold border border-dark border-bottom-0">
+                @Html.LabelFor(m => m.FlightInfo.DateofBirth, htmlAttributes: new { @for = "", @class = "fw-bold" })
+                <div class="fs-7 fw-bold bg-white">
+                    @Html.DisplayFor(m => m.FlightInfo.DateofBirth)
+                </div>
+            </div>
+            <div class="col text-start fw-bold border border-dark border-bottom-0">
+                @Html.LabelFor(m => m.FlightInfo.TravelContactNumber, htmlAttributes: new { @for = "", @class = "fw-bold" })
+                <div class="fs-7 fw-bold bg-white">
+                    @Html.DisplayFor(m => m.FlightInfo.TravelContactNumber)
+                </div>
+            </div>
+            <div class="col text-start fw-bold border border-dark border-bottom-0">
+                @Html.LabelFor(m => m.FlightInfo.SeatPreference, htmlAttributes: new { @for = "", @class = "fw-bold" })
+                <div class="fs-7 fw-bold bg-white">
+                    @Html.DisplayFor(m => m.FlightInfo.SeatPreference)
+                </div>
+            </div>
+        </div>
+
+        <div class="row row-cols-1 border border-dark border-bottom-0">
+            <div class="col text-start fw-bold border border-dark border-bottom-0">
+                @Html.LabelFor(m => m.TravelAuthoriztionModel.PurposeOfTrip, htmlAttributes: new { @for = "PurposeOfTrip", @class = "fw-bold" })
+                <div class="fs-7 fw-bold bg-white">
+                    @Html.DisplayFor(m => m.TravelAuthoriztionModel.PurposeOfTrip)
+                </div>
+            </div>
+        </div>
+
+        <div class="row row-cols-1 border border-dark mb-1">
+            <div class="col text-start fw-bold border border-dark border-bottom-0">
+                @Html.LabelFor(m => m.TravelAuthoriztionModel.NumberOfPersons, htmlAttributes: new { @for = "NumberOfPersons", @class = "fw-bold" })
+                <div class="fs-7 fw-bold bg-white">
+                    @Html.DisplayFor(m => m.TravelAuthoriztionModel.MethodOfTravel)
+                </div>
+            </div>
+        </div>
+
+        <div class="row row-cols-6 border border-dark border-bottom-0">
+            <div class="col-2 text-center fw-bold req-item-form-header">
+                Transportation
+            </div>
+            <div class="col-2 text-center fw-bold req-item-form-header">
+                Per Diem
+            </div>
+            <div class="col-2 text-center fw-bold req-item-form-header">
+                Lodging
+            </div>
+            <div class="col-2 text-center fw-bold req-item-form-header">
+                Registration
+            </div>
+            <div class="col-2 text-center fw-bold req-item-form-header">
+                Rental Car/Taxi
+            </div>
+            <div class="col-2 text-center fw-bold req-item-form-header">
+                Estimated Total Cost
+            </div>
+        </div>
+
+        <div class="row row-cols-6 border border-dark mb-1" style="height: 30px">
+            <div class="col text-start fw-bold border border-dark border-bottom-0">
+                <div class="fs-7 fw-bold bg-white">
+                    <span class="prefix fw-bold">$ @Html.DisplayFor(m => m.TravelAuthoriztionModel.Transportation)</span>
+                </div>
+            </div>
+            <div class="col text-start fw-bold border border-dark border-bottom-0">
+                <div class="fs-7 fw-bold bg-white">
+                    <span class="prefix fw-bold">$ @Html.DisplayFor(m => m.TravelAuthoriztionModel.PerDiem)</span>
+                </div>
+            </div>
+            <div class="col text-start fw-bold border border-dark border-bottom-0">
+                <div class="fs-7 fw-bold bg-white">
+                    <span class="prefix fw-bold">$ @Html.DisplayFor(m => m.TravelAuthoriztionModel.Lodging)</span>
+                </div>
+            </div>
+            <div class="col text-start fw-bold border border-dark border-bottom-0">
+                <div class="fs-7 fw-bold bg-white">
+                    <span class="prefix fw-bold">$ @Html.DisplayFor(m => m.TravelAuthoriztionModel.Registration)</span>
+                </div>
+            </div>
+            <div class="col text-start fw-bold border border-dark border-bottom-0">
+                <div class="fs-7 fw-bold bg-white">
+                    <span class="prefix fw-bold">$ @Html.DisplayFor(m => m.TravelAuthoriztionModel.RentalCarTaxi)</span>
+                </div>
+            </div>
+            <div class="col text-start fw-bold border border-dark border-bottom-0">
+                <div class="fs-7 fw-bold bg-white">
+                    <span class="prefix fw-bold">$ @Html.DisplayFor(m => m.TravelAuthoriztionModel.EstimatedTotalCost)</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row row-cols-1 border border-dark mb-1">
+            <div class="col text-start fw-bold border border-dark border-bottom-0">
+                @Html.LabelFor(m => m.TravelAuthoriztionModel.Comments, htmlAttributes: new { @for = "Comments", @class = "fw-bold" })
+                <div class="fs-7 fw-bold bg-white">
+                    @Html.DisplayFor(m => m.TravelAuthoriztionModel.Comments)
+                </div>
+            </div>
+        </div>
+
+        <div class="row border border-dark border-bottom-0">
+            <div class="col-8 text-start fw-bold border border-dark border-bottom-0">
+                @Html.LabelFor(m => m.SFN52712Approvals.PersonTravelingSignature, htmlAttributes: new { @for = "itSignature", @class = "fw-bold req-form-long-label" })
+                <div class="fs-7 fw-bold bg-white">
+                    @Html.DisplayFor(m => m.SFN52712Approvals.PersonTravelingSignature)
+                </div>
+            </div>
+            <div class="col-4 text-start fw-bold border border-dark border-bottom-0">
+                @Html.LabelFor(m => m.SFN52712Approvals.PersonTravelingSignatureDate, htmlAttributes: new { @for = "itSignatureDate", @class = "fw-bold" })
+                <div class="fs-7 fw-bold bg-white">
+                    @Html.DisplayFor(m => m.SFN52712Approvals.PersonTravelingSignatureDate)
+                </div>
+            </div>
+        </div>
+        if (Model.TravelAuthoriztionModel.FormSubmitted == true)
+        {
+            if (!Model.SFN52712Approvals.PersonTravelingSignature.IsEmpty() && !Model.SFN52712Approvals.SupervisorSignature.IsEmpty())
+            {
+                <div class="row border border-dark border-bottom-0">
+                    <div class="col-8 text-start fw-bold border border-dark border-bottom-0">
+                        @Html.LabelFor(m => m.SFN52712Approvals.SupervisorSignature, htmlAttributes: new { @for = "itSignature", @class = "fw-bold req-form-long-label" })
+                        <div class="fs-7 fw-bold bg-white">
+                            @Html.DisplayFor(m => m.SFN52712Approvals.SupervisorSignature)
+                        </div>
+                    </div>
+                    <div class="col-4 text-start fw-bold border border-dark border-bottom-0">
+                        @Html.LabelFor(m => m.SFN52712Approvals.SupervisorSignatureDate, htmlAttributes: new { @for = "itSignatureDate", @class = "fw-bold" })
+                        <div class="fs-7 fw-bold bg-white">
+                            @Html.DisplayFor(m => m.SFN52712Approvals.SupervisorSignatureDate)
+                        </div>
+                    </div>
+                </div>
+            }
+            if (!Model.SFN52712Approvals.PersonTravelingSignature.IsEmpty() && !Model.SFN52712Approvals.DepartmentBudgetManagerSignature.IsEmpty())
+            {
+                <div class="row border border-dark border-bottom-0">
+                    <div class="col-8 text-start fw-bold border border-dark border-bottom-0">
+                        @Html.LabelFor(m => m.SFN52712Approvals.DepartmentBudgetManagerSignature, htmlAttributes: new { @for = "DepartmentBudgetManagerSignature", @class = "fw-bold req-form-long-label" })
+                        <div class="fs-7 fw-bold bg-white">
+                            @Html.DisplayFor(m => m.SFN52712Approvals.DepartmentBudgetManagerSignature)
+                        </div>
+                    </div>
+                    <div class="col-4 text-start fw-bold border border-dark border-bottom-0">
+                        @Html.LabelFor(m => m.SFN52712Approvals.DepartmentBudgetManagerSignatureDate, htmlAttributes: new { @for = "DepartmentBudgetManagerSignatureDate", @class = "fw-bold" })
+                        <div class="fs-7 fw-bold bg-white">
+                            @Html.DisplayFor(m => m.SFN52712Approvals.DepartmentBudgetManagerSignatureDate)
+                        </div>
+                    </div>
+                </div>
+            }
+
+            if (!Model.SFN52712Approvals.PersonTravelingSignature.IsEmpty() && !Model.SFN52712Approvals.DivisionChiefSignature.IsEmpty())
+            {
+                <div class="row border border-dark border-bottom-0">
+                    <div class="col-8 text-start fw-bold border border-dark border-bottom-0">
+                        @Html.LabelFor(m => m.SFN52712Approvals.DivisionChiefSignature, htmlAttributes: new { @for = "DivisionChiefSignature", @class = "fw-bold req-form-long-label" })
+                        <div class="fs-7 fw-bold bg-white">
+                            @Html.DisplayFor(m => m.SFN52712Approvals.DivisionChiefSignature)
+                        </div>
+                    </div>
+                    <div class="col-4 text-start fw-bold border border-dark border-bottom-0">
+                        @Html.LabelFor(m => m.SFN52712Approvals.DivisionChiefSignatureDate, htmlAttributes: new { @for = "DivisionChiefSignatureDate", @class = "fw-bold" })
+                        <div class="fs-7 fw-bold bg-white">
+                            @Html.DisplayFor(m => m.SFN52712Approvals.DivisionChiefSignatureDate)
+                        </div>
+                    </div>
+                </div>
+            }
+
+            if (!Model.SFN52712Approvals.PersonTravelingSignature.IsEmpty() && !Model.SFN52712Approvals.DirectorofFinanceSignature.IsEmpty())
+            {
+                <div class="row border border-dark border-bottom-0">
+                    <div class="col-8 text-start fw-bold border border-dark border-bottom-0">
+                        @Html.LabelFor(m => m.SFN52712Approvals.DirectorofFinanceSignature, htmlAttributes: new { @for = "DirectorofFinanceSignature", @class = "fw-bold req-form-long-label" })
+                        <div class="fs-7 fw-bold bg-white">
+                            @Html.DisplayFor(m => m.SFN52712Approvals.DirectorofFinanceSignature)
+                        </div>
+                    </div>
+                    <div class="col-4 text-start fw-bold border border-dark border-bottom-0">
+                        @Html.LabelFor(m => m.SFN52712Approvals.DirectorofFinanceSignatureDate, htmlAttributes: new { @for = "DirectorofFinanceSignatureDate", @class = "fw-bold" })
+                        <div class="fs-7 fw-bold bg-white">
+                            @Html.DisplayFor(m => m.SFN52712Approvals.DirectorofFinanceSignatureDate)
+                        </div>
+                    </div>
+                </div>
+            }
+
+            if (!Model.SFN52712Approvals.PersonTravelingSignature.IsEmpty() && !Model.SFN52712Approvals.DirectorSignature.IsEmpty())
+            {
+                <div class="row border border-dark mb-1">
+                    <div class="col-8 text-start fw-bold border border-dark border-bottom-0">
+                        @Html.LabelFor(m => m.SFN52712Approvals.DirectorSignature, htmlAttributes: new { @for = "DirectorSignature", @class = "fw-bold req-form-long-label" })
+                        <div class="fs-7 fw-bold bg-white">
+                            @Html.DisplayFor(m => m.SFN52712Approvals.DirectorSignature)
+                        </div>
+                    </div>
+                    <div class="col-4 text-start fw-bold border border-dark border-bottom-0">
+                        @Html.LabelFor(m => m.SFN52712Approvals.DirectorSignatureDate, htmlAttributes: new { @for = "DirectorSignatureDate", @class = "fw-bold" })
+                        <div class="fs-7 fw-bold bg-white">
+                            @Html.DisplayFor(m => m.SFN52712Approvals.DirectorSignatureDate)
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+
+<div class="row">
+    <div class="col-3">
+        <button id="submitButton" type="button" onclick="printPage()" class="w-100" data-dismiss="modal">Print</button>
+    </div>    
+</div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <partial name="_ValidationScriptsPartial" />
+
+    <script type="text/javascript">
+        numDestItems = 1;
+        $(function () {
+            $("[currencymask]").inputmask({ alias: "currency", groupSeparator: "," });
+        });
+
+        $("#otherTravelMethod").html("@ViewBag.OtherMethodofTravel");
+
+        window.onload = function () {
+            otherMethod();
+        };
+
+        function otherMethod() {
+            var method = @Html.Raw(Json.Encode(Model.TravelAuthoriztionModel.MethodOfTravel));
+
+            if (method == "Other (Explain)") {
+                $('#othersection').show();
+            } else {
+                $('#othersection').hide();
+            }
+
+            if (method == "Commercial Air") {
+                $('#flightsection').show();
+            } else {
+                $('#flightsection').hide();
+            }
+        }
+
+        function printPage() {
+            window.print();
+        }
+    </script>
+    <style>
+        #flightsection, #othersection {
+            display: none;
+        }
+    </style>
+}
+
+

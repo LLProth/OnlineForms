@@ -1,0 +1,590 @@
+﻿@model OnlineForms.ViewModels.ESCRFViewModel
+@{
+    ViewBag.FormInfo = new Dictionary<string, string>();
+    ViewBag.FormInfo.Add("FormName", "Employee Status Change Request Form");
+    ViewBag.FormInfo.Add("Division", "Human Resource Division");
+    ViewBag.FormInfo.Add("Info", "New Hire Print");
+}
+
+
+
+@section topHeader {
+    @Html.Partial("~/Views/Shared/_ESCRFHeader.cshtml", (Dictionary<string, string>)ViewBag.FormInfo)
+}
+
+<body onload="window.print()">
+    <div id="notPrint">
+        <div>
+            <div class="row mb-5 ">
+                <div class="form-group col-5 form-floating">
+                    @Html.EditorFor(m => m.NewHire.FirstName, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = Html.DisplayNameFor(m => m.NewHire.FirstName), @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.NewHire.FirstName, htmlAttributes: new { @class = "fw-bold" })
+                </div>
+                <div class="form-group col-5 form-floating">
+                    @Html.EditorFor(m => m.NewHire.LastName, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = Html.DisplayNameFor(m => m.NewHire.LastName), @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.NewHire.LastName, htmlAttributes: new { @class = "fw-bold" })
+                </div>
+                <div class="form-group col-2 form-floating">
+                    @Html.EditorFor(m => m.NewHire.MiddleInitial, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = Html.DisplayNameFor(m => m.NewHire.MiddleInitial), @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.NewHire.MiddleInitial, htmlAttributes: new { @class = "fw-bold" })
+                </div>
+            </div>
+            <div class="row mb-5">
+                <div class="form-group col-4 form-floating">
+                    @Html.EditorFor(m => m.NewHire.JobTitle, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = Html.DisplayNameFor(m => m.NewHire.JobTitle), @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.NewHire.JobTitle, htmlAttributes: new { @class = "fw-bold" })
+                </div>
+                <div class="form-group col-4 form-floating">
+                    @Html.EditorFor(m => m.NewHire.EffectiveDate, new { htmlAttributes = new { @class = "form-control fw-bold", @Value = Model.NewHire.EffectiveDate.ToShortDateString(), @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.NewHire.EffectiveDate, htmlAttributes: new { @class = "fw-bold" })
+                </div>
+                <div class="form-group col-4 form-floating">
+                    @Html.EditorFor(m => m.NewHire.CurrentSupervisor, new { htmlAttributes = new { @class = "form-control fw-bold w-100", @placeholder = Html.DisplayNameFor(m => m.NewHire.CurrentSupervisor), @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.NewHire.CurrentSupervisor, htmlAttributes: new { @class = "fw-bold" })
+                </div>
+            </div>
+            <div class="row mb-5">
+                <div class="form-group col-4 form-floating">
+                    @Html.EditorFor(m => m.NewHire.EmployeeType, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = Html.DisplayNameFor(m => m.NewHire.EmployeeType), @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.NewHire.EmployeeType, htmlAttributes: new { @class = "fw-bold" })
+                </div>
+                <div class="form-group col-4 form-floating">
+                    @Html.EditorFor(m => m.NewHire.FLSAStatus, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = Html.DisplayNameFor(m => m.NewHire.FLSAStatus), @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.NewHire.FLSAStatus, htmlAttributes: new { @class = "fw-bold" })
+                </div>
+                <div class="form-group col-4">
+                    @Html.CheckBoxFor(m => m.NewHire.TransferringFromAgency, htmlAttributes: new { @disabled = "disabled" })
+                    @Html.LabelFor(m => m.NewHire.TransferringFromAgency, htmlAttributes: new { @class = "fw-bold" })
+                    @Html.ValidationMessageFor(m => m.NewHire.TransferringFromAgency)
+                </div>
+            </div>
+            <div class="row mb-5">
+                <div class="form-group col-12 form-floating">
+                    @Html.EditorFor(m => m.NewHire.Comments, new { htmlAttributes = new { @class = "form-control fw-bold w-100", @placeholder = Html.DisplayNameFor(m => m.NewHire.CurrentSupervisor), @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.NewHire.Comments, htmlAttributes: new { @class = "fw-bold" })
+                </div>
+            </div>
+            <div class="row mb-5 formRow">
+                <div class="form-group col-3 form-floating">
+                    @Html.EditorFor(m => m.NewHire.ModifiedBy, new { htmlAttributes = new { @class = "form-control fw-bold w-100", @placeholder = Html.DisplayNameFor(m => m.NewHire.ModifiedBy), @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.NewHire.ModifiedBy, htmlAttributes: new { @class = "fw-bold" })
+                </div>
+                <div class="form-group col-3 form-floating">
+                    @Html.EditorFor(m => m.NewHire.ChangeType, new { htmlAttributes = new { @class = "form-control fw-bold w-100", @placeholder = Html.DisplayNameFor(m => m.NewHire.ChangeType), @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.NewHire.ChangeType, htmlAttributes: new { @class = "fw-bold" })
+                </div>
+                <div class="form-group col-3 form-floating">
+                    @Html.EditorFor(m => m.NewHire.CreatedDate, new { htmlAttributes = new { @class = "form-control fw-bold", @Value = Model.NewHire.CreatedDate.ToShortDateString(), @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.NewHire.CreatedDate, htmlAttributes: new { @class = "fw-bold" })
+                </div>
+            </div>
+        </div>
+        @Html.HiddenFor(m => m.NewHire.ID)
+        @if (Model.TaskListItemHolder.Count() != 0)
+        {
+            <div id="recentHeading" class="w-100">
+                <h3>Changelist</h3>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            Task:
+                        </th>
+                        <th>
+                            Completed By:
+                        </th>
+                        <th>
+                            Completed On:
+                        </th>
+                        <th>Status</th>
+                        <th>Comments</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (OnlineForms.Models.ESCRFViewModel.TaskListItemModel taskListItem in Model.TaskListItemHolder)
+                    {
+                        if (taskListItem.TaskListID == ViewBag.ID)
+                        {
+
+
+                            <tr>
+                                <td>
+                                    @taskListItem.Task
+                                </td>
+                                <td>
+                                    @taskListItem.Deputy
+                                </td>
+                                @if (taskListItem.SignedOn == DateTime.MinValue)
+                                {
+                                    <td>
+                                        Not Signed
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>
+                                        @taskListItem.SignedOn.ToShortDateString()
+                                    </td>
+                                }
+                                @if (taskListItem.Completed)
+                                {
+                                    <td>Completed</td>
+                                }
+                                else if (taskListItem.NotApplicable)
+                                {
+                                    <td>N/A</td>
+                                }
+                                <td>@taskListItem.Comments</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+
+    <table id="printTable" class="escrfTable">
+
+        <tbody>
+            <tr class="printRow">
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.NewHire.FirstName) <br />
+                    <span class="userInput">@Html.DisplayFor(m => m.NewHire.FirstName)</span>
+                </td>
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.NewHire.LastName) <br />
+                    <span class="userInput">@Model.NewHire.LastName</span>
+                </td>
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.NewHire.MiddleInitial) <br />
+                    <span class="userInput">@Model.NewHire.MiddleInitial</span>
+                </td>
+            </tr>
+            <tr class="printRow">
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.NewHire.JobTitle) <br />
+                    <span class="userInput">@Html.DisplayFor(m => m.NewHire.JobTitle)</span>
+                </td>
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.NewHire.EffectiveDate) <br />
+                    <span class="userInput">@Model.NewHire.EffectiveDate.ToShortDateString()</span>
+                </td>
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.NewHire.TransferringFromAgency) <br />
+                    <span class="userInput">@Model.NewHire.TransferringFromAgency</span>
+                </td>
+            </tr>
+
+            <tr class="printRow">
+                <td class="printCell" colspan="12">
+                    @Html.LabelFor(m => m.NewHire.Comments) <br />
+                    <span class="userInput">@Html.DisplayFor(m => m.NewHire.Comments)</span>
+                </td>
+            </tr>
+
+            <tr class="printRow">
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.NewHire.EmployeeType) <br />
+                    <span class="userInput">@Html.DisplayFor(m => m.NewHire.EmployeeType)</span>
+                </td>
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.NewHire.FLSAStatus) <br />
+                    <span class="userInput">@Model.NewHire.FLSAStatus</span>
+                </td>
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.NewHire.TransferringFromAgency) <br />
+                    <span class="userInput">@Model.NewHire.TransferringFromAgency</span>
+                </td>
+            </tr>
+            <tr class="printRow">
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.NewHire.ModifiedBy) <br />
+                    <span class="userInput">@Html.DisplayFor(m => m.NewHire.ModifiedBy)</span>
+                </td>
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.NewHire.ChangeType) <br />
+                    <span class="userInput">@Model.NewHire.ChangeType</span>
+                </td>
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.NewHire.CreatedDate) <br />
+                    <span class="userInput">@Model.NewHire.CreatedDate.ToShortDateString()</span>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+
+    <table id="printTable">
+
+
+        <thead>
+            <tr class="printHeading">
+                <th colspan="4">Supervisor Tasks</th>
+                <th colspan="2">Completed By</th>
+                <th colspan="2">Completed On</th>
+                <th colspan="2">Status</th>
+                <th colspan="2">Comments</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (OnlineForms.Models.ESCRFViewModel.TaskListItemModel taskListItem in Model.TaskListItemHolder)
+            {
+                if (taskListItem.TaskListID == ViewBag.ID)
+                {
+                    if (taskListItem.Deputy.ToUpper() != "Help Desk" && taskListItem.Deputy.ToUpper() != "IS TECH" && taskListItem.Deputy.ToUpper() != "HR" && taskListItem.Deputy.ToUpper() != "FINANCE" && taskListItem.Deputy.ToUpper() != "ERGO" && !taskListItem.Deputy.ToUpper().Contains("FACILITY"))
+                    {
+                        <tr class="printRow">
+                            <td class="printCell" colspan="4">@taskListItem.Task</td>
+                            <td colspan="2">@taskListItem.CompletedBy</td>
+                            @if (taskListItem.SignedOn == DateTime.MinValue)
+                            {
+                                <td class="printCell" colspan="2">
+                                    Not Signed
+                                </td>
+                            }
+                            else
+                            {
+                                <td class="printCell" colspan="2">
+                                    @taskListItem.SignedOn.ToShortDateString()
+                                </td>
+                            }
+                            @if (taskListItem.Completed)
+                            {
+                                <td class="printCell" colspan="2">Completed</td>
+                            }
+                            else if (taskListItem.NotApplicable)
+                            {
+                                <td class="printCell" colspan="2">N/A</td>
+                            }
+                            else
+                            {
+                                <td class="printCell" colspan="2"></td>
+                            }
+                            <td class="printCell" colspan="2">@taskListItem.Comments</td>
+                        </tr>
+                    }
+                }
+            }
+        </tbody>
+    </table>
+
+    <table id="printTable">
+        <thead>
+            <tr class="printHeading">
+                <th colspan="4">Helpdesk Tasks</th>
+                <th colspan="2">Completed By</th>
+                <th colspan="2">Completed On</th>
+                <th colspan="2">Status</th>
+                <th colspan="2">Comments</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (OnlineForms.Models.ESCRFViewModel.TaskListItemModel taskListItem in Model.TaskListItemHolder)
+            {
+                if (taskListItem.TaskListID == ViewBag.ID)
+                {
+                    if (taskListItem.Deputy.ToUpper() == "HELP DESK")
+                    {
+                        <tr class="printRow">
+                            <td class="printCell" colspan="4">@taskListItem.Task</td>
+                            <td colspan="2">@taskListItem.CompletedBy</td>
+                            @if (taskListItem.SignedOn == DateTime.MinValue)
+                            {
+                                <td class="printCell" colspan="2">
+                                    Not Signed
+                                </td>
+                            }
+                            else
+                            {
+                                <td class="printCell" colspan="2">
+                                    @taskListItem.SignedOn.ToShortDateString()
+                                </td>
+                            }
+                            @if (taskListItem.Completed)
+                            {
+                                <td class="printCell" colspan="2">Completed</td>
+                            }
+                            else if (taskListItem.NotApplicable)
+                            {
+                                <td class="printCell" colspan="2">N/A</td>
+                            }
+                            else
+                            {
+                                <td class="printCell" colspan="2"></td>
+                            }
+                            <td class="printCell" colspan="2">@taskListItem.Comments</td>
+                        </tr>
+                    }
+                }
+            }
+        </tbody>
+    </table>
+
+    <table id="printTable">
+        <thead>
+            <tr class="printHeading">
+                <th colspan="4">IS Tech Tasks</th>
+                <th colspan="2">Completed By</th>
+                <th colspan="2">Completed On</th>
+                <th colspan="2">Status</th>
+                <th colspan="2">Comments</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (OnlineForms.Models.ESCRFViewModel.TaskListItemModel taskListItem in Model.TaskListItemHolder)
+            {
+                if (taskListItem.TaskListID == ViewBag.ID)
+                {
+                    if (taskListItem.Deputy.ToUpper() == "IS TECH")
+                    {
+                        <tr class="printRow">
+                            <td class="printCell" colspan="4">@taskListItem.Task</td>
+                            <td class="printCell" colspan="2">@taskListItem.CompletedBy</td>
+                            @if (taskListItem.SignedOn == DateTime.MinValue)
+                            {
+                                <td class="printCell" colspan="2">
+                                    Not Signed
+                                </td>
+                            }
+                            else
+                            {
+                                <td class="printCell" colspan="2">
+                                    @taskListItem.SignedOn.ToShortDateString()
+                                </td>
+                            }
+                            @if (taskListItem.Completed)
+                            {
+                                <td class="printCell" colspan="2">Completed</td>
+                            }
+                            else if (taskListItem.NotApplicable)
+                            {
+                                <td class="printCell" colspan="2">N/A</td>
+                            }
+                            else
+                            {
+                                <td class="printCell" colspan="2"></td>
+                            }
+                            <td class="printCell" colspan="2">@taskListItem.Comments</td>
+                        </tr>
+                    }
+                }
+            }
+        </tbody>
+    </table>
+
+    <table id="printTable">
+        <thead>
+            <tr class="printHeading">
+                <th colspan="4">Human Resources Tasks</th>
+                <th colspan="2">Completed By</th>
+                <th colspan="2">Completed On</th>
+                <th colspan="2">Status</th>
+                <th colspan="2">Comments</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (OnlineForms.Models.ESCRFViewModel.TaskListItemModel taskListItem in Model.TaskListItemHolder)
+            {
+                if (taskListItem.TaskListID == ViewBag.ID)
+                {
+                    if (taskListItem.Deputy.ToUpper() == "HR")
+                    {
+                        <tr class="printRow">
+                            <td class="printCell" colspan="4">@taskListItem.Task</td>
+                            <td class="printCell" colspan="2">@taskListItem.CompletedBy</td>
+                            @if (taskListItem.SignedOn == DateTime.MinValue)
+                            {
+                                <td class="printCell" colspan="2">
+                                    Not Signed
+                                </td>
+                            }
+                            else
+                            {
+                                <td class="printCell" colspan="2">
+                                    @taskListItem.SignedOn.ToShortDateString()
+                                </td>
+                            }
+                            @if (taskListItem.Completed)
+                            {
+                                <td class="printCell" colspan="2">Completed</td>
+                            }
+                            else if (taskListItem.NotApplicable)
+                            {
+                                <td class="printCell" colspan="2">N/A</td>
+                            }
+                            else
+                            {
+                                <td class="printCell" colspan="2"></td>
+                            }
+                            <td class="printCell" colspan="2">@taskListItem.Comments</td>
+                        </tr>
+                    }
+                }
+            }
+        </tbody>
+    </table>
+
+    <table id="printTable">
+        <thead>
+            <tr class="printHeading">
+                <th colspan="4">Finance Tasks</th>
+                <th colspan="2">Completed By</th>
+                <th colspan="2">Completed On</th>
+                <th colspan="2">Status</th>
+                <th colspan="2">Comments</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (OnlineForms.Models.ESCRFViewModel.TaskListItemModel taskListItem in Model.TaskListItemHolder)
+            {
+                if (taskListItem.TaskListID == ViewBag.ID)
+                {
+                    if (taskListItem.Deputy.ToUpper() == "FINANCE")
+                    {
+                        <tr class="printRow">
+                            <td class="printCell" colspan="4">@taskListItem.Task</td>
+                            <td class="printCell" colspan="2">@taskListItem.CompletedBy</td>
+                            @if (taskListItem.SignedOn == DateTime.MinValue)
+                            {
+                                <td class="printCell" colspan="2">
+                                    Not Signed
+                                </td>
+                            }
+                            else
+                            {
+                                <td class="printCell" colspan="2">
+                                    @taskListItem.SignedOn.ToShortDateString()
+                                </td>
+                            }
+                            @if (taskListItem.Completed)
+                            {
+                                <td class="printCell" colspan="2">Completed</td>
+                            }
+                            else if (taskListItem.NotApplicable)
+                            {
+                                <td class="printCell" colspan="2">N/A</td>
+                            }
+                            else
+                            {
+                                <td class="printCell" colspan="2"></td>
+                            }
+                            <td class="printCell" colspan="2">@taskListItem.Comments</td>
+                        </tr>
+                    }
+                }
+            }
+        </tbody>
+    </table>
+
+    <table id="printTable">
+        <thead>
+            <tr class="printHeading">
+                <th colspan="4">ERGO Tasks</th>
+                <th colspan="2">Completed By</th>
+                <th colspan="2">Completed On</th>
+                <th colspan="2">Status</th>
+                <th colspan="2">Comments</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (OnlineForms.Models.ESCRFViewModel.TaskListItemModel taskListItem in Model.TaskListItemHolder)
+            {
+                if (taskListItem.TaskListID == ViewBag.ID)
+                {
+                    if (taskListItem.Deputy.ToUpper() == "ERGO")
+                    {
+                        <tr class="printRow">
+                            <td class="printCell" colspan="4">@taskListItem.Task</td>
+                            <td class="printCell" colspan="2">@taskListItem.CompletedBy</td>
+                            @if (taskListItem.SignedOn == DateTime.MinValue)
+                            {
+                                <td class="printCell" colspan="2">
+                                    Not Signed
+                                </td>
+                            }
+                            else
+                            {
+                                <td class="printCell" colspan="2">
+                                    @taskListItem.SignedOn.ToShortDateString()
+                                </td>
+                            }
+                            @if (taskListItem.Completed)
+                            {
+                                <td class="printCell" colspan="2">Completed</td>
+                            }
+                            else if (taskListItem.NotApplicable)
+                            {
+                                <td class="printCell" colspan="2">N/A</td>
+                            }
+                            else
+                            {
+                                <td class="printCell" colspan="2"></td>
+                            }
+                            <td class="printCell" colspan="2">@taskListItem.Comments</td>
+                        </tr>
+                    }
+                }
+            }
+        </tbody>
+    </table>
+
+    <table id="printTable">
+        <thead>
+            <tr class="printHeading">
+                <th colspan="4">Facility Management Tasks</th>
+                <th colspan="2">Completed By</th>
+                <th colspan="2">Completed On</th>
+                <th colspan="2">Status</th>
+                <th colspan="2">Comments</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (OnlineForms.Models.ESCRFViewModel.TaskListItemModel taskListItem in Model.TaskListItemHolder)
+            {
+                if (taskListItem.TaskListID == ViewBag.ID)
+                {
+                    if (taskListItem.Deputy.ToUpper().Contains("FACILITY"))
+                    {
+                        <tr class="printRow">
+                            <td class="printCell" colspan="4">@taskListItem.Task</td>
+                            <td class="printCell" colspan="2">@taskListItem.CompletedBy</td>
+                            @if (taskListItem.SignedOn == DateTime.MinValue)
+                            {
+                                <td class="printCell" colspan="2">
+                                    Not Signed
+                                </td>
+                            }
+                            else
+                            {
+                                <td class="printCell" colspan="2">
+                                    @taskListItem.SignedOn.ToShortDateString()
+                                </td>
+                            }
+                            @if (taskListItem.Completed)
+                            {
+                                <td class="printCell" colspan="2">Completed</td>
+                            }
+                            else if (taskListItem.NotApplicable)
+                            {
+                                <td class="printCell" colspan="2">N/A</td>
+                            }
+                            else
+                            {
+                                <td class="printCell" colspan="2"></td>
+                            }
+                            <td class="printCell" colspan="2">@taskListItem.Comments</td>
+                        </tr>
+                    }
+                }
+            }
+        </tbody>
+
+
+    </table>
+</body>

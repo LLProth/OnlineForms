@@ -1,0 +1,324 @@
+﻿@model OnlineForms.ViewModels.SFN61579ViewModel
+
+
+@{
+    ViewBag.Title = "Request For Charitable Event";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    @section topHeader {
+        @Html.Partial("~/Views/Shared/_FormHeader.cshtml", (Dictionary<string, string>)ViewBag.FormInfo)
+    }
+
+    @section sideBarNav {
+        @Html.Partial("~/Views/Forms/SFN61579/Sidebar.cshtml")
+    }
+
+    <div class="container-fluid">
+        @using (Html.BeginForm("SFN61579", "SFN61579", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div>
+                <h5>Section 1 - Charity Information</h5>
+            </div>
+
+            <div class="row mb-2 formRow">
+                <div class="col form-floating">
+                    @Html.EditorFor(m => m.CharityInfoModel.Organization, new { htmlAttributes = new { @name = "Organization", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.CharityInfoModel.Organization), @id = "reqOrganization", @maxlength = "1000", @required = "required" } })
+                    @Html.LabelFor(m => m.CharityInfoModel.Organization, htmlAttributes: new { @for = "reqOrganization", @class = "fw-bold label" })
+                    @Html.ValidationMessageFor(m => m.CharityInfoModel.Organization, "", new { @class = "validationText" })
+                </div>
+            </div>
+
+            <div class="row row-cols-3 mb-2 formRow">
+                <div class="col-12 form-floating">
+                    @Html.EditorFor(m => m.CharityInfoModel.AddressLineOne, new { htmlAttributes = new { @name = "Organization", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.CharityInfoModel.AddressLineOne), @id = "reqOrganization", @maxlength = "1000", @required = "required" } })
+                    @Html.LabelFor(m => m.CharityInfoModel.AddressLineOne, htmlAttributes: new { @for = "reqOrganization", @class = "fw-bold label" })
+                    @Html.ValidationMessageFor(m => m.CharityInfoModel.AddressLineOne, "", new { @class = "validationText" })
+                </div>
+            </div>
+            <div class="row row-cols-3 mb-2 formRow">
+                <div class="col-12 form-floating">
+                    @Html.EditorFor(m => m.CharityInfoModel.AddressLineTwo, new { htmlAttributes = new { @name = "Name", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.CharityInfoModel.AddressLineTwo), @id = "reqName" } })
+                    @Html.LabelFor(m => m.CharityInfoModel.AddressLineTwo, htmlAttributes: new { @for = "reqName", @class = "fw-bold label" })
+                </div>
+            </div>
+            <div class="row row-cols-3 mb-2 formRow">
+                <div class="col form-floating">
+                    @Html.EditorFor(m => m.CharityInfoModel.City, new { htmlAttributes = new { @name = "DateSubmitted", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.CharityInfoModel.City), @id = "reqDate" } })
+                    @Html.LabelFor(m => m.CharityInfoModel.City, htmlAttributes: new { @for = "reqDate", @class = "fw-bold label" })
+                    @Html.ValidationMessageFor(m => m.CharityInfoModel.City, "", new { @class = "validationText" })
+                </div>
+
+                    <datalist id="states">
+                        <option>Alabama</option>
+                        <option>Alaska</option>
+                        <option>Arizona</option>
+                        <option>Arkansas</option>
+                        <option>California</option>
+                        <option>Colorado</option>
+                        <option>Connecticut</option>
+                        <option>Delaware</option>
+                        <option>Florida</option>
+                        <option>Georgia</option>
+                        <option>Hawaii</option>
+                        <option>Idaho</option>
+                        <option>Illinois</option>
+                        <option>Indiana</option>
+                        <option>Iowa</option>
+                        <option>Kansas</option>
+                        <option>Kentucky</option>
+                        <option>Louisiana</option>
+                        <option>Maine</option>
+                        <option>Maryland</option>
+                        <option>Massachusetts</option>
+                        <option>Michigan</option>
+                        <option>Minnesota</option>
+                        <option>Mississippi</option>
+                        <option>Missouri</option>
+                        <option>Montana</option>
+                        <option>Nebraska</option>
+                        <option>Nevada</option>
+                        <option>New Hampshire</option>
+                        <option>New Jersey</option>
+                        <option>New Mexico</option>
+                        <option>New York</option>
+                        <option>North Carolina</option>
+                        <option>North Dakota</option>
+                        <option>Ohio</option>
+                        <option>Oklahoma</option>
+                        <option>Oregon</option>
+                        <option>Pennsylvania</option>
+                        <option>Rhode Island</option>
+                        <option>South Carolina</option>
+                        <option>South Dakota</option>
+                        <option>Tennessee</option>
+                        <option>Texas</option>
+                        <option>Utah</option>
+                        <option>Vermont</option>
+                        <option>Virginia</option>
+                        <option>Washington</option>
+                        <option>West Virginia</option>
+                        <option>Wisconsin</option>
+                        <option>Wyoming</option>
+                    </datalist>
+
+                    <div class="col form-floating">
+                        @Html.EditorFor(m => m.CharityInfoModel.State, new { htmlAttributes = new { @list = "states", @name = "State", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.CharityInfoModel.State), @required = "required" } })
+                        @Html.LabelFor(m => m.CharityInfoModel.State, htmlAttributes: new { @for = "reqDate", @class = "fw-bold label" })
+                        @Html.ValidationMessageFor(m => m.CharityInfoModel.State, "", new { @class = "validationText" })
+                    </div>
+
+                <div class="col form-floating">
+                    @Html.EditorFor(m => m.CharityInfoModel.ZipCode, new { htmlAttributes = new { @name = "Name", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.CharityInfoModel.ZipCode), @id = "reqName" } })
+                    @Html.LabelFor(m => m.CharityInfoModel.ZipCode, htmlAttributes: new { @for = "reqName", @class = "fw-bold label" })
+                    @Html.ValidationMessageFor(m => m.CharityInfoModel.ZipCode, "", new { @class = "validationText" })
+                </div>
+            </div>
+
+            <div class="row row-cols-3 mb-2 formRow">
+                <div class="col-6 form-floating" select-list-control>
+                    @* Display only months in the same quarter as the current quarter of the year *@
+
+                    @if (DateTime.Now.Month == 01 || DateTime.Now.Month == 02 || DateTime.Now.Month == 03)
+                    {
+                        <datalist id="months">
+                            <option>January</option>
+                            <option>February</option>
+                            <option>March</option>
+                        </datalist>
+                        @Html.EditorFor(m => m.CharityInfoModel.Month, new { htmlAttributes = new { @list = "months", @name = "Month", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.CharityInfoModel.Month), @required = "required" } })
+                        @Html.LabelFor(m => m.CharityInfoModel.Month, htmlAttributes: new { @for = "reqStartDate", @class = "fw-bold label" })
+                        @Html.ValidationMessageFor(m => m.CharityInfoModel.Month, "", new { @class = "validationText" })
+                    }
+
+                    @if (DateTime.Now.Month == 04 || DateTime.Now.Month == 05 || DateTime.Now.Month == 06)
+                    {
+                        <datalist id="months">
+                            <option>April</option>
+                            <option>May</option>
+                            <option>June</option>
+                        </datalist>
+                        @Html.EditorFor(m => m.CharityInfoModel.Month, new { htmlAttributes = new { @list = "months", @name = "Month", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.CharityInfoModel.Month), @required = "required" } })
+                        @Html.LabelFor(m => m.CharityInfoModel.Month, htmlAttributes: new { @for = "reqStartDate", @class = "fw-bold label" })
+                        @Html.ValidationMessageFor(m => m.CharityInfoModel.Month, "", new { @class = "validationText" })
+                    }
+
+                    @if (DateTime.Now.Month == 07 || DateTime.Now.Month == 08 || DateTime.Now.Month == 09)
+                    {
+                        <datalist id="months">
+                            <option>July</option>
+                            <option>August</option>c
+                            <option>September</option>
+                        </datalist>
+                        @Html.EditorFor(m => m.CharityInfoModel.Month, new { htmlAttributes = new { @list = "months", @name = "Month", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.CharityInfoModel.Month), @required = "required" } })
+                        @Html.LabelFor(m => m.CharityInfoModel.Month, htmlAttributes: new { @for = "reqStartDate", @class = "fw-bold label" })
+                        @Html.ValidationMessageFor(m => m.CharityInfoModel.Month, "", new { @class = "validationText" })
+                    }
+
+                    @if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
+                    {
+                        <datalist id="months">
+                            <option>October</option>
+                            <option>November</option>
+                            <option>December</option>
+                        </datalist>
+                        @Html.EditorFor(m => m.CharityInfoModel.Month, new { htmlAttributes = new { @list = "months", @name = "Month", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.CharityInfoModel.Month), @required = "required" } })
+                        @Html.LabelFor(m => m.CharityInfoModel.Month, htmlAttributes: new { @for = "reqStartDate", @class = "fw-bold label" })
+                        @Html.ValidationMessageFor(m => m.CharityInfoModel.Month, "", new { @class = "validationText" })
+                    }
+                </div>
+
+                <div class="col-6 form-floating">
+                    @Html.EditorFor(m => m.CharityInfoModel.Website, new { htmlAttributes = new { @name = "DateSubmitted", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.CharityInfoModel.Website), @id = "reqDate", @maxlength = "1000" } })
+                    @Html.LabelFor(m => m.CharityInfoModel.Website, htmlAttributes: new { @for = "reqDate", @class = "fw-bold label" })
+                </div>
+
+
+            </div>
+
+            <div id="forms" class="row row-cols-3 mb-5 formRow">
+                <div class="col-12 form-floating">
+                    @Html.EditorFor(m => m.CharityInfoModel.CharityDescription, new { htmlAttributes = new { @name = "CharityDescription", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.CharityInfoModel.CharityDescription), @id = "reqCharityDescription", @maxlength = "2000", @required = "required" } })
+                    @Html.LabelFor(m => m.CharityInfoModel.CharityDescription, htmlAttributes: new { @for = "reqCharityDescription", @class = "fw-bold label" })
+                    @Html.ValidationMessageFor(m => m.CharityInfoModel.CharityDescription, "", new { @class = "validationText" })
+                </div>
+            </div>
+
+            <div>
+                <h5>Section 2 - Requestor Information</h5>
+            </div>
+
+            <div class="row mb-2 formRow">
+                <div class="col form-floating">
+                    @Html.EditorFor(m => m.CharitableModel.Name, new { htmlAttributes = new { @name = "Name", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.CharitableModel.Name), @id = "reqName", @Value = ViewBag.Username, @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.CharitableModel.Name, htmlAttributes: new { @for = "reqName", @class = "fw-bold label" })
+                </div>
+
+                <div class="col form-floating">
+                    @Html.EditorFor(m => m.CharitableModel.DateSubmitted, new { htmlAttributes = new { @name = "DateSubmitted", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.CharitableModel.DateSubmitted).ToString(), @id = "reqDate", @Value = DateTime.Today.ToString("MM/dd/yyyy"), @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.CharitableModel.DateSubmitted, htmlAttributes: new { @for = "reqDate", @class = "fw-bold label" })
+                </div>
+
+            </div>
+
+            <div class="row">
+                @* Submit form and send email to superusers *@
+                <div class="col-2">
+                    <input id="submitButton" onclick="onSubmitButtonClicked()" class="w-100" type="button" value="Submit" />
+                </div>
+
+                @* Redirect back to form landing page *@
+                <div class="col-2">
+                    <input id="cancelButton" onclick="onCancelButtonClicked()" class="w-100" type="button" value="Cancel" />
+                </div>
+
+            </div>
+        }
+    </div>
+    </div>
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+
+        <script type="text/javascript">
+            var numReqItems = 1;
+
+            //$(function () {
+            //    $("[currencymask]").inputmask({ alias: "currency", groupSeparator: "" });
+            //});
+
+            //var rowsToValidate = $("[requisition-item]").filter(function () {
+            //    return parseInt($(this).attr("requisition-item")) > 1;
+            //});
+
+            //$("form").on("submit", function () {
+            //    var canSubmit = true;
+
+            //    var numberRegEx = /^\s*(\+|-)?((\d+(\.\d+)?)|(\.\d+))\s*$/;
+            //    $(function () {
+            //        if ($(this).attr("type") === "number" && numberRegEx.test($(this).val()) && $(this).val() > 0) {
+            //            if (!$(this).hasClass("input-validation-error")) {
+            //                $(this).removeClass("input-validation-error");
+            //            }
+            //        }
+            //        else if ($(this).attr("type") === "text" && $(this).val().length > 0) {
+            //            if (!$(this).hasClass("input-validation-error")) {
+            //                $(this).removeClass("input-validation-error");
+            //            }
+            //        }
+            //        else {
+            //            canSubmit = false;
+
+            //            if (!$(this).hasClass("input-validation-error")) {
+            //                $(this).addClass("input-validation-error");
+            //            }
+            //        }
+            //    });
+
+            //    return canSubmit;
+            //});
+            //var radioButtons = radioButtonControl.find("input");
+            //var selectInput = $('#month').find(":selected").val();
+
+            //if (!selectInput) {
+            //    canSubmit = false;
+
+            //    if (!selectListControl.hasClass("input-validation-error")) {
+            //        selectListControl.addClass("input-validation-error");
+            //    }
+            //}
+            //else {
+            //    if (selectListControl.hasClass("input-validation-error")) {
+            //        selectListControl.removeClass("input-validation-error");
+            //    }
+            //}
+
+            var months = $("#months option").map(function () {
+                return this.value;
+            }).get();
+
+            var states = $("#states option").map(function () {
+                return this.value;
+            }).get();
+
+            function onSubmitButtonClicked() {
+                //var submit = confirm("Are you sure you want to submit this form?");
+                var monthsValue = document.getElementById("CharityInfoModel_Month").value;
+                var statesValue = document.getElementById("CharityInfoModel_State").value;
+                
+
+                for (i = 0; i <= months.length; i++) {
+                    if (monthsValue == months[i]) {
+                        document.getElementById("CharityInfoModel_Month").value = monthsValue;
+                        break;
+                    } else {
+                        document.getElementById("CharityInfoModel_Month").value = "";
+                    }
+                }
+
+                for (i = 0; i <= states.length; i++) {
+                    if (statesValue == states[i]) {
+                        document.getElementById("CharityInfoModel_State").value = statesValue;
+                        break;
+                    } else {
+                        document.getElementById("CharityInfoModel_State").value = "";
+                    }
+                }
+
+                    document.getElementById("submitButton").type = "submit";
+                
+            }
+
+            function onCancelButtonClicked() {
+                var cancel = confirm("Form has not been submitted. Any changes will be lost. Are you sure that you want to close?");
+                if (cancel) {
+                    window.location.href = "Index";
+                }
+            }
+        </script>
+    }

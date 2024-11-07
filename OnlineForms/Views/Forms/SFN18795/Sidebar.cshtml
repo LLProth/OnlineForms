@@ -1,0 +1,26 @@
+﻿
+@{
+    ViewBag.Title = "Sidebar";
+}
+
+<nav class="navbar-nav offset-1">
+    <ul id="nav">
+        <li class="navItem">@Html.ActionLink("Home", "Index", "Home", new { @class = "navLink" })</li>
+    </ul>
+    @if (ViewBag.nonsuper != 0 || ViewBag.jobtitle == "Director of Finance")
+    {
+        <ul id="nav">
+            <li class="navItem">@Html.ActionLink("View Forms Needing My Approval", "MyApprovals", "Home", new { @class = "navLink" })</li>
+            <li class="navItem">@Html.ActionLink("View All Team Members", "ViewAllTeamMembers", "Home", new { @class = "navLink" })</li>
+        </ul>
+    }
+    @if (ViewBag.jobtitle == "Procurement Officer")
+    {
+        <a class="nav-item navbar-text text-dark fw-bold">Procurement Actions</a>
+        <ul id="nav">
+            <li class="navItem">@Html.ActionLink("Approved Forms (Not Processed)", "MyApprovals", "Home", new { @class = "navLink" })</li>
+        </ul>
+    }
+</nav>
+
+

@@ -1,0 +1,271 @@
+﻿@model OnlineForms.ViewModels.SFN60026DisplayViewModel
+
+
+@{
+    ViewBag.Title = "Performance Bonus Recommendation Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    @section topHeader {
+        @Html.Partial("~/Views/Shared/_FormHeader.cshtml", (Dictionary<string, string>)ViewBag.FormInfo)
+    }
+
+    @section sideBarNav {
+        @Html.Partial("~/Views/Forms/SFN61579/Sidebar.cshtml")
+    }
+
+    @using (Html.BeginForm("SFN60026", "SFN60026", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div id="wait">
+            <h4>Please wait...</h4>
+            <input id="closeButton" class="w-100" type="button" value="Close" onclick="onClosedButtonClicked()" />
+        </div>
+
+        <div class="row row-cols-1 text-center mb-2">
+            <div class="col bg-dark text-white fw-bold">
+                Please complete the form and submit for approval.
+            </div>
+        </div>
+
+        <div class="row row-cols-3 mb-2">
+            <div class="col form-floating" nominee-name="1">
+                @Html.DropDownListFor(m => m.BonusRecommendationModel.NomineeName, new SelectList(ViewBag.WSIPersonnel), new { @id = "reqName", @class = "form-control", @name = "reqName", @Value = Model.BonusRecommendationModel.NomineeName })
+                @Html.LabelFor(m => m.BonusRecommendationModel.NomineeName, htmlAttributes: new { @for = "reqName", @class = "fw-bold" })
+                @Html.ValidationMessageFor(m => m.BonusRecommendationModel.NomineeName, "", new { @class = "validationText" })
+            </div>
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.BonusRecommendationModel.NomineePosition, new { htmlAttributes = new { @class = "form-control bg-white", @Value = Model.BonusRecommendationModel.NomineePosition, @id = "reqPosition", @readonly = "readonly" } })
+                @Html.LabelFor(m => m.BonusRecommendationModel.NomineePosition, htmlAttributes: new { @for = "reqPosition", @class = "fw-bold" })
+            </div>
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.BonusRecommendationModel.NomineeDepartment, new { htmlAttributes = new { @class = "form-control bg-white", @Value = Model.BonusRecommendationModel.NomineeDepartment, @id = "reqDepartment", @type = "text", @readonly = "readonly" } })
+                @Html.LabelFor(m => m.BonusRecommendationModel.NomineeDepartment, htmlAttributes: new { @for = "reqDepartment", @class = "fw-bold" })
+            </div>
+        </div>
+        <div>
+            <h5>Justification of Performance Bonus</h5>
+        </div>
+        <div class="row row-cols-1 mb-2">
+            <div class="col form-floating">
+                Date Range for Nominee's Accomplishments.
+            </div>
+        </div>
+        <div class="row row-cols-2 mb-2">
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.BonusRecommendationModel.AccomplishmentStartDate, new { htmlAttributes = new { @class = "form-control bg-white", @id = "reqStDate", @Value = Model.BonusRecommendationModel.AccomplishmentStartDate.ToString("yyyy-MM-dd"), @type = "date" } })
+                @Html.LabelFor(m => m.BonusRecommendationModel.AccomplishmentStartDate, htmlAttributes: new { @for = "reqStDate", @class = "fw-bold" })
+                @Html.ValidationMessageFor(m => m.BonusRecommendationModel.AccomplishmentStartDate, "", new { @class = "validationText" })
+
+            </div>
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.BonusRecommendationModel.AccomplishmentEndDate, new { htmlAttributes = new { @class = "form-control bg-white", @Value = Model.BonusRecommendationModel.AccomplishmentEndDate.ToString("yyyy-MM-dd"), @id = "reqEdDate", @type = "date" } })
+                @Html.LabelFor(m => m.BonusRecommendationModel.AccomplishmentEndDate, htmlAttributes: new { @for = "reqEdDate", @class = "fw-bold" })
+                @Html.ValidationMessageFor(m => m.BonusRecommendationModel.AccomplishmentEndDate, "", new { @class = "validationText" })
+            </div>
+        </div>
+        <div class="row row-cols-1 mb-2">
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.BonusRecommendationModel.Justification, new { htmlAttributes = new { @class = "form-control bg-white", @id = "reqJustification", @Value = Model.BonusRecommendationModel.Justification } })
+                @Html.LabelFor(m => m.BonusRecommendationModel.Justification, htmlAttributes: new { @for = "reqJustification", @class = "fw-bold" })
+                @Html.ValidationMessageFor(m => m.BonusRecommendationModel.Justification, "", new { @class = "validationText" })
+            </div>
+        </div>
+        <div class="row row-cols-3 mb-2">
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.BonusRecommendationModel.SubmitterName, new { htmlAttributes = new { @class = "form-control bg-white", @id = "reqSubmitterName", @placeholder = @Html.DisplayNameFor(m => m.BonusRecommendationModel.SubmitterName), @Value = ViewBag.Username, @readonly = "readonly" } })
+                @Html.LabelFor(m => m.BonusRecommendationModel.SubmitterName, htmlAttributes: new { @for = "reqSubmitterName", @class = "fw-bold" })
+            </div>
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.BonusRecommendationModel.SubmitterPosition, new { htmlAttributes = new { @class = "form-control bg-white", @id = "reqSubmitterPosition", @placeholder = @Html.DisplayNameFor(m => m.BonusRecommendationModel.SubmitterPosition), @Value = ViewBag.SubPos, @readonly = "readonly" } })
+                @Html.LabelFor(m => m.BonusRecommendationModel.SubmitterPosition, htmlAttributes: new { @for = "reqSubmitterPosition", @class = "fw-bold" })
+            </div>
+            <div class="col form-floating visually-hidden">
+                @Html.EditorFor(m => m.BonusRecommendationModel.SubmitterDate, new { htmlAttributes = new { @class = "form-control bg-white", @id = "reqSubmitterDate", @placeholder = @Html.DisplayNameFor(m => m.BonusRecommendationModel.SubmitterDate), @Value = ViewBag.SubDate, @type = "date", @disabled = "disabled" } })
+                @Html.LabelFor(m => m.BonusRecommendationModel.SubmitterDate, htmlAttributes: new { @for = "reqSubmitterDate", @class = "fw-bold" })
+            </div>
+        </div>
+        @*<div class="row row-cols-1 text-center mb-2">
+                <div class="col bg-dark text-white fw-bold">
+                    Nominee's Eligibility Requirements
+                </div>
+            </div>
+            <div class="row row-cols-1 mb-2">
+                <div class="col form-floating">
+                    Has the Nominee held a position in State Government for at least one year?
+                </div>
+            </div>
+            <div class="row row-cols-3 mb-2">
+                <div class="col form-floating">
+                    <div class="form-control" radio-button-control>
+                        <label class="pe-4">@Html.RadioButtonFor(m => m.BonusRecommendationModel.StateEmployeeOneYear, "true") Yes</label>
+                        <label>@Html.RadioButtonFor(m => m.BonusRecommendationModel.StateEmployeeOneYear, "false", new { @checked = "checked" }) No</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row row-cols-1 mb-2">
+                <div class="col form-floating">
+                    <table>
+                        <tr>
+                            <th>Check all that apply:</th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <td><b>Probationary Employee</b></td>
+                            <td>@Html.CheckBox("ProbationaryEmployee", false)</td>
+                        </tr>
+                        <tr>
+                            <td><b>Full Time</b></td>
+                            <td>@Html.CheckBox("FullTime", false)</td>
+                        </tr>
+                        <tr>
+                            <td><b>Part Time</b></td>
+                            <td>@Html.CheckBox("PartTime", false)</td>
+                        </tr>
+                        <tr>
+                            <td><b>Temporary</b></td>
+                            <td>@Html.CheckBox("Temporary", false)</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="row row-cols-2 mb-2">
+                <div class="col form-floating">
+                    @Html.EditorFor(m => m.BonusRecommendationModel.LastBonusDate, new { htmlAttributes = new { @class = "form-control bg-white", @id = "reqLastBonus", @placeholder = @Html.DisplayNameFor(m => m.BonusRecommendationModel.LastBonusDate), @Value = DateTime.Today.ToString("yyyy-MM-dd"), @type = "date" } })
+                    @Html.LabelFor(m => m.BonusRecommendationModel.LastBonusDate, htmlAttributes: new { @for = "reqLastBonus", @class = "fw-bold" })
+                </div>
+                <div class="col form-floating">
+                    @Html.EditorFor(m => m.BonusRecommendationModel.LastBonusAmount, new { htmlAttributes = new { @class = "form-control bg-white", @id = "reqLastAmount", @placeholder = @Html.DisplayNameFor(m => m.BonusRecommendationModel.LastBonusAmount), @Value = 0 } })
+                    @Html.LabelFor(m => m.BonusRecommendationModel.LastBonusAmount, htmlAttributes: new { @for = "reqLastAmount", @class = "fw-bold" })
+                </div>
+            </div>
+            <div class="row row-cols-1 mb-2">
+                <div class="col form-floating">
+                    @Html.EditorFor(m => m.BonusRecommendationModel.LastPerformanceScore, new { htmlAttributes = new { @class = "form-control bg-white", @id = "reqLastScore", @placeholder = @Html.DisplayNameFor(m => m.BonusRecommendationModel.LastPerformanceScore), @Value = 0 } })
+                    @Html.LabelFor(m => m.BonusRecommendationModel.LastPerformanceScore, htmlAttributes: new { @for = "reqLastScore", @class = "fw-bold" })
+                </div>
+            </div>
+            <div class="row row-cols-1 mb-2">
+                <div class="col form-floating">
+                    <div class="form-control" radio-button-control>
+                        <label class="pe-4">@Html.RadioButtonFor(m => m.BonusRecommendationModel.HRAction, "true") Yes</label>
+                        <label>@Html.RadioButtonFor(m => m.BonusRecommendationModel.HRAction, "false", new { @checked = "checked" }) No</label>
+                    </div>
+                    @Html.LabelFor(m => m.BonusRecommendationModel.HRAction, htmlAttributes: new { @for = "", @class = "fw-bold req-form-long-label" })
+                </div>
+            </div>
+            <div class="row row-cols-1 mb-2">
+                <div class="col form-floating">
+                    <div class="form-control" radio-button-control>
+                        <label class="pe-4">@Html.RadioButtonFor(m => m.BonusRecommendationModel.MeetsRequirements, "true") Yes</label>
+                        <label>@Html.RadioButtonFor(m => m.BonusRecommendationModel.MeetsRequirements, "false", new { @checked = "checked" }) No</label>
+                    </div>
+                    @Html.LabelFor(m => m.BonusRecommendationModel.MeetsRequirements, htmlAttributes: new { @for = "", @class = "fw-bold req-form-long-label" })
+                </div>
+            </div>
+            <div class="row row-cols-2 mb-2">
+                <div class="col form-floating">
+                    <div class="form-control" radio-button-control>
+                        <label class="pe-4">@Html.RadioButtonFor(m => m.BonusRecommendationModel.CommitteeApproval, "true") Yes</label>
+                        <label>@Html.RadioButtonFor(m => m.BonusRecommendationModel.CommitteeApproval, "false", new { @checked = "checked" }) No</label>
+                    </div>
+                    @Html.LabelFor(m => m.BonusRecommendationModel.CommitteeApproval, htmlAttributes: new { @for = "", @class = "fw-bold req-form-long-label" })
+                </div>
+                <div class="col form-floating">
+                    @Html.EditorFor(m => m.BonusRecommendationModel.CommitteeApprovalAmount, new { htmlAttributes = new { @class = "form-control bg-white", @id = "reqApprovalAmount", @placeholder = @Html.DisplayNameFor(m => m.BonusRecommendationModel.CommitteeApprovalAmount), @Value = 0 } })
+                    @Html.LabelFor(m => m.BonusRecommendationModel.CommitteeApprovalAmount, htmlAttributes: new { @for = "reqApprovalAmount", @class = "fw-bold" })
+                </div>
+            </div>
+            <div class="row row-cols-1 mb-2">
+                <div class="col form-floating">
+                    @Html.EditorFor(m => m.BonusRecommendationModel.Comments, new { htmlAttributes = new { @class = "form-control bg-white", @id = "reqComments", @placeholder = @Html.DisplayNameFor(m => m.BonusRecommendationModel.Comments) } })
+                    @Html.LabelFor(m => m.BonusRecommendationModel.Comments, htmlAttributes: new { @for = "reqComments", @class = "fw-bold" })
+                </div>
+            </div>*@
+        <div class="row formRow visually-hidden">
+            @Html.EditorFor(m => m.BonusRecommendationModel.FormSubmitted, new { htmlAttributes = new { @class = "form-control bg-white", @id = "formSubmitted", @placeholder = @Html.DisplayNameFor(m => m.BonusRecommendationModel.FormSubmitted), @Value = "N", @readonly = "readonly" } })
+        </div>
+        <div class="row formRow">
+            <div class="col-2">
+                <input id="submitButton" class="w-100" type="button" value="Submit" onclick="onSubmitButtonClicked()" name="command" />
+            </div>
+            <div class="col-2">
+                <input id="saveButton" class="w-100" type="button" value="Save" onclick="onSaveButtonClicked()" name="command" disabled="disabled" />
+            </div>
+            <div class="col-2">
+                <input id="cancelButton" class="w-100" type="button" value="Close" onclick="onCancelButtonClicked()" name="command" />
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+        document.getElementById('reqName').addEventListener('input', function (e) {
+            var name = document.getElementById("reqName").value;
+            var title = "";
+            var department = "";
+            var array = @Html.Raw(Json.Encode(ViewBag.WSIList));
+            var idx = array.indexOf(name);
+            if (idx > 0) {
+                var stringPart = array.substr(idx, 200);
+                var idxTitle = stringPart.indexOf("\"Title\":");
+                var idxDepartment = stringPart.indexOf("\"Department\":");
+                var idxEnd = stringPart.indexOf("}");
+
+                title = stringPart.substring(idxTitle + 9, idxDepartment - 2);
+                department = stringPart.substring(idxDepartment + 14, idxEnd - 1);
+            }
+//            if (title != "") {
+                document.getElementById("reqPosition").value = title;
+                document.getElementById("reqDepartment").value = department;
+//            }
+        });
+        const form = document.querySelector('form');
+        form.addEventListener('change', function () {
+            EnableButtons();
+        });
+        function EnableButtons() {
+            document.getElementById("saveButton").removeAttribute("disabled");
+        };
+        function DisableButtons() {
+            document.getElementById("saveButton").setAttribute("disabled", "disabled");
+        };
+        function onSaveButtonClicked() {
+            //DisableButtons();
+            document.getElementById("saveButton").type = "submit";
+        };
+        function onSubmitButtonClicked() {
+            $("#wait").show();
+            $(".button").hide();
+            document.getElementById("submitButton").type = "submit";
+        };
+        function toggleModal() {
+            $('#submitModal').toggle();
+        };
+
+        function onCancelButtonClicked() {
+            var beenSaved = document.getElementById("saveButton").getAttribute("disabled");
+            if (!beenSaved) {
+                var cancel = confirm("All data will be lost if the form is closed. Are you sure that you want to close? Click OK to proceed.");
+            }
+            if (beenSaved || cancel) {
+                document.getElementById("cancelButton").type = "submit";
+            }
+        };
+
+        function onClosedButtonClicked() {
+            $("#wait").hide();
+            $(".button").show();
+
+            if ($("form").valid() == true) {
+                $(".button").prop('disabled', true);
+            }
+        }
+    </script>
+}

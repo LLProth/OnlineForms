@@ -1,0 +1,18 @@
+﻿
+@{
+    ViewBag.Title = "Sidebar";
+}
+
+
+<nav class="navbar-nav offset-1">
+    <ul id="nav">
+        <li class="navItem">@Html.ActionLink("Home", "Index", "SFN61065", new { @class = "navLink" })</li>
+        @if (ViewBag.HasApprovals == true)
+        {
+            <li class="navItem">@Html.ActionLink("View Forms Needing My Approval", "MyApprovals", "Home", new { @class = "navLink" })</li>
+        }
+    </ul>
+
+
+</nav>
+

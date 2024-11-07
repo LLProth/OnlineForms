@@ -1,0 +1,127 @@
+﻿@model OnlineForms.ViewModels.MaintenanceRequestViewModel
+@{
+    ViewBag.Title = "Maintenance Request Form";
+    string[] Agencies = { "Child Support Enforcement", "Commerce Department", "Council on the Arts", "Parks & Recreation Department", "Provider Audit", "Risk Management", "WSI" };
+
+
+    ViewBag.Dropdown = Agencies;
+}
+
+<main>
+    <div class="">
+        @*Facilities Manager
+        General Trades Maintenance Worker*@
+        @if (ViewBag.Job == "Software Engineer" || ViewBag.Job == "Facilities Manager" || ViewBag.Job == "General Trades Maintenance Worker")
+        {
+            <div>
+                @section sideBarNav {
+                    @Html.Partial("~/Views/Forms/MaintenanceRequest/_Sidebar.cshtml")
+                }
+            </div>
+        }
+        else
+        {
+            <div></div>
+
+        }
+
+        <div class="pb-5 col-10 d-flex justify-content-center flex-column">
+            <div class="d-flex justify-content-center">
+                <h1>@ViewBag.Title</h1>
+            </div>
+            <div class="mt-5 mb-5">
+                <h3>Hello @ViewBag.FirstName, please select the agency you are employed by, please give a brief overview of the issue in the subject and a detailed report in Description. </h3>
+            </div>
+            <div class="mt-5">
+                @using (Html.BeginForm("SubmitMaintenanceRequest", "MaintenanceRequest"))
+                {
+                    <h1>@ViewBag.Job</h1>
+                    <div class="mb-5">
+                        @Html.LabelFor(m => m.MaintenanceRequest.Agency)
+                        @Html.DropDownListFor(m => m.MaintenanceRequest.Agency, new SelectList(ViewBag.Dropdown), "--Agency--", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.MaintenanceRequest.Agency)
+                    </div>
+                    <div class="mb-5">
+                        @Html.LabelFor(m => m.MaintenanceRequest.Subject)
+                        @Html.TextBoxFor(m => m.MaintenanceRequest.Subject, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.MaintenanceRequest.Subject)
+                    </div>
+                    <div class="mb-5">
+                        @Html.LabelFor(m => m.MaintenanceRequest.Description)
+                        @Html.TextAreaFor(m => m.MaintenanceRequest.Description, new { @class = "form-control", @style = "height: 150px" })
+                        @Html.ValidationMessageFor(m => m.MaintenanceRequest.Description)
+                    </div>
+                    <div>
+                        <div>
+                            @Html.HiddenFor(m => m.MaintenanceRequest.EmployeeName, new { @Value = ViewBag.Name })
+                        </div>
+                        <div>
+                            @Html.HiddenFor(m => m.MaintenanceRequest.Phonenumber, new { @Value = ViewBag.PhoneNumber })
+                        </div>
+                        <div>
+                            @Html.HiddenFor(m => m.MaintenanceRequest.Email, new { @Value = ViewBag.Email })
+                        </div>
+                        <div>
+                            @Html.HiddenFor(m => m.MaintenanceRequest.EnteredDate, new { @Value = ViewBag.TodaysDate })
+                        </div>
+                        <div>
+                            @Html.HiddenFor(m => m.MaintenanceRequest.CompletedDate, new { @Value = ViewBag.CompletedDate })
+                        </div>
+                    </div>
+                    <div class="mb-5">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+
+                }
+            </div>
+
+            @if (Model.MaintenanceRequests.Count != 0)
+            {
+                <h3 class="my-5">Your Maintenance Requests:</h3>
+                <table class="table table-striped text-center">
+                    <thead>
+                        <tr>
+                            <th>
+                                Subject:
+                            </th>
+                            <th>
+                                Date Submitted:
+                            </th>
+                            <th>
+                                Date Completed:
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @for (int i = 0; i < Model.MaintenanceRequests.Count; i++)
+                        {
+                            if (Model.MaintenanceRequests[i].EmployeeName == ViewBag.Name)
+                            {
+                                string[] dateArray = Model.MaintenanceRequests[i].EnteredDate.ToString().Split();
+                                string justSubmittedDate = dateArray[0];
+                                DateTime minTime = DateTime.MinValue;
+                                var completedDate = @Model.MaintenanceRequests[i].CompletedDate == minTime ? "N/A" : @Model.MaintenanceRequests[i].CompletedDate.ToShortDateString();
+                                
+
+                                <tr>
+                                    <td>@Model.MaintenanceRequests[i].Subject</td>
+                                    <td>@justSubmittedDate</td>
+                                    <td>@completedDate</td>
+                                </tr>
+
+                            }
+                        }
+                    </tbody>
+                </table>
+            }
+
+        </div>
+
+    </div>
+
+</main>
+
+
+
+

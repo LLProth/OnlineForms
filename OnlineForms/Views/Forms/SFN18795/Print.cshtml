@@ -1,0 +1,273 @@
+﻿@model OnlineForms.ViewModels.SFN18795DisplayViewModel
+
+@{
+    ViewBag.Title = "Print";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div style="font-size: 12px">
+    @Html.Partial("~/Views/Shared/_PrintHeader.cshtml", (Dictionary<string, string>)ViewBag.FormInfo)
+
+    <div class="row row-cols-3 border border-dark border-bottom-0">
+        <div class="col text-start fw-bold border border-dark border-bottom-0">
+            @Html.LabelFor(m => m.RequisitionModel.Department, new { @class = "fw-bold" }):
+            <div class="fs-7 fw-bold bg-white">
+                @Html.DisplayFor(m => m.RequisitionModel.Department)
+            </div>
+        </div>
+        <div class="col text-start fw-bold border border-dark border-bottom-0">
+            @Html.LabelFor(m => m.RequisitionModel.Name, new { @class = "fw-bold" }):
+            <div class="fs-7 fw-bold bg-white">
+                @Html.DisplayFor(m => m.RequisitionModel.Name)
+            </div>
+        </div>
+        <div class="col text-start fw-bold border border-dark border-bottom-0">
+            Date Submitted:
+            <div class="fs-7 fw-bold bg-white">
+                @Model.RequisitionModel.DateSubmitted.ToShortDateString()
+            </div>
+        </div>
+    </div>
+
+    <div class="row row-cols-2 border border-dark border-bottom-0">
+        <div class="col-8 text-start fw-bold border border-dark border-bottom-0">
+            Suggest Contractor:
+            <div class="fs-7 fw-bold bg-white">
+                @Html.DisplayFor(m => m.RequisitionModel.Contractor)
+            </div>
+        </div>
+        <div class="col-4 text-start fw-bold border border-dark border-bottom-0">
+            ID Number:
+            <div class="fs-7 fw-bold bg-whitee">
+                @Html.DisplayFor(m => m.RequisitionModel.RequisitionID)
+            </div>
+        </div>
+    </div>
+
+    <div class="row row-cols-3 border border-dark">
+        <div class="col text-start fw-bold border border-dark border-bottom-0">
+            Software/Hardware Request:
+            <div class="fs-7 fw-bold bg-white">
+                @((Model.RequisitionModel.SoftwareHardware) ? "Yes" : "No")
+            </div>
+        </div>
+        <div class="col text-start fw-bold border border-dark border-bottom-0">
+            @Html.LabelFor(m => m.RequisitionModel.EstimatedStartDate):
+            <div class="fs-7 fw-bold bg-white">
+                @Model.RequisitionModel.EstimatedStartDate.Value.ToShortDateString()
+            </div>
+        </div>
+        <div class="col text-start fw-bold border border-dark border-bottom-0">
+            @Html.LabelFor(m => m.RequisitionModel.EstimatedCompleteDate):
+            <div class="fs-7 fw-bold bg-white">
+                @Model.RequisitionModel.EstimatedCompleteDate.Value.ToShortDateString()
+            </div>
+        </div>
+    </div>
+
+    <div class="row bg-black mb-2">
+        <div class=" text-white w-100 text-center pt-1 pb-1">Please complete the form and submit for approval.</div>
+    </div>
+
+    <div class="row border border-2 border-dark bg-light">
+        <div class="col-2 text-center fw-bold border-end border-dark">
+            Quantity
+        </div>
+        <div class="col-2 text-center fw-bold border-end border-dark">
+            Item #
+        </div>
+        <div class="col-4 text-center fw-bold border-end border-dark">
+            Description
+        </div>
+        <div class="col-2 text-center fw-bold border-end border-dark">
+            Price
+        </div>
+        <div class="col-2 text-center fw-bold">
+            Est. Cost
+        </div>
+    </div>
+
+
+    @for (int i = 0; i < Model.RequisitionItems.Count; i++)
+    {
+        <div class="row border-start border-end border-dark">
+            <div class="col-2 fw-bold text-start border-start border-end border-bottom border-1">
+                @Model.RequisitionItems[@i].Quantity
+            </div>
+            <div class="col-2 fw-bold text-start border-end border-bottom border-1">
+                @Model.RequisitionItems[@i].ItemNumber
+            </div>
+            <div class="col-4 fw-bold text-start border-end border-bottom border-1">
+                @Model.RequisitionItems[@i].Description
+            </div>
+            <div class="col-2 fw-bold text-end border-end border-bottom border-1">
+                $@Model.RequisitionItems[@i].Price.ToString("n2")
+            </div>
+            <div class="col-2 fw-bold text-end border-end border-bottom border-1">
+                $@Model.RequisitionItems[@i].EstimatedCost.ToString("n2")
+            </div>
+        </div>
+    }
+
+    <div class="row mb-3 border border-top-0 border-dark">
+        <div class="col-2 d-flex">
+        </div>
+        <div class="col-6 border-end border-1"></div>
+        <div class="col-2 text-center fw-bold border-bottom border-end border-1">
+            Total
+        </div>
+        <div class="col-2 fw-bold text-end border-bottom border-end border-1">
+            $@decimal.Parse(ViewBag.TotalPrice).ToString("n2")
+        </div>
+    </div>
+    @if (!Model.RequisitionModel.ITRepSignature.IsEmpty())
+    {
+        <div class="row row-cols-2 border border-dark mb-1">
+            <div class="col-9 border-end border-dark">
+                @Html.LabelFor(m => m.RequisitionModel.ITRepSignature, new { @class = "fw-bold" })
+                <div class="fs-7 fw-bold bg-white">
+                    @Html.DisplayFor(m => m.RequisitionModel.ITRepSignature)
+                </div>
+            </div>
+            <div class="col-3">
+                Date
+                <div class="fs-7 fw-bold bg-white">
+                    @Model.RequisitionModel.ITRepSignatureDate.ToShortDateString()
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (!Model.RequisitionModel.SupervisorSignature.IsEmpty())
+    {
+        <div class="row row-cols-2 border border-dark mb-1">
+            <div class="col-9 border-end border-dark">
+                @Html.LabelFor(m => m.RequisitionModel.SupervisorSignature, new { @class = "fw-bold" })
+                <div class="fs-7 fw-bold bg-white">
+                    @Html.DisplayFor(m => m.RequisitionModel.SupervisorSignature)
+                </div>
+            </div>
+            <div class="col-3">
+                Date
+                <div class="fs-7 fw-bold bg-white">
+                    @Model.RequisitionModel.SupervisorSignatureDate.ToShortDateString()
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (!Model.RequisitionModel.DepartmentSignature.IsEmpty())
+    {
+        <div class="row row-cols-2 border  border-dark mb-1">
+            <div class="col-9 border-end border-dark">
+                @Html.LabelFor(m => m.RequisitionModel.DepartmentSignature, new { @class = "fw-bold" })
+                <div class="fs-7 fw-bold bg-white">
+                    @Html.DisplayFor(m => m.RequisitionModel.DepartmentSignature)
+                </div>
+            </div>
+            <div class="col-3">
+                Date
+                <div class="fs-7 fw-bold bg-white">
+                    @Model.RequisitionModel.DepartmentSignatureDate.ToShortDateString()
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (!Model.RequisitionModel.ChiefSignature.IsEmpty())
+    {
+        <div class="row row-cols-2 border  border-dark mb-1">
+            <div class="col-9 border-end border-dark">
+                @Html.LabelFor(m => m.RequisitionModel.ChiefSignature, new { @class = "fw-bold" })
+                <div class="fs-7 fw-bold bg-white">
+                    @Html.DisplayFor(m => m.RequisitionModel.ChiefSignature)
+                </div>
+            </div>
+            <div class="col-3">
+                Date
+                <div class="fs-7 fw-bold bg-white">
+                    @Model.RequisitionModel.ChiefSignatureDate.ToShortDateString()
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (!Model.RequisitionModel.DirectorSignature.IsEmpty())
+    {
+        <div class="row row-cols-2 border  border-dark mb-1">
+            <div class="col-9 border-end border-dark">
+                @Html.LabelFor(m => m.RequisitionModel.DirectorSignature, new { @class = "fw-bold" })
+                <div class="fs-7 fw-bold bg-white">
+                    @Html.DisplayFor(m => m.RequisitionModel.DirectorSignature)
+                </div>
+            </div>
+            <div class="col-3">
+                Date
+                <div class="fs-7 fw-bold bg-white">
+                    @Model.RequisitionModel.DirectorSignatureDate.ToShortDateString()
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (!Model.RequisitionModel.ProcurementOfficerSignature.IsEmpty())
+    {
+        <div class="row row-cols-2 border border-dark mb-3">
+            <div class="col-9 border-end border-dark">
+                @Html.LabelFor(m => m.RequisitionModel.ProcurementOfficerSignature, new { @class = "fw-bold" })
+                <div class="fs-7 fw-bold bg-white">
+                    @Html.DisplayFor(m => m.RequisitionModel.ProcurementOfficerSignature)
+                </div>
+            </div>
+            <div class="col-3">
+                Date
+                <div class="fs-7 fw-bold bg-white">
+                    @Model.RequisitionModel.ProcurementOfficerSignatureDate.ToShortDateString()
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (Model.RequisitionModel.ProcurementProcessing == true)
+    {
+        <div>
+            <h5>Administration Section</h5>
+            <div class="row row-cols-2 border border-dark mb-3">
+                <div class="col-9 border-end border-dark pb-1">
+                    <br />
+                    @Html.RadioButtonFor(m => m.RequisitionModel.ProcurementProcessing, "true", new { htmlAttributes = new { @readonly = "readonly" } })
+                    Form is being processed by Procurement
+                </div>
+                <div class="col-3">
+                    Date
+                    <div class="fs-7 fw-bold bg-white">
+                        @Model.RequisitionModel.ProcurementProcessedDate.ToShortDateString()
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+<div class="row">
+    <div class="col-3">
+        <button id="submitButton" type="button" onclick="printPage()" class="w-100" data-dismiss="modal">Print</button>
+    </div>
+</div>
+
+    </div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <partial name="_ValidationScriptsPartial" />
+
+    <script type="text/javascript">
+
+        function printPage() {
+            window.print();
+        }
+         
+        $(function () {
+            $("[currencymask]").inputmask({ alias: "currency", groupSeparator: "," });
+        });
+    </script>
+}

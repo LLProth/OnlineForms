@@ -1,0 +1,166 @@
+﻿@model OnlineForms.ViewModels.ESCRFViewModel
+
+
+
+@{
+    ViewBag.FormInfo = new Dictionary<string, string>();
+    ViewBag.FormInfo.Add("FormName", "Employee Status Change Request Form");
+    ViewBag.FormInfo.Add("Division", "Human Resource Division");
+    ViewBag.FormInfo.Add("Info", "IT Termination Requirements");
+
+    string[] YesNo = { "No", "Yes" };
+    ViewBag.yesNo = YesNo;
+    string[] YesNoMaybe = { "No", "Yes", "Unknown at this time" };
+    ViewBag.yesNoMaybe = YesNoMaybe;
+}
+
+<div>
+    <div class="row">
+        @section topHeader {
+            @Html.Partial("~/Views/Shared/_ESCRFHeader.cshtml", (Dictionary<string, string>)ViewBag.FormInfo)
+        }
+    </div>
+
+    @section sideBarNav {
+        @Html.Partial("~/Views/Forms/SFN54497/Sidebar.cshtml")
+    }
+
+    @using (Html.BeginForm("SubmitEmployeeTechnology", "ESCRF", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+<div>
+    <div class="mb-4">
+        <h5>
+            The employees existing voicemail will be forwarded to the supervisor's mailbox and the phone will be reset. The supervisor will be notified of the new password.
+        </h5>
+    </div>
+    <div>
+        <h5>
+            The supervisor will have access to the email, archive folders and OneDrive for 30 days.
+        </h5>
+    </div>
+    <div class="mt-4">
+        <div class="form-group">
+            @Html.CheckBoxFor(m => m.EmployeeTechnology.NoAccess, new { @id = "no-access" })
+            @Html.LabelFor(m => m.EmployeeTechnology.NoAccess, htmlAttributes: new { @class = "fw-bold" })
+            @Html.ValidationMessageFor(m => m.EmployeeTechnology.NoAccess)
+        </div>
+    </div>
+    <div class="mt-4">
+        <div class="form-group d-none" id="accept">
+            @Html.CheckBoxFor(m => m.EmployeeTechnology.Agreement)
+            @Html.LabelFor(m => m.EmployeeTechnology.Agreement, htmlAttributes: new { @class = "fw-bold" })
+            @Html.ValidationMessageFor(m => m.EmployeeTechnology.Agreement)
+        </div>
+    </div>
+    <div class="mt-4">
+        <div class=" col-12 Validation">
+            @Html.LabelFor(m => m.EmployeeTechnology.TransferringTo, htmlAttributes: new { @class = "fw-bold" })
+            <a href="~/Content/forms/Caseload Request - sfn 60709.dotx">Caseload Move Form</a>
+            @Html.EditorFor(m => m.EmployeeTechnology.TransferringTo, new { htmlAttributes = new { @class = "form-control fw-bold w-100  Validation Verify", @maxlength = "207", @required = "required", @list = "names" } })
+            @Html.ValidationMessageFor(m => m.EmployeeTechnology.TransferringTo, "", new { @class = "validationText" })
+        </div>
+        <datalist id="names">
+            <option></option>
+        </datalist>
+    </div>
+    <div class="row align-items-end">
+        <div class="mt-4 col-2 form-group ">
+            @Html.LabelFor(m => m.EmployeeTechnology.RemoveEmployee, htmlAttributes: new { @class = "fw-bold" })
+            @Html.DropDownListFor(m => m.EmployeeTechnology.RemoveEmployee, new SelectList(ViewBag.yesNo), " ", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.EmployeeTechnology.RemoveEmployee, "", new { @class = "validationText" })
+        </div>
+        <div class="mt-4 col-2 form-group ">
+            @Html.LabelFor(m => m.EmployeeTechnology.Replaced, htmlAttributes: new { @class = "fw-bold" })
+            @Html.DropDownListFor(m => m.EmployeeTechnology.Replaced, new SelectList(ViewBag.yesNoMaybe), " ", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.EmployeeTechnology.Replaced, "", new { @class = "validationText" })
+        </div>
+    </div>
+    <div class="mt-4">
+        <div class="form-group col-12">
+            @Html.LabelFor(m => m.EmployeeTechnology.Comments, htmlAttributes: new { @class = "fw-bold" })
+            @Html.EditorFor(m => m.EmployeeTechnology.Comments, new { htmlAttributes = new { @class = "form-control fw-bold w-100", @maxlength = "800" } })
+            @Html.ValidationMessageFor(m => m.EmployeeTechnology.Comments, "", new { @class = "validationText" })
+        </div>
+    </div>
+    <div>
+        @Html.HiddenFor(m => m.EmployeeTechnology.ID, new { @Value = ViewBag.ID })
+    </div>
+
+    <div class="row formRow">
+        <div class="col-2">
+            <input id="submitButton" class="w-100" type="button" value="Submit" onclick="onSubmitButtonClicked()" />
+        </div>
+
+    </div>
+</div>
+     }
+ </div>
+    
+        @section Scripts {
+            @Scripts.Render("~/bundles/jqueryval")
+            <script type="text/javascript">
+                $('#no-access').on("change", function () {
+                    let NoAccessCheckbox = document.getElementById('no-access')
+                    let AgreeInput = document.getElementById('accept')
+                    if (NoAccessCheckbox.checked) {
+                        AgreeInput.classList.remove('d-none')
+                    }
+                    if (!NoAccessCheckbox.checked) {
+                        AgreeInput.classList.add('d-none')
+                    }
+                })
+            </script>
+            <script type="text/javascript">
+                var names = [];
+                $('.Validation').on("keypress", function () {
+                    $.ajax({
+                        //url: "/api/Validation/?query=" + $('.Validation').val().trim(),
+                        url: '@ViewBag.Validation' + $('.Validation').val().trim(),
+                        method: 'GET',
+                        success: function (data) {
+                            data.forEach(function (name) {
+                                if (!names.includes(name)) {
+                                    names.push(name);
+                                    var option = document.createElement('option')
+                                    option.value = name
+                                    document.getElementById('names').appendChild(option)
+                                }
+                            })
+                        }
+                    })
+                })
+                function onSubmitButtonClicked() {
+
+
+
+                    document.getElementById("submitButton").type = "submit";
+                }
+
+                function handleChange(src) {
+                    if (src.value == "true") {
+                        document.getElementById("newLocation").hidden = false;
+                    } else if (src.value == "false") {
+                        document.getElementById("newLocation").hidden = true;
+                    }
+                }
+
+                function signatureChange(src) {
+                    if (src.value == "true") {
+                        document.getElementById("newElecSig").hidden = false;
+                    } else if (src.value == "false") {
+                        document.getElementById("newElecSig").hidden = true;
+                    }
+                }
+
+                function onCancelButtonClicked() {
+                    var cancel = confirm("All data will be lost if the form is closed. Are you sure that you want to close? Click OK to proceed.");
+                    if (cancel) {
+                        window.location.href = "Index";
+                    }
+                }
+            </script>
+        }

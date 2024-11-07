@@ -1,0 +1,87 @@
+﻿@model OnlineForms.ViewModels.MaintenanceRequestViewModel
+@{
+    ViewBag.Title = "MasterView";
+
+}
+<div >
+    <div>
+        @section sideBarNav {
+            @Html.Partial("~/Views/Forms/MaintenanceRequest/_Sidebar.cshtml")
+        }
+    </div>
+    <div class="col-10 ">
+        @if (Model.MaintenanceRequests.Count == 0)
+        {
+            <div class="d-flex justify-content-center">
+                <h1 class="">@ViewBag.Title</h1>
+            </div>
+
+            <p>No Maintenance Requests in queue.</p>
+        }
+        else
+        {
+            <div class="d-flex justify-content-center mb-5">
+                <h1>@ViewBag.Title</h1>
+            </div>
+            <div class="mb-5">
+                <h3>Submitted Maintenance Requests:</h3>
+            </div>
+            <table class="table table-striped text-center" r>
+                <thead>
+                    <tr>
+                        <th>
+                            Name:
+                        </th>
+                        <th>
+                            Email:
+                        </th>
+                        <th>
+                            Agency:
+                        </th>
+                        <th>
+                            PhoneNumber:
+                        </th>
+                        <th>
+                            Subject:
+                        </th>
+                        <th>
+                            Date Submitted:
+                        </th>
+                        <th>
+                            Date Completed:
+                        </th>
+                        <th>
+                            View Request:
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.MaintenanceRequests.Count; i++)
+                    {
+                        string[] dateArray = Model.MaintenanceRequests[i].EnteredDate.ToString().Split();
+                        DateTime minTime = DateTime.MinValue;
+                        var submittedDate = Model.MaintenanceRequests[i].EnteredDate.ToString();
+                        var justSubmittedDate =submittedDate.Substring(0, submittedDate.IndexOf(" "));
+
+                        var completedDate = @Model.MaintenanceRequests[i].CompletedDate == minTime ? "N/A" : @Model.MaintenanceRequests[i].CompletedDate.ToShortDateString();
+                      
+                        <tr>
+                            <td>@Model.MaintenanceRequests[i].EmployeeName</td>
+                            <td>@Model.MaintenanceRequests[i].Email</td>
+                            <td>@Model.MaintenanceRequests[i].Agency</td>
+                            <td>@Model.MaintenanceRequests[i].Phonenumber</td>
+                            <td>@Model.MaintenanceRequests[i].Subject</td>
+                            <td>@justSubmittedDate</td>
+                            <td>@completedDate</td>
+                            <td>@Html.ActionLink("View", "ViewMaintenanceRequest", "MaintenanceRequest", new { id = Model.MaintenanceRequests[i].Id }, new {@class = "btn btn-primary"})</td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
+
+
+

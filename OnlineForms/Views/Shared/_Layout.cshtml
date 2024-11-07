@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+
+<body>
+    <div id="topHeader" class="">
+        @RenderSection("topHeader", required: false)
+    </div>
+    <div id="sidebar-nav" class="col-2 float-lg-start">
+        @RenderSection("sidebarNav", required: false)
+    </div>
+    <div class="d-flex">
+        <div class="container-fluid mx-3 my-5">
+            @RenderBody()
+        </div>
+    </div>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/inputmask")
+    @RenderSection("scripts", required: false)
+   
+</body>
+</html>

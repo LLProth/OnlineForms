@@ -1,0 +1,173 @@
+﻿@model  OnlineForms.ViewModels.SFN52712IndexViewmodel
+
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@section topHeader {
+    @Html.Partial("~/Views/Shared/_FormHeader.cshtml", (Dictionary<string, string>)ViewBag.FormInfo)
+}
+
+
+
+<div class="container-fluid">
+    <div class="container-fluid">
+        <div class="row flex-nowrap">
+            @section sideBarNav {
+                @Html.Partial("~/Views/Forms/SFN52712/Sidebar.cshtml")
+            }
+            <div>
+                <div class="row row-cols-1 text-start mb-2">
+                    <div>
+                        <h5 class="display-5">
+                            <a href="~/SFN52712/Create" type="button" id="createButton" class="btn button">Create New Form</a>
+                        </h5>
+                    </div>
+                </div>
+
+                @if (ViewBag.jobtitle == "Procurement Officer"  || ViewBag.jobTitle == "Executive Assistant" || ViewBag.jobtitle == "HR Director")
+                {
+                    <table class="table" id="procurement">
+                        <thead>
+                            <tr>
+                                <th id="nameSort" style="cursor: pointer; width: 13%" onclick="sortTable(0)">Event Start Date<img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                                <th id="nameSort" style="cursor: pointer; width: 20%" onclick="sortTable(1)">Destination City<img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                                <th id="nameSort" style="cursor: pointer; width: 15%" onclick="sortTable(2)">Person Traveling<img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                                <th id="nameSort" style="cursor: pointer; width: 13%" class="text-sm-center" onclick="sortTable(3, 'checkSort')">Form Submitted<img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                                <th id="nameSort" style="cursor: pointer; width: 13%" class="text-sm-center" onclick="sortTable(4, 'checkSort')">Form Approved<img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                                <th id="nameSort" style="cursor: pointer; width: 13%" class="text-sm-center" onclick="sortTable(5, 'checkSort')">Form Completed<img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                                <th id="nameSort" style="cursor: pointer; width: 20%" class="text-sm-center" onclick="sortTable(6, 'checkSort')">Form Denied<img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="submittedForms">
+                            @for (int i = 0; i < Model.SFN52712s.Count; i++)
+                            {
+                                <tr>
+                                    <td>@Html.DisplayFor(m => m.SFN52712s[@i].EventStartDate)</td>
+                                    @for (int x = 0; x < Model.SFN52712s.Count; x++)
+                                    {
+                                        if (Model.SFN52712Destinations[@x].ID == Model.SFN52712s[@i].ID)
+                                        {
+                                            <td>@Html.DisplayFor(m => m.SFN52712Destinations[@x].City), @Html.DisplayFor(m => m.SFN52712Destinations[@x].State)</td>
+                                        }
+                                    }
+                                    <td>@Html.DisplayFor(m => m.SFN52712s[@i].Name)</td>
+                                    <td class="text-sm-center check-container">@Html.DisplayFor(m => m.SFN52712s[@i].FormSubmitted)<span class="checkmark"></span></td>
+                                    <td class="text-sm-center check-container">@Html.DisplayFor(m => m.SFN52712s[@i].FormApproved)<span class="checkmark"></span></td>
+                                    <td class="text-sm-center check-container">@Html.DisplayFor(m => m.SFN52712s[@i].FormCompleted)<span class="checkmark"></span></td>
+                                    <td class="text-sm-center check-container">@Html.DisplayFor(m => m.SFN52712s[@i].FormDenied)<span class="checkmark"></span></td>
+                                    @if (Model.SFN52712s[@i].FormCompleted || Model.SFN52712s[@i].FormDenied || !Model.SFN52712s[@i].FormApproved)
+                                    {
+                                        <td>
+                                            @Html.ActionLink("View", "Details", "SFN52712", new { ID = Model.SFN52712s[@i].ID }, new { @id = "button", @class = "btn button" })
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            @Html.ActionLink("View", "Approval", "SFN52712", new { ID = Model.SFN52712s[@i].ID }, new { @id = "button", @class = "btn button" })
+                                        </td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    <button type="button" onclick="sectionId = 'procurement'; expandList(sectionId);" id="procurement-button">More</button>
+                }
+                else
+                {
+                    <div id="recentHeading" class="col">
+                        <h3>Recently Submitted Forms</h3>
+                    </div>
+                    <table class="table" id="working-on">
+                        <thead>
+                            <tr>
+                                <th id="dateSort" style="cursor: pointer; width: 13%" onclick="sortTable(0)">Event Start Date<img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                                <th id="nameSort" style="cursor: pointer; width: 20%" onclick="sortTable(1)">Destination City<img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                                <th id="nameSort" style="cursor: pointer; width: 13%" onclick="sortTable(2)">Person Traveling<img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                                <th id="nameSort" style="cursor: pointer; width: 13%" class="text-sm-center" onclick="sortTable(3, 'checkSort')">Form Submitted<img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                                <th id="nameSort" style="cursor: pointer; width: 13%" class="text-sm-center" onclick="sortTable(4, 'checkSort')">Form Approved<img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                                <th id="nameSort" style="cursor: pointer; width: 13%" class="text-sm-center" onclick="sortTable(5, 'checkSort')">Form Completed<img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                                <th id="nameSort" style="cursor: pointer; width: 13%" class="text-sm-center" onclick="sortTable(6, 'checkSort')">Form Denied<img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="submittedForms">
+
+                            @for (int i = 0; i < Model.SFN52712s.Count; i++)
+                            {
+                                if (ViewBag.Username == Model.SFN52712s[@i].Name)
+                                {
+                                    <tr>
+                                        <td>@Html.DisplayFor(m => m.SFN52712s[@i].EventStartDate)</td>
+                                        @for (int x = 0; x < Model.SFN52712s.Count; x++)
+                                        {
+                                            if (Model.SFN52712Destinations[@x].ID == Model.SFN52712s[@i].ID)
+                                            {
+                                                <td>@Html.DisplayFor(m => m.SFN52712Destinations[@x].City), @Html.DisplayFor(m => m.SFN52712Destinations[@x].State)</td>
+                                            }
+                                        }
+                                        <td>@Html.DisplayFor(m => m.SFN52712s[@i].Name)</td>
+                                        <td class="text-sm-center check-container">@Html.DisplayFor(m => m.SFN52712s[@i].FormSubmitted)<span class="checkmark"></span></td>
+                                        <td class="text-sm-center check-container">@Html.DisplayFor(m => m.SFN52712s[@i].FormApproved)<span class="checkmark"></span></td>
+                                        <td class="text-sm-center check-container">@Html.DisplayFor(m => m.SFN52712s[@i].FormCompleted)<span class="checkmark"></span></td>
+                                        <td class="text-sm-center check-container">@Html.DisplayFor(m => m.SFN52712s[@i].FormDenied)<span class="checkmark"></span></td>
+                                        <td>
+                                            @if (Model.SFN52712s[@i].FormSubmitted == true || Model.SFN52712s[@i].FormDenied == true)
+                                            {
+                                                @Html.ActionLink("View", "Details", "SFN52712", new { ID = Model.SFN52712s[@i].ID }, new { @id = "button", @class = "btn button" })
+                                            }
+                                            else
+                                            {
+                                                @Html.ActionLink("Edit", "Edit", "SFN52712", new { ID = Model.SFN52712s[@i].ID }, new { @id = "button", @class = "btn button" })
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+
+                    <button type="button" onclick="sectionId = 'working-on'; expandList(sectionId);" id="working-on-button">More</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/Scripts/commonScripts.js")
+    <partial name="_ValidationScriptsPartial" />
+
+    <script type="text/javascript">
+        function expandList(sectionId) {
+            sectionRows = sectionId + " tbody tr:nth-child(n+21)";
+            if ($('#' + sectionId).hasClass('expanded')) {
+                $('#' + sectionRows).css('display', 'none');
+                $('#' + sectionId).removeClass('expanded');
+                $('#' + sectionId + '-button').html('More');
+            }
+            else {
+                $('#' + sectionRows).css('display', 'table-row');
+                $('#' + sectionId).addClass('expanded');
+                $('#' + sectionId + '-button').html('Less');
+            }
+        }
+
+        
+    </script>
+    <style>
+        .table tbody tr:nth-child(n+21) {
+            display: none;
+        }
+
+        button {
+            width: 100px;
+            text-align: center;
+        }
+    </style>
+}

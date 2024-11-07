@@ -1,0 +1,26 @@
+﻿@model Dictionary<string, string>
+
+<div id="topHeader" class="row mb-4">
+    <div id="wsiLogo" class="col-4 text-start">
+        <div>
+            <img class="imgwsilogo" src="~/Content/images/WSIInfopathFormsLogo.jpg" />
+        </div>
+    </div>
+    <div id="formInfo" class="col-4">
+        <p>
+            <span id="formName">@Model["FormName"]</span>
+        <br />
+        <span id="division">@Model["Division"]</span><br />
+            <span id="sfnNum">@Model["Info"]</span></p>
+    </div>
+    <div id="addressBlock" class="col-4 text-end wsi-header-info">
+        1600 E Century Ave, Ste 1<br />
+        PO Box 5585<br />
+        Bismarck ND 58506-5585<br />
+        <b>Telephone 800-777-5033</b><br />
+        Toll Free Fax 888-786-8695<br />
+        TTY (hearing impaired) 800-366-6888<br />
+        Fraud and Safety Hotline 800-243-3331<br />
+        www.workforcesafety.com
+    </div>
+</div>

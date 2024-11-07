@@ -1,0 +1,855 @@
+﻿* {
+    font-family: Arial !important;
+}
+
+.container-width {
+    width: 80%;
+}
+
+@media only screen and (max-width: 1023px) {
+    .container-width {
+        width: 90%;
+        max-width: 90%;
+    }
+}
+
+/* Page header */
+.imgwsilogo {
+    width: 200px;
+    height: auto;
+}
+
+.wsi-header-info {
+    font-size: 12px;
+}
+
+/* Form formatting */
+.form-floating > label {
+    margin: 0 10px !important;
+}
+
+.form-control.input-validation-error {
+    border-color: #dc3545;
+    padding-right: calc(1.5em + 0.75rem);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23dc3545' viewBox='0 0 12 12'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right calc(0.375em + 0.1875rem) center;
+    background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
+
+.form-floating > .form-control:focus ~ label, .form-floating > .form-control:not(:placeholder-shown) ~ label, .form-floating > .form-select ~ label {
+    opacity: 1 !important;
+}
+
+.req-item-form-header {
+    background-color: lightgrey;
+}
+
+.prefix {
+    margin-right: -10px;
+    position: absolute !important;
+    padding: 7px 0 0 10px;
+}
+
+.add-req-icon {
+    height: 25px;
+    width: 25px;
+    cursor: pointer;
+}
+
+.delete-req-icon {
+    position: absolute;
+    height: 40px;
+    width: 50px;
+    cursor: pointer;
+    right: calc(10% - 35px);
+    display: none;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.req-item-inputs {
+    padding-left: 6px;
+    padding-right: 6px;
+}
+
+.req-form-long-label {
+    padding-right: 0.5rem !important;
+    padding-left: 0.5rem !important;
+    width: 110%;
+}
+
+/*.req-form-custom-long > label {*/
+    /*width: 40% !important;*/
+    /*padding-right: 0;
+    width: 120%
+}
+
+.req-form-custom-short > label {*/
+    /*width: 40% !important;*/
+    /*padding-right: 0;
+    width: 120%
+}
+
+.req-form-custom-long {
+    width: 40% !important;    
+}
+
+.req-form-custom-short {
+    width: 30% !important;
+}*/
+
+/* In Order to make the validator work you can not use Html helpers.These classes to make inputs look like html helper classes. */
+
+.textboxfor {
+    display: block;
+    width: 100%;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+
+
+/* Header */
+#topHeader {
+    margin-top: 3%;
+    margin-left: 1%;
+    margin-right: 1%;
+}
+
+#formInfo {
+    line-height: 16px;
+    text-align: left;
+    padding-left: 16.65%;
+}
+
+#formName {
+    font-family: Arial;
+    font-weight: bold;
+    font-size: 12px;
+    text-transform: uppercase;
+    margin: 0;
+    padding: 0;
+}
+
+#formName::first-letter {
+    text-transform: capitalize;
+}
+
+#escrfFormName {
+    font-family: Arial;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+#division {
+    font-family: Arial;
+    text-transform: uppercase;
+    font-size: 10px;
+    margin: 0;
+    padding: 0;
+}
+
+#escrfDivision {
+    font-family: Arial;
+    text-transform: uppercase;
+}
+
+#sfnNum {
+    font-family: Arial;
+    font-size: 8px;
+    margin: 0;
+    padding: 0;
+}
+
+#escrfSfnNum {
+    font-family: Arial;
+    font-size: 20px;
+}
+
+#addressBlock {
+    font-family: Arial;
+    font-size: 8px;
+}
+
+/* Headings */
+#heading {
+    color: white;
+    background-color: #1f1f1f;
+    font-weight: bold;
+}
+
+#recentHeading {
+    font-weight: bolder;
+    color: white;
+    background-color: #29479d;
+    text-align: left;
+    padding-top: 7px;
+    padding-bottom: 2px;
+    padding-left: 5px;
+}
+
+/* Navigation */
+nav {
+    min-height: 100vh;
+}
+
+#nav {
+    margin-top: 5%;
+    list-style-type: none;
+    color: white;
+}
+
+.navItem {
+    margin-top: 5%;
+    background-color: #29479d;
+    padding: 3.5%;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    border-radius: 4px;
+}
+
+.navItem:hover {
+    background-color: #5e70a4;
+}
+
+.navLink {
+    text-decoration: none;
+    color: white;
+}
+
+.navLink:hover {
+    color: white;
+}
+
+/* Form */
+
+.label {
+    text-transform: lowercase;
+}
+
+.techLabel {
+    margin-bottom: 5%;
+}
+
+.label::first-letter {
+    text-transform: capitalize;
+}
+
+input[type="radio"]:checked {
+    background-color: #29479d;
+}
+
+input[type="radio"] {
+    border: 1px solid #29479d;
+    border-radius: 8px;
+    height: 16px;
+    width: 16px;
+    -webkit-appearance: none;
+}
+
+/* Buttons */
+
+.button {
+    background-color: #29479d;
+    color: white;
+}
+
+#button {
+    background-color: #29479d;
+    color: white;
+
+}
+
+#headingLeft {
+    text-align: left;
+}
+
+#headingRight {
+    text-align: right;
+}
+
+#moreButton, #denied-button, #procurement-button, #working-on-button,
+#in-progress-button, #processing-button, #processed-button, .btn-blue {
+    background-color: #29479d;
+    color: white;
+}
+
+
+#createButton {
+    background-color: #29479d;
+    color: white;
+    font-size: 18px;
+    border: none;
+}
+
+.submitButton {
+    background-color: #29479d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 3%;
+}
+
+#submitButton {
+    background-color: #29479d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 3%;
+}
+
+#saveButton {
+    background-color: #29479d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 3%;
+}
+
+#selected {
+    background-color: green;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 3%;
+}
+
+#editButton {
+    background-color: #29479d;
+    color: white;
+    font-size: 18px;
+    border: none;
+}
+
+#deleteButton {
+    background-color: #29479d;
+    color: white;
+    border: none;
+}
+
+#cancelDenyButton {
+    background-color: #29479d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 3%;
+}
+
+#submitDenyButton {
+    background-color: #29479d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 3%;
+}
+
+    #submitDenyButton[disabled] {
+        background-color: darkgrey;
+        color: black;
+        border: none;
+        border-radius: 4px;
+        padding: 3%;
+    }
+
+#button[disabled] {
+    background-color: darkgrey;
+    color: black;
+    border: none;
+    border-radius: 4px;
+    padding: 3%;
+}
+
+#selected[disabled] {
+    background-color: #29479d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 3%;
+}
+
+#notSelected {
+    background-color: darkgrey;
+    color: black;
+    border: none;
+    border-radius: 4px;
+    padding: 3%;
+}
+
+#notSelected[disabled] {
+    background-color: darkgrey;
+    color: black;
+    border: none;
+    border-radius: 4px;
+    padding: 3%;
+}
+
+#saveButton[disabled] {
+    background-color: darkgrey;
+    color: black;
+    border: none;
+    border-radius: 4px;
+    padding: 3%;
+}
+
+#approveButton {
+    background-color: #29479d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 3%;
+}
+
+#denyButton {
+    background-color: #29479d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 3%;
+}
+
+#cancelButton {
+    background-color: #29479d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 3%;
+    text-decoration: none;
+}
+
+.accordionButton {
+    border: none;
+    background-color: transparent;
+    text-align: justify;
+    width: 100%;
+    display: block;
+    font-weight: bold;
+}
+
+.accordionPlus {
+    text-align: right;
+    padding-left: 10px;
+}
+
+.collapseHeader {
+    text-align: left;
+    width: 90%;
+}
+
+#deptRows {
+    background-color: white;
+}
+
+#card {
+    margin-left: 25%;
+    margin-right: 25%;
+}
+
+#cardHeader {
+    background-color: #29479d;
+    color: white;
+}
+
+#cardBody {
+}
+
+@page {
+    size: auto;
+    margin: 0mm;
+}
+
+/* Tables */
+.table tr:nth-child(even) {
+    background-color: rgb(41, 71, 157, 0.1);
+}
+
+#printTable tr:nth-child(even) {
+    background-color: none;
+}
+
+table {
+    width: 100%;
+}
+
+#printTable {
+    border: 1px solid black;
+    table-layout: fixed;
+    background-color: none;
+}
+
+.printRow {
+    border: 1px solid black;
+}
+
+.printCell {
+    border: 1px solid black;
+    vertical-align: top;
+}
+
+.printHeading {
+    background-color: rgb(41, 71, 157, 0.1);
+    -webkit-print-color-adjust: exact !important;
+}
+
+.userInput {
+    font-weight: bold;
+}
+
+.sectionName {
+    font-weight: normal;
+    font-style: italic;
+}
+
+/* Forms */
+div .formRow {
+    margin-top: 2%;
+}
+
+/* Validation*/
+.validationText {
+    color: red;
+}
+
+/* Print */
+#print {
+    margin-left: 15%;
+}
+
+#wait {
+    background-color: #29479d;
+    border: 1px solid grey;
+    padding: 50px;
+    margin-left: 30%;
+    position: fixed;
+    color: white;
+    z-index: 1;
+    display: none;
+}
+
+#proofDenialBox {
+    background-color: white;
+    border: 1px solid grey;
+    padding: 50px;
+    margin-left: 30%;
+    position: fixed;
+    color: black;
+    z-index: 1;
+    display: none;
+}
+
+.ergo {
+    display: none;
+}
+
+.facility {
+    display: none;
+}
+
+.finance {
+    display: none;
+}
+
+.hr {
+    display: none;
+}
+
+.help {
+    display: none;
+}
+
+.is {
+    display: none;
+}
+
+.supervisor {
+    display: none;
+}
+
+.misc {
+    display: none;
+}
+
+/* Search box */
+
+.searchBox input {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 16px;
+    position: absolute;
+    border-radius: 8px 8px 0 0;
+    z-index: 100;
+    border: 8px solid;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.4s;
+}
+
+#StaffRequestModel_Department {
+    cursor: default;
+}
+
+#StaffRequestModel_Location {
+    cursor: default;
+}
+
+#StaffRequestModel_TypeOfHire {
+    cursor: default;
+}
+
+.fs-7 {
+    font-size: 0.7rem;
+}
+
+button#homelink {
+    height: 75%;
+    transition: all 0.5s;
+}
+
+button#homelink:hover {
+    color: #29479d;
+    background-color: #e6e6e6;
+    border-color: #29479d;
+}
+
+.chevronright {
+    transform: rotate(0deg);
+    transition: transform 0.5s;
+}
+
+.home-menu-dropdown {
+    position: sticky;
+    height: 0%;
+    opacity: 0;
+    transition: all 1s;
+    background-color: #e6e6e6;
+    border: 1px solid #29479d;
+    border-top: none;
+    border-radius: 5px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    overflow: hidden;
+    z-index: 99;
+}
+
+/* Screen */
+@media screen {
+    #printTable {
+        display: none;
+    }
+
+    #notPrint {
+        display: block;
+    }
+}
+
+/* Print */
+@media print {
+    /* Show and hide elements*/
+    #printTable {
+        display: normal;
+    }
+
+    #notPrint {
+        display: none;
+    }
+
+    .escrfTable {
+        border: 1px solid black;
+    }
+
+    #escrfFormName {
+        font-family: Arial;
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    #escrfDivision {
+        font-family: Arial;
+        text-transform: uppercase;
+        font-size: 14px;
+    }
+
+    #escrfSfnNum {
+        font-family: Arial;
+        font-size: 14px;
+    }
+
+    body {
+        font-size: 12px;
+        background-color: none;
+        margin: 10mm;
+    }
+
+    h5 {
+        font-weight: bold;
+        font-size: 16px;
+    }
+
+    #sidebar-nav {
+        display: none;
+    }
+
+    #submitButton {
+        display: none;
+    }
+
+    /* Header */
+    #topHeader {
+        margin-bottom: 0;
+    }
+
+    .imgwsilogo {
+        width: 80%;
+        height: auto;
+    }
+
+    #wsiLogo {
+        width: 25%;
+    }
+
+    #formInfo {
+        width: 40%;
+    }
+
+    #formName {
+        font-family: Arial;
+        font-weight: bold;
+        font-size: 12px;
+        margin: 0;
+        padding: 0;
+    }
+
+    #division {
+        font-family: Arial;
+        text-transform: uppercase;
+        font-size: 10px;
+        margin: 0;
+        padding: 0;
+    }
+
+    #sfnNum {
+        font-family: Arial;
+        font-size: 8px;
+        margin: 0;
+        padding: 0;
+    }
+
+    #addressBlock {
+        font-family: Arial;
+        font-size: 8px;
+        width: 33.3%;
+    }
+
+    /* Table */
+    th {
+        font-size: 10px;
+        font-family: Arial;
+    }
+
+    .printHeading {
+        background-color: rgb(41, 71, 157, 0.1) !important;
+        -webkit-print-color-adjust: exact !important;
+    }
+
+    td {
+        font-size: 8px;
+        font-family: Arial;
+    }
+
+    .sectionName {
+        font-size: 8px;
+        font-weight: normal;
+        font-style: italic;
+    }
+
+    btn{
+        display: none;
+    }
+    
+}
+
+.check-container {
+    position: relative;
+    padding-left: 35px !important;
+}
+
+.check-container .check-box {
+    opacity: 0;
+    width: 0;
+}
+
+.check-container input:checked ~ .checkmark {
+    background-color: #29479d;
+}
+
+.check-container input:checked ~ .checkmark::after {
+   display: block;
+}
+
+input[type="checkbox"] {
+    appearance: none;
+    top: 11px;
+    left: calc(50% - 12.5px);
+    height: 25px;
+    width: 25px;
+    background-color: #eee;
+    border: solid #29479d;
+    border-width: 2px;
+}
+
+    input[type="checkbox"]:checked {
+        background-color: #29479d;
+        left: 22px;
+        top: 10px;
+        width: 25px;
+        height: 25px;
+        
+    }
+
+.checkmark {
+    position: absolute;
+    top: 11px;
+    left: calc(50% - 12.5px);
+    height: 25px;
+    width: 25px;
+    background-color: #eee;
+    border: solid #29479d;
+    border-width: 2px;
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.check-container .checkmark::after {
+    left: 7px;
+    top: 3px;
+    width: 8px;
+    height: 13px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}

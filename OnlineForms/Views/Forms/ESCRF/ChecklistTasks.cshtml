@@ -1,0 +1,1327 @@
+﻿@model OnlineForms.ViewModels.ESCRFViewModel
+
+@{
+    ViewBag.FormInfo = new Dictionary<string, string>();
+    ViewBag.FormInfo.Add("FormName", "Employee Status Change Request Form");
+    ViewBag.FormInfo.Add("Division", "Human Resource Division");
+    ViewBag.FormInfo.Add("Info", Model.ChangeListInfo.ChangeType + " Checklist");
+}
+<div class="row">
+    @section topHeader {
+        @Html.Partial("~/Views/Shared/_ESCRFHeader.cshtml", (Dictionary<string, string>)ViewBag.FormInfo)
+    }
+</div>
+
+<div id="notPrint" class="container-fluid">
+    <div class="container-fluid">
+        <div class="row flex-nowrap">
+            @section sideBarNav {
+                @Html.Partial("~/Views/Forms/ESCRF/_Sidebar.cshtml")
+            }
+            <div>
+
+
+                <div id="formView">
+                    <div class="col py-3">
+                        <div class="text-start mb-2">
+                            <div id="recentHeading" class="col">
+                                <h3>@Model.ChangeListInfo.ChangeType Checklist</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-start d-inline-block align-middle">
+                        <h6 class="fw-bold">
+                            Employee Name: @Model.ChangeListInfo.EmployeeName
+                        </h6>
+                        <h6 class="fw-bold">
+                            Effective Date: @Model.ChangeListInfo.EffectiveDate.ToString("MM/dd/yyyy")
+                        </h6>
+                        @if (Model.ChangeListInfo.ChangeType.ToLower() == "new hire" || Model.ChangeListInfo.ChangeType.ToLower() == "change in wsi")
+                        {
+                            if (ViewBag.ITSecurity == true)
+                            {
+                                if (ViewBag.TechRequirementsCompleted == "true")
+                                {
+                                @Html.ActionLink("View Technology Form", "TechnologyRequirementsView", "ESCRF", new { id = ViewBag.TechRequirementsId }, new { @id = "button", @class = "btn btn-primary" })
+                                }
+                                else
+                                {
+                                <button id="button" class="btn btn-primary" disabled>View Technology Form</button>
+                                }
+                            }
+                        }
+                        else if (Model.ChangeListInfo.ChangeType.ToLower() == "termination")
+                        {
+                            if (ViewBag.TechRequirementsCompleted == "true")
+                            {
+                                @Html.ActionLink("View Technology Form", "EmployeeTechnologyView", "ESCRF", new { id = ViewBag.TechRequirementsId }, new { @id = "button", @class = "btn btn-primary" })
+                            }
+                            else
+                            {
+                                <button id="button" class="btn btn-primary" disabled>View Technology Form</button>
+                            }
+                        }
+
+
+                    </div>
+
+                    <div class="text-end d-inline-block align-middle float-end">
+                        @if (ViewBag.Access == true)
+                        {
+
+                            if (Model.ChangeListInfo.ChangeType == "New Hire")
+                            {
+                                @Html.ActionLink("View Form", "NewHireView", "ESCRF", new { id = Model.NewHire.ID }, new { @id = "button", @class = "btn m-2", })
+                                @Html.ActionLink("Print", "ChecklistTasks", "ESCRF", new { id = Model.ChangeListInfo.ChangelistID }, new { @id = "button", @class = "btn", @onclick = "window.print()" })
+                                @Html.ActionLink("Delete", "NewHireDelete", "ESCRF", new { id = Model.ChangeListInfo.ID, taskListId = Model.ChangeListInfo.ChangelistID }, new { @id = "deleteButton", @class = "btn m-2" })
+
+                            }
+                            if (Model.ChangeListInfo.ChangeType == "Termination")
+                            {
+                                @Html.ActionLink("View Form", "TerminationView", "ESCRF", new { id = Model.Termination.ID }, new { @id = "button", @class = "btn m-2" })
+                                @Html.ActionLink("Print", "ChecklistTasks", "ESCRF", new { id = Model.ChangeListInfo.ChangelistID }, new { @id = "button", @class = "btn", @onclick = "window.print()" })
+                                @Html.ActionLink("Delete", "TerminationDelete", "ESCRF", new { id = Model.ChangeListInfo.ID, taskListId = Model.ChangeListInfo.ChangelistID }, new { @id = "deleteButton", @class = "btn m-2" })
+                            }
+                            if (Model.ChangeListInfo.ChangeType == "Change in WSI")
+                            {
+                                @Html.ActionLink("View Form", "ChangeView", "ESCRF", new { id = Model.Change.ID }, new { @id = "button", @class = "btn m-2" })
+                                @Html.ActionLink("Print", "ChecklistTasks", "ESCRF", new { id = Model.ChangeListInfo.ChangelistID }, new { @id = "button", @class = "btn", @onclick = "window.print()" })
+                                @Html.ActionLink("Delete", "ChangeDelete", "ESCRF", new { id = Model.ChangeListInfo.ID, taskListId = Model.ChangeListInfo.ChangelistID }, new { @id = "deleteButton", @class = "btn m-2" })
+                            }
+                            if (Model.ChangeListInfo.ChangeType == "Name Change")
+                            {
+                                @Html.ActionLink("View Form", "NameView", "ESCRF", new { id = Model.Name.ID }, new { @id = "button", @class = "btn m-2" })
+                                @Html.ActionLink("Print", "ChecklistTasks", "ESCRF", new { id = Model.ChangeListInfo.ChangelistID }, new { @id = "button", @class = "btn", @onclick = "window.print()" })
+                                @Html.ActionLink("Delete", "NameDelete", "ESCRF", new { id = Model.ChangeListInfo.ID, taskListId = Model.ChangeListInfo.ChangelistID }, new { @id = "deleteButton", @class = "btn m-2" })
+                            }
+                        }
+                    </div>
+
+                    <table class="table" id="submittedForms">
+                        <thead>
+                            <tr>
+                                <th>Task</th>
+                                <th>Assigned To</th>
+                                <th>Comments</th>
+                                <th>Completed</th>
+                                <th>Not Applicable</th>
+                                <th>Task Completed On</th>
+                                <th>Completed By</th>
+                                @if (ViewBag.isAdmin == true) 
+                                { 
+                                    <th>EditTask</th>
+                                }
+                                
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @for (int i = 0; i < Model.TaskListItemList.Count; i++)
+                            {
+                                using (Html.BeginForm("UpdateChecklist", "ESCRF", FormMethod.Post))
+                                {
+                                    @Html.AntiForgeryToken()
+
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                                    if (Model.TaskListItemList[i].Deputy == ViewBag.Username || ViewBag.Access == true ||
+                                        (ViewBag.Finance == true && Model.TaskListItemList[i].Deputy.ToLower() == "finance") ||
+                                        (ViewBag.HelpDesk == true && Model.TaskListItemList[i].Deputy.ToLower() == "help desk") ||
+                                        (ViewBag.Facilities == true && Model.TaskListItemList[i].Deputy.ToLower() == "facility management") ||
+                                        (ViewBag.TechServices == true && Model.TaskListItemList[i].Deputy.ToLower() == "is tech") ||
+                                        (ViewBag.ITSecurity == true && Model.TaskListItemList[i].Deputy.ToLower() == "is tech") ||
+                                        (ViewBag.ITSecurity == true && Model.TaskListItemList[i].Deputy.ToLower() == "help desk"))
+                                    {
+                                        if (i-1 >= 0 && Model.TaskListItemList[i].Dept != Model.TaskListItemList[i - 1].Dept || i == 0)
+                                        {
+                                            if (Model.TaskListItemList[i].Dept.ToUpper() == "HR")
+                                            {
+                                                <tr id="deptRows">
+                                                    <th colspan="8" id="collapseHR" class="collapseHeader"><button class="accordionButton" type="button" onclick="hrAccordion()"><span class="accordionDept">HR</span> <span id="hrPlus" class="accordionPlus">+</span></button></th>
+                                                </tr>
+                                            } else if (Model.TaskListItemList[i].Dept.ToUpper() == "ERGO")
+                                            {
+                                                <tr id="deptRows">
+                                                    <th colspan="8" class="collapseHeader"><button class="accordionButton" type="button" onclick="ergoAccordion()"><span class="accordionDept">Ergo</span> <span id="ergoPlus" class="accordionPlus">+</span></button></th>
+                                                </tr>
+                                            } else if (Model.TaskListItemList[i].Dept.ToUpper() == "FACILITY MANAGEMENT")
+                                            {
+                                                <tr id="deptRows">
+                                                    <th colspan="8" class="collapseHeader"><button class="accordionButton" type="button" onclick="facilitiesAccordion()"><span class="accordionDept">Facility Management</span> <span id="facilityPlus" class="accordionPlus">+</span></button></th>
+                                                </tr>
+                                            } else if (Model.TaskListItemList[i].Dept.ToUpper() == "FINANCE")
+                                            {
+                                                <tr id="deptRows">
+                                                    <th colspan="8" class="collapseHeader"><button class="accordionButton" type="button" onclick="financeAccordion()"><span class="accordionDept">Finance</span> <span id="financePlus" class="accordionPlus">+</span></button></th>
+                                                </tr>
+                                            } else if (Model.TaskListItemList[i].Dept.ToUpper() == "HELP DESK")
+                                            {
+                                                <tr id="deptRows">
+                                                    <th colspan="8" class="collapseHeader"><button class="accordionButton" type="button" onclick="helpDeskAccordion()"><span class="accordionDept">Help Desk</span> <span id="helpPlus" class="accordionPlus">+</span></button></th>
+                                                </tr>
+                                            } else if (Model.TaskListItemList[i].Dept.ToUpper() == "IS TECH")
+                                            {
+                                                <tr id="deptRows">
+                                                    <th colspan="8" class="collapseHeader"><button class="accordionButton" type="button" onclick="isAccordion()"><span class="accordionDept">IS Tech</span> <span id="isPlus" class="accordionPlus">+</span></button></th>
+                                                </tr>
+                                            } else if (Model.TaskListItemList[i].Dept.ToUpper() == "SUPERVISOR")
+                                            {
+                                                <tr id="deptRows">
+                                                    <th colspan="8" class="collapseHeader"><button class="accordionButton" type="button" onclick="supervisorAccordion()"><span class="accordionDept">Supervisor</span> <span id="supervisorPlus" class="accordionPlus">+</span></button></th>
+                                                </tr>
+                                            } else
+                                            {
+                                                <tr id="deptRows">
+                                                    <th colspan="8" class="collapseHeader"><button class="accordionButton" type="button" onclick="miscAccordion()"><span class="accordionDept">Miscellaneous</span> <span id="miscPlus" class="accordionPlus">+</span></button></th>
+                                                </tr>
+                                            }
+
+                                        }
+                        <tr class="@Model.TaskListItemList[i].Dept.ToLower()">
+                            @*Task*@
+                            <td>@Model.TaskListItemList[@i].Task</td>
+                            @*Assigned To*@
+                            <td>@Model.TaskListItemList[i].Deputy</td>
+                            @*Comments*@
+                            @if (Model.TaskListItemList[i].Completed == true || Model.TaskListItemList[i].NotApplicable == true)
+                            {
+                                {
+                                    ViewBag.Comments = Model.TaskListItemList[i].Comments;
+                                }
+
+                                <td> @Model.TaskListItemList[i].Comments @Html.EditorFor(m => m.TaskListItem.Comments, new { htmlAttributes = new { @name = "ID", @class = "form-control fw-bold", @maxlength = "500" } })</td>
+                            }
+                            else
+                            {
+                                <td>@Html.EditorFor(m => m.TaskListItem.Comments, new { htmlAttributes = new { @name = "Comments", @class = "form-control fw-bold", @maxlength = "500" } })</td>
+
+                            }
+                            @if (Model.TaskListItemList[i].Completed == true)
+                            {
+                                if (Model.TaskListItemList[i].DefaultTaskID == "1" && Model.TaskListItemList[i].Deputy == ViewBag.Username || Model.TaskListItemList[i].DefaultTaskID == "1" && ViewBag.Access == true || Model.TaskListItemList[i].DefaultTaskID == "103" && Model.TaskListItemList[i].Deputy == ViewBag.Username || Model.TaskListItemList[i].DefaultTaskID == "103" && ViewBag.Access == true)
+                                {
+                                    <td class="text-center" colspan="2">@Html.ActionLink("View Form", "TechnologyRequirementsView", "ESCRF", new { id = Model.TaskListItemList[@i].ID }, new { @id = "selected", @class = "btn btn-primary" })</td>
+                                }
+                                else if (Model.TaskListItemList[i].DefaultTaskID == "132" && Model.TaskListItemList[i].Deputy == ViewBag.Username || Model.TaskListItemList[i].DefaultTaskID == "132" && ViewBag.Access == true)
+                                {
+                                    <td class="text-center" colspan="2">@Html.ActionLink("View Form", "EmployeeTechnologyView", "ESCRF", new { id = Model.TaskListItemList[@i].ID }, new { @id = "selected", @class = "btn btn-primary" })</td>
+                                }
+                                else
+                                {
+                                    if (ViewBag.Access == true)
+                                    {
+                                        <td><input id="selected" class="w-100 btn btn-primary" type="submit" onclick="onSubmitButtonClicked()" name="Command" value="Complete" /> </td>
+                                        <td><input id="notSelected" class="w-100 btn btn-primary" type="submit" onclick="onSubmitButtonClicked()" name="Command" value="N/A" /> </td>
+                                    }
+                                    else if (ViewBag.Access != true)
+                                    {
+                                        <td><input id="selected" class="w-100 btn btn-primary" type="submit" onclick="onSubmitButtonClicked()" name="Command" value="Complete" disabled /> </td>
+                                        <td><input id="notSelected" class="w-100 btn btn-primary" type="submit" onclick="onSubmitButtonClicked()" name="Command" value="N/A" disabled /> </td>
+                                    }
+                                }
+                            }
+                            else if (Model.TaskListItemList[i].NotApplicable == true)
+                            {
+                                if (ViewBag.Access == true)
+                                {
+                                    <td><input id="notSelected" class="w-100 btn btn-primary" type="submit" onclick="onSubmitButtonClicked()" name="Command" value="Complete" /> </td>
+                                    <td><input id="selected" class="w-100 btn btn-primary" type="submit" onclick="onSubmitButtonClicked()" name="Command" value="N/A" /> </td>
+                                }
+                                else if (ViewBag.Access != true)
+                                {
+                                    <td><input id="notSelected" class="w-100 btn btn-primary" type="submit" onclick="onSubmitButtonClicked()" name="Command" value="Complete" disabled /> </td>
+                                    <td><input id="selected" class="w-100 btn btn-primary" type="submit" onclick="onSubmitButtonClicked()" name="Command" value="N/A" disabled /> </td>
+                                }
+                            }
+                            else
+                            {
+                                if (Model.TaskListItemList[i].DefaultTaskID == "1" && Model.TaskListItemList[i].Deputy == ViewBag.Username || Model.TaskListItemList[i].DefaultTaskID == "1" && ViewBag.Access == true || Model.TaskListItemList[i].DefaultTaskID == "103" && Model.TaskListItemList[i].Deputy == ViewBag.Username || Model.TaskListItemList[i].DefaultTaskID == "103" && ViewBag.Access == true)
+                                {
+                                    if (Model.TaskListItemList[i].Completed != true)
+                                    {
+                                        <td class="text-center" colspan="2">@Html.ActionLink("Complete Form", "TechnologyRequirements", "ESCRF", new { id = Model.TaskListItemList[@i].ID }, new { @id = "button", @class = "btn btn-primary" })</td>
+                                    }
+                                }
+                                else if (Model.TaskListItemList[i].DefaultTaskID == "132" && Model.TaskListItemList[i].Deputy == ViewBag.Username || Model.TaskListItemList[i].DefaultTaskID == "132" && ViewBag.Access == true)
+                                {
+                                    if (Model.TaskListItemList[i].Completed != true)
+                                    {
+                                        <td class="text-center" colspan="2">@Html.ActionLink("Complete Form", "EmployeeTechnology", "ESCRF", new { id = Model.TaskListItemList[@i].ID }, new { @id = "notSelected", @class = "btn btn-primary" })</td>
+                                    }
+                                }
+                                else
+                                {
+                                    <td><input id="submitButton" class="w-100 btn btn-primary" type="submit" onclick="onSubmitButtonClicked()" name="Command" value="Complete" /> </td>
+                                    <td><input id="submitButton" class="w-100 btn btn-primary" type="submit" onclick="onSubmitButtonClicked()" name="Command" value="N/A" /> </td>
+
+                                }
+
+                            }
+
+                            @if (Model.TaskListItemList[i].Completed == true || Model.TaskListItemList[i].NotApplicable == true)
+                            {
+                                <td>@Model.TaskListItemList[@i].SignedOn.ToString("MM/dd/yyyy")</td>
+
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                            @*Completed By*@
+                            <td>@Model.TaskListItemList[i].CompletedBy</td>
+                            @if (ViewBag.isAdmin == true)
+                            {
+                                <td>
+                                    @Html.ActionLink("Edit Task", "TaskEditView", "ESCRF", new { id = Model.TaskListItemList[@i].ID }, new { @id = "button", @class = "btn btn-primary" })
+                                </td>
+                            }
+                            @if (ViewBag.TechServices == true || ViewBag.Access == true && Model.TaskListItemList[i].Completed == true)
+                            {
+                                if (Model.TaskListItemList[i].Task.ToLower() == "complete new technology requirements form for teams voice & computer access")
+                                {
+                                    <td class="text-end">@Html.ActionLink("View", "TechnologyRequirementsView", "ESCRF", new { id = Model.TaskListItemList[@i].ID }, new { @id = "button", @class = "btn btn-primary" })</td>
+                                }
+
+                            }
+                            @if (ViewBag.TechServices == true || ViewBag.Access == true && Model.TaskListItemList[i].Completed == true)
+                            {
+                                if (Model.TaskListItemList[i].Task.ToLower() == "Complete Employee Technology Form")
+                                {
+                                    <td class="text-end">@Html.ActionLink("View", "EmployeeTechnologyView", "ESCRF", new { id = Model.TaskListItemList[@i].ID }, new { @id = "button", @class = "btn btn-primary" })</td>
+                                }
+
+                            }
+
+
+                            <td hidden>@Html.EditorFor(m => m.TaskListItem.ID, new { htmlAttributes = new { @name = "ID", @class = "form-control fw-bold", @Value = Model.TaskListItemList[i].ID } })</td>
+                            <td hidden>@Html.EditorFor(m => m.TaskListItem.TaskListID, new { htmlAttributes = new { @name = "ID", @class = "form-control fw-bold", @Value = Model.TaskListItemList[i].TaskListID } })</td>
+
+                        </tr>
+                                    }
+                                }
+                            }
+                        </tbody>
+
+
+                    </table>
+                    @* Show more forms or hide the extras *@
+
+                    @*@Html.ActionLink("Complete", "TechnologyRequirements", "ESCRF", new { id = Model.TaskListItem.TaskListID }, new { @id = "button", @class = "btn btn-primary" })*@
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<table id="printTable" class="escrfTable">
+    @*Form info for New Hire*@
+    @if (Model.ChangeListInfo.ChangeType == "New Hire")
+    {
+    <tbody>
+        <tr class="printRow">
+            <td class="printCell" colspan="6">
+                @Html.LabelFor(m => m.NewHire.FirstName) <br />
+                <span class="userInput">@Html.DisplayFor(m => m.NewHire.FirstName)</span>
+            </td>
+            <td class="printCell" colspan="6">
+                @Html.LabelFor(m => m.NewHire.LastName) <br />
+                <span class="userInput">@Model.NewHire.LastName</span>
+            </td>
+            <td class="printCell" colspan="6">
+                @Html.LabelFor(m => m.NewHire.MiddleInitial) <br />
+                <span class="userInput">@Model.NewHire.MiddleInitial</span>
+            </td>
+        </tr>
+        <tr class="printRow">
+            <td class="printCell" colspan="6">
+                @Html.LabelFor(m => m.NewHire.JobTitle) <br />
+                <span class="userInput">@Html.DisplayFor(m => m.NewHire.JobTitle)</span>
+            </td>
+            <td class="printCell" colspan="6">
+                @Html.LabelFor(m => m.NewHire.EffectiveDate) <br />
+                <span class="userInput">@Model.NewHire.EffectiveDate.ToShortDateString()</span>
+            </td>
+            <td class="printCell" colspan="6">
+                @Html.LabelFor(m => m.NewHire.CurrentSupervisor) <br />
+                <span class="userInput">@Model.NewHire.CurrentSupervisor</span>
+            </td>
+        </tr>
+
+        <tr class="printRow">
+            <td class="printCell" colspan="6">
+                @Html.LabelFor(m => m.NewHire.EmployeeType) <br />
+                <span class="userInput">@Html.DisplayFor(m => m.NewHire.EmployeeType)</span>
+            </td>
+            <td class="printCell" colspan="6">
+                @Html.LabelFor(m => m.NewHire.FLSAStatus) <br />
+                <span class="userInput">@Model.NewHire.FLSAStatus</span>
+            </td>
+            <td class="printCell" colspan="6">
+                @Html.LabelFor(m => m.NewHire.TransferringFromAgency) <br />
+                <span class="userInput">@Model.NewHire.TransferringFromAgency</span>
+            </td>
+        </tr>
+
+        <tr class="printRow">
+            <td class="printCell" colspan="18">
+                @Html.LabelFor(m => m.NewHire.Comments) <br />
+                <span class="userInput">@Html.DisplayFor(m => m.NewHire.Comments)</span>
+            </td>
+        </tr>
+
+        <tr class="printRow">
+            <td class="printCell" colspan="6">
+                @Html.LabelFor(m => m.NewHire.ModifiedBy) <br />
+                <span class="userInput">@Html.DisplayFor(m => m.NewHire.ModifiedBy)</span>
+            </td>
+            <td class="printCell" colspan="6">
+                @Html.LabelFor(m => m.NewHire.ChangeType) <br />
+                <span class="userInput">@Model.NewHire.ChangeType</span>
+            </td>
+            <td class="printCell" colspan="6">
+                @Html.LabelFor(m => m.NewHire.CreatedDate) <br />
+                <span class="userInput">@Model.NewHire.CreatedDate.ToShortDateString()</span>
+            </td>
+        </tr>
+    </tbody>
+    }
+    @*Form info for Change*@
+    else if (Model.ChangeListInfo.ChangeType.ToLower() == "change in wsi")
+    {
+        <tbody>
+            <tr class="printRow">
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.Change.EmployeeName) <br />
+                    <span class="userInput">@Html.DisplayFor(m => m.Change.EmployeeName)</span>
+                </td>
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.Change.PhoneNumber) <br />
+                    <span class="userInput">@Model.Change.PhoneNumber</span>
+                </td>
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.Change.Department) <br />
+                    <span class="userInput">@Model.Change.Department</span>
+                </td>
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.Change.OfficeLocation) <br />
+                    <span class="userInput">@Html.DisplayFor(m => m.Change.OfficeLocation)</span>
+                </td>
+            </tr>
+            <tr class="printRow">
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.Change.CurrentSupervisor) <br />
+                    <span class="userInput">@Model.Change.CurrentSupervisor</span>
+                </td>
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.Change.IsNewPosition) <br />
+                    <span class="userInput">@Model.Change.IsNewPosition</span>
+                </td>
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.Change.PositionName) <br />
+                    <span class="userInput">@Html.DisplayFor(m => m.Change.PositionName)</span>
+                </td>
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.Change.IsNewSupervisor) <br />
+                    <span class="userInput">@Model.Change.IsNewSupervisor</span>
+                </td>
+            </tr>
+
+            <tr class="printRow">
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.Change.NewSupervisor) <br />
+                    <span class="userInput">@Model.Change.NewSupervisor</span>
+                </td>
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.Change.IsTempToFte) <br />
+                    <span class="userInput">@Model.Change.IsTempToFte</span>
+                </td>
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.Change.FLSAStatus) <br />
+                    <span class="userInput">@Html.DisplayFor(m => m.Change.FLSAStatus)</span>
+                </td>
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.Change.EffectiveDate) <br />
+                    <span class="userInput">@Html.DisplayFor(m => m.Change.EffectiveDate)</span>
+                </td>
+            </tr>
+
+            <tr class="printRow">
+                <td class="printCell" colspan="24">
+                    @Html.LabelFor(m => m.Change.Comments) <br />
+                    <span class="userInput">@Model.Change.Comments</span>
+                </td>
+            </tr>
+
+            <tr class="printRow">
+                <td class="printCell" colspan="8">
+                    @Html.LabelFor(m => m.Change.ModifiedBy) <br />
+                    <span class="userInput">@Model.Change.ModifiedBy</span>
+                </td>
+                <td class="printCell" colspan="8">
+                    @Html.LabelFor(m => m.Change.ChangeType) <br />
+                    <span class="userInput">@Model.Change.ChangeType</span>
+                </td>
+                <td class="printCell" colspan="8">
+                    @Html.LabelFor(m => m.Change.CreatedDate) <br />
+                    <span class="userInput">@Html.DisplayFor(m => m.Change.CreatedDate)</span>
+                </td>
+            </tr>
+
+
+        </tbody>
+    }
+    @*Form info for Name*@
+    else if (Model.ChangeListInfo.ChangeType.ToLower() == "name change")
+    {
+        <tbody>
+            <tr class="printRow">
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.Name.EmployeeName) <br />
+                    <span class="userInput">@Html.DisplayFor(m => m.Name.EmployeeName)</span>
+                </td>
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.Name.PhoneNumber) <br />
+                    <span class="userInput">@Model.Name.PhoneNumber</span>
+                </td>
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.Name.CurrentSupervisor) <br />
+                    <span class="userInput">@Model.Name.CurrentSupervisor</span>
+                </td>
+
+            </tr>
+
+            <tr class="printRow">
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.Name.Department) <br />
+                    <span class="userInput">@Html.DisplayFor(m => m.Name.Department)</span>
+                </td>
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.Name.OfficeLocation) <br />
+                    <span class="userInput">@Model.Name.OfficeLocation</span>
+                </td>
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.Name.EffectiveDate) <br />
+                    <span class="userInput">@Model.Name.EffectiveDate.ToShortDateString()</span>
+                </td>
+
+            </tr>
+
+            <tr class="printRow">
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.Name.FirstName) <br />
+                    <span class="userInput">@Html.DisplayFor(m => m.Name.FirstName)</span>
+                </td>
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.Name.LastName) <br />
+                    <span class="userInput">@Html.DisplayFor(m => m.Name.LastName)</span>
+                </td>
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.Name.MiddleInitial) <br />
+                    <span class="userInput">@Model.Name.MiddleInitial</span>
+                </td>
+            </tr>
+
+            <tr class="printRow">
+                <td class="printCell" colspan="18">
+                    @Html.LabelFor(m => m.Name.Comments) <br />
+                    <span class="userInput">@Model.Name.Comments</span>
+                </td>
+            </tr>
+
+            <tr class="printRow">
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.Name.ModifiedBy) <br />
+                    <span class="userInput">@Model.Name.ModifiedBy</span>
+                </td>
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.Name.ChangeType) <br />
+                    <span class="userInput">@Model.Name.ChangeType</span>
+                </td>
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.Name.CreatedDate) <br />
+                    <span class="userInput">@Html.DisplayFor(m => m.Name.CreatedDate)</span>
+                </td>
+            </tr>
+
+
+        </tbody>
+    }
+    @*Form info for Termination*@
+    else if (Model.ChangeListInfo.ChangeType.ToLower() == "termination")
+    {
+        <tbody>
+            <tr class="printRow">
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.Termination.EmployeeName) <br />
+                    <span class="userInput">@Html.DisplayFor(m => m.Termination.EmployeeName)</span>
+                </td>
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.Termination.CurrentSupervisor) <br />
+                    <span class="userInput">@Model.Termination.CurrentSupervisor</span>
+                </td>
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.Termination.PhoneNumber) <br />
+                    <span class="userInput">@Model.Termination.PhoneNumber</span>
+                </td>
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.Termination.Department) <br />
+                    <span class="userInput">@Html.DisplayFor(m => m.Termination.Department)</span>
+                </td>
+            </tr>
+            <tr class="printRow">
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.Termination.LastDateWorked) <br />
+                    <span class="userInput">@Model.Termination.LastDateWorked.ToShortDateString()</span>
+                </td>
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.Termination.EffectiveDate) <br />
+                    <span class="userInput">@Model.Termination.EffectiveDate.ToShortDateString()</span>
+                </td>
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.Termination.OfficeLocation) <br />
+                    <span class="userInput">@Html.DisplayFor(m => m.Termination.OfficeLocation)</span>
+                </td>
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.Termination.TransferringToAgency) <br />
+                    <span class="userInput">@Model.Termination.TransferringToAgency</span>
+                </td>
+            </tr>
+
+            <tr class="printRow">
+        <td class="printCell" colspan="24">
+            @Html.LabelFor(m => m.Termination.Comments) <br />
+            <span class="userInput">@Html.DisplayFor(m => m.Termination.Comments)</span>
+        </td>
+    </tr>
+
+    <tr class="printRow">
+                <td class="printCell" colspan="8">
+                    @Html.LabelFor(m => m.Termination.ModifiedBy) <br />
+                    <span class="userInput">@Model.Termination.ModifiedBy</span>
+                </td>
+                <td class="printCell" colspan="8">
+                    @Html.LabelFor(m => m.Termination.ChangeType) <br />
+                    <span class="userInput">@Model.Termination.ChangeType</span>
+                </td>
+                <td class="printCell" colspan="8">
+                    @Html.LabelFor(m => m.Termination.CreatedDate) <br />
+                    <span class="userInput">@Html.DisplayFor(m => m.Termination.CreatedDate)</span>
+                </td>
+            </tr>
+
+
+        </tbody>
+    }
+</table>
+
+@*Prints Helpdesk tasks*@
+<table id="printTable">
+    <thead>
+        <tr class="printHeading">
+            <th colspan="4">Helpdesk Tasks</th>
+            <th colspan="2">Completed By</th>
+            <th colspan="2">Completed On</th>
+            <th colspan="2">Status</th>
+            <th colspan="2">Comments</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @for (int i = 0; i < Model.TaskListItemList.Count; i++)
+        {
+            if (Model.TaskListItemList[i].Dept.ToUpper() == "HELP DESK")
+            {
+                <tr class="printRow">
+                    <td class="printCell" colspan="4">@Model.TaskListItemList[i].Task</td>
+                    <td colspan="2">@Model.TaskListItemList[i].CompletedBy</td>
+                    @if (Model.TaskListItemList[i].SignedOn == DateTime.MinValue)
+                    {
+                        <td class="printCell" colspan="2">
+                            Not Signed
+                        </td>
+                    }
+                    else
+                    {
+                        <td class="printCell" colspan="2">
+                            @Model.TaskListItemList[i].SignedOn.ToShortDateString()
+                        </td>
+                    }
+                    @if (Model.TaskListItemList[i].Completed)
+                    {
+                        <td class="printCell" colspan="2">Completed</td>
+                    }
+                    else if (Model.TaskListItemList[i].NotApplicable)
+                    {
+                        <td class="printCell" colspan="2">N/A</td>
+                    }
+                    else
+                    {
+                        <td class="printCell" colspan="2"></td>
+                    }
+                    <td class="printCell" colspan="2">@Model.TaskListItemList[i].Comments</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+@*Prints IS Tech tasks*@
+<table id="printTable">
+    <thead>
+        <tr class="printHeading">
+            <th colspan="4">IS Tech Tasks</th>
+            <th colspan="2">Completed By</th>
+            <th colspan="2">Completed On</th>
+            <th colspan="2">Status</th>
+            <th colspan="2">Comments</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.TaskListItemList.Count; i++)
+        {
+            if (Model.TaskListItemList[i].Dept.ToUpper() == "IS TECH")
+            {
+                    <tr class="printRow">
+                        <td class="printCell" colspan="4">@Model.TaskListItemList[i].Task</td>
+                    <td class="printCell" colspan="2">@Model.TaskListItemList[i].CompletedBy</td>
+                        @if (Model.TaskListItemList[i].SignedOn == DateTime.MinValue)
+                        {
+                            <td class="printCell" colspan="2">
+                                Not Signed
+                            </td>
+                        }
+                        else
+                        {
+                            <td class="printCell" colspan="2">
+                                @Model.TaskListItemList[i].SignedOn.ToShortDateString()
+                            </td>
+                        }
+                        @if (Model.TaskListItemList[i].Completed)
+                        {
+                            <td class="printCell" colspan="2">Completed</td>
+                        }
+                        else if (Model.TaskListItemList[i].NotApplicable)
+                        {
+                            <td class="printCell" colspan="2">N/A</td>
+                        }
+                        else
+                        {
+                            <td class="printCell" colspan="2"></td>
+                        }
+                        <td class="printCell" colspan="2">@Model.TaskListItemList[i].Comments</td>
+                    </tr>
+            }
+         }
+    </tbody>
+</table>
+@*Prints HR tasks*@
+<table id="printTable">
+    <thead>
+        <tr class="printHeading">
+            <th colspan="4">Human Resources Tasks</th>
+            <th colspan="2">Completed By</th>
+            <th colspan="2">Completed On</th>
+            <th colspan="2">Status</th>
+            <th colspan="2">Comments</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @for (int i = 0; i < Model.TaskListItemList.Count; i++)
+        {
+            if (Model.TaskListItemList[i].Dept.ToUpper() == "HR")
+                {
+                    <tr class="printRow">
+                        <td class="printCell" colspan="4">@Model.TaskListItemList[i].Task</td>
+                    <td class="printCell" colspan="2">@Model.TaskListItemList[i].CompletedBy</td>
+                        @if (Model.TaskListItemList[i].SignedOn == DateTime.MinValue)
+                        {
+                            <td class="printCell" colspan="2">
+                                Not Signed
+                            </td>
+                        }
+                        else
+                        {
+                            <td class="printCell" colspan="2">
+                                @Model.TaskListItemList[i].SignedOn.ToShortDateString()
+                            </td>
+                        }
+                        @if (Model.TaskListItemList[i].Completed)
+                        {
+                            <td class="printCell" colspan="2">Completed</td>
+                        }
+                        else if (Model.TaskListItemList[i].NotApplicable)
+                        {
+                            <td class="printCell" colspan="2">N/A</td>
+                        }
+                        else
+                        {
+                            <td class="printCell" colspan="2"></td>
+                        }
+                        <td class="printCell" colspan="2">@Model.TaskListItemList[i].Comments</td>
+                    </tr>
+                }
+            }
+    </tbody>
+</table>
+@*Prints Finance tasks*@
+<table id="printTable">
+    <thead>
+        <tr class="printHeading">
+            <th colspan="4">Finance Tasks</th>
+            <th colspan="2">Completed By</th>
+            <th colspan="2">Completed On</th>
+            <th colspan="2">Status</th>
+            <th colspan="2">Comments</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @for (int i = 0; i < Model.TaskListItemList.Count; i++)
+        {
+            if (Model.TaskListItemList[i].Dept.ToUpper() == "FINANCE")
+                {
+                    <tr class="printRow">
+                        <td class="printCell" colspan="4">@Model.TaskListItemList[i].Task</td>
+                        <td class="printCell" colspan="2">@Model.TaskListItemList[i].CompletedBy</td>
+                        @if (Model.TaskListItemList[i].SignedOn == DateTime.MinValue)
+                        {
+                            <td class="printCell" colspan="2">
+                                Not Signed
+                            </td>
+                        }
+                        else
+                        {
+                            <td class="printCell" colspan="2">
+                                @Model.TaskListItemList[i].SignedOn.ToShortDateString()
+                            </td>
+                        }
+                        @if (Model.TaskListItemList[i].Completed)
+                        {
+                            <td class="printCell" colspan="2">Completed</td>
+                        }
+                        else if (Model.TaskListItemList[i].NotApplicable)
+                        {
+                            <td class="printCell" colspan="2">N/A</td>
+                        }
+                        else
+                        {
+                            <td class="printCell" colspan="2"></td>
+                        }
+                        <td class="printCell" colspan="2">@Model.TaskListItemList[i].Comments</td>
+                    </tr>
+                }
+            }
+    </tbody>
+</table>
+@*Prints ERGO tasks*@
+<table id="printTable">
+    <thead>
+        <tr class="printHeading">
+            <th colspan="4">ERGO Tasks</th>
+            <th colspan="2">Completed By</th>
+            <th colspan="2">Completed On</th>
+            <th colspan="2">Status</th>
+            <th colspan="2">Comments</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @for (int i = 0; i < Model.TaskListItemList.Count; i++)
+        {
+            if (Model.TaskListItemList[i].Dept.ToUpper() == "ERGO")
+                {
+                    <tr class="printRow">
+                        <td class="printCell" colspan="4">@Model.TaskListItemList[i].Task</td>
+                        <td class="printCell" colspan="2">@Model.TaskListItemList[i].CompletedBy</td>
+                        @if (Model.TaskListItemList[i].SignedOn == DateTime.MinValue)
+                        {
+                            <td class="printCell" colspan="2">
+                                Not Signed
+                            </td>
+                        }
+                        else
+                        {
+                            <td class="printCell" colspan="2">
+                                @Model.TaskListItemList[i].SignedOn.ToShortDateString()
+                            </td>
+                        }
+                        @if (Model.TaskListItemList[i].Completed)
+                        {
+                            <td class="printCell" colspan="2">Completed</td>
+                        }
+                        else if (Model.TaskListItemList[i].NotApplicable)
+                        {
+                            <td class="printCell" colspan="2">N/A</td>
+                        }
+                        else
+                        {
+                            <td class="printCell" colspan="2"></td>
+                        }
+                        <td class="printCell" colspan="2">@Model.TaskListItemList[i].Comments</td>
+                    </tr>
+                }
+            }
+    </tbody>
+</table>
+@*Prints Facility Maintenance tasks*@
+<table id="printTable">
+    <thead>
+        <tr class="printHeading">
+            <th colspan="4">Facility Management Tasks</th>
+            <th colspan="2">Completed By</th>
+            <th colspan="2">Completed On</th>
+            <th colspan="2">Status</th>
+            <th colspan="2">Comments</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @for (int i = 0; i < Model.TaskListItemList.Count; i++)
+        {
+            if (Model.TaskListItemList[i].Dept.ToUpper().Contains("FACILITY"))
+                {
+                    <tr class="printRow">
+                        <td class="printCell" colspan="4">@Model.TaskListItemList[i].Task</td>
+                        <td class="printCell" colspan="2">@Model.TaskListItemList[i].CompletedBy</td>
+                        @if (Model.TaskListItemList[i].SignedOn == DateTime.MinValue)
+                        {
+                            <td class="printCell" colspan="2">
+                                Not Signed
+                            </td>
+                        }
+                        else
+                        {
+                            <td class="printCell" colspan="2">
+                                @Model.TaskListItemList[i].SignedOn.ToShortDateString()
+                            </td>
+                        }
+                        @if (Model.TaskListItemList[i].Completed)
+                        {
+                            <td class="printCell" colspan="2">Completed</td>
+                        }
+                        else if (Model.TaskListItemList[i].NotApplicable)
+                        {
+                            <td class="printCell" colspan="2">N/A</td>
+                        }
+                        else
+                        {
+                            <td class="printCell" colspan="2"></td>
+                        }
+                        <td class="printCell" colspan="2">@Model.TaskListItemList[i].Comments</td>
+                    </tr>
+                }
+            }
+    </tbody>
+</table>
+@*Prints Supervisor tasks*@
+<table id="printTable">
+    <thead>
+        <tr class="printHeading">
+            <th colspan="4">Supervisor Tasks</th>
+            <th colspan="2">Completed By</th>
+            <th colspan="2">Completed On</th>
+            <th colspan="2">Status</th>
+            <th colspan="2">Comments</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @for (int i = 0; i < Model.TaskListItemList.Count; i++)
+        {
+            if (Model.TaskListItemList[i].Dept.ToUpper().Contains("SUPERVISOR"))
+                {
+                    <tr class="printRow">
+                        <td class="printCell" colspan="4">@Model.TaskListItemList[i].Task</td>
+                        <td class="printCell" colspan="2">@Model.TaskListItemList[i].CompletedBy</td>
+                        @if (Model.TaskListItemList[i].SignedOn == DateTime.MinValue)
+                        {
+                            <td class="printCell" colspan="2">
+                                Not Signed
+                            </td>
+                        }
+                        else
+                        {
+                            <td class="printCell" colspan="2">
+                                @Model.TaskListItemList[i].SignedOn.ToShortDateString()
+                            </td>
+                        }
+                        @if (Model.TaskListItemList[i].Completed)
+                        {
+                            <td class="printCell" colspan="2">Completed</td>
+                        }
+                        else if (Model.TaskListItemList[i].NotApplicable)
+                        {
+                            <td class="printCell" colspan="2">N/A</td>
+                        }
+                        else
+                        {
+                            <td class="printCell" colspan="2"></td>
+                        }
+                        <td class="printCell" colspan="2">@Model.TaskListItemList[i].Comments</td>
+                    </tr>
+                }
+            }
+    </tbody>
+</table>
+
+@*Prints tasks that does not have a dept*@
+<table id="printTable">
+    <thead>
+        <tr class="printHeading">
+            <th colspan="4">Misc Tasks</th>
+            <th colspan="2">Completed By</th>
+            <th colspan="2">Completed On</th>
+            <th colspan="2">Status</th>
+            <th colspan="2">Comments</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @for (int i = 0; i < Model.TaskListItemList.Count; i++)
+        {
+            if (Model.TaskListItemList[i].Dept.ToUpper() == "MISC")
+                {
+                    <tr class="printRow">
+                        <td class="printCell" colspan="4">@Model.TaskListItemList[i].Task</td>
+                        <td class="printCell" colspan="2">@Model.TaskListItemList[i].CompletedBy</td>
+                        @if (Model.TaskListItemList[i].SignedOn == DateTime.MinValue)
+                        {
+                            <td class="printCell" colspan="2">
+                                Not Signed
+                            </td>
+                        }
+                        else
+                        {
+                            <td class="printCell" colspan="2">
+                                @Model.TaskListItemList[i].SignedOn.ToShortDateString()
+                            </td>
+                        }
+                        @if (Model.TaskListItemList[i].Completed)
+                        {
+                            <td class="printCell" colspan="2">Completed</td>
+                        }
+                        else if (Model.TaskListItemList[i].NotApplicable)
+                        {
+                            <td class="printCell" colspan="2">N/A</td>
+                        }
+                        else
+                        {
+                            <td class="printCell" colspan="2"></td>
+                        }
+                        <td class="printCell" colspan="2">@Model.TaskListItemList[i].Comments</td>
+                    </tr>
+                }
+            }
+    </tbody>
+</table>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+        var editButton = false;
+        document.addEventListener("DOMContentLoaded", function (event) {
+            var scrollpos = localStorage.getItem('scrollpos');
+
+            var hrAccordion = localStorage.getItem('hrAccordion');
+            if (hrAccordion === "true") {
+                hr = true;
+                $(".hr").show();
+                document.getElementById("hrPlus").innerHTML = "-";
+            } else {
+                hr = false;
+                $(".hr").hide();
+                document.getElementById("hrPlus").innerHTML = "+";
+            }
+
+            var ergoAccordion = localStorage.getItem('ergoAccordion');
+            if (ergoAccordion === "true") {
+                ergo = true;
+                $(".ergo").show();
+                document.getElementById("ergoPlus").innerHTML = "-";
+            } else {
+                ergo = false;
+                $(".ergo").hide();
+                document.getElementById("ergoPlus").innerHTML = "+";
+            }
+
+            var facilityAccordion = localStorage.getItem('facilityAccordion');
+            if (facilityAccordion === "true") {
+                facility = true;
+                $(".facility").show();
+                document.getElementById("facilityPlus").innerHTML = "-";
+            } else {
+                facility = false;
+                $(".facility").hide();
+                document.getElementById("facilityPlus").innerHTML = "+";
+            }
+
+            var helpAccordion = localStorage.getItem('helpAccordion');
+            if (helpAccordion === "true") {
+                help = true;
+                $(".help").show();
+                document.getElementById("helpPlus").innerHTML = "-";
+            } else {
+                help = false;
+                $(".help").hide();
+                document.getElementById("helpPlus").innerHTML = "+";
+            }
+
+            var isAccordion = localStorage.getItem('isAccordion');
+            if (isAccordion === "true") {
+                is = true;
+                $(".is").show();
+                document.getElementById("isPlus").innerHTML = "-";
+            } else {
+                is = false;
+                $(".is").hide();
+                document.getElementById("isPlus").innerHTML = "+";
+            }
+
+            var supervisorAccordion = localStorage.getItem('supervisorAccordion');
+            if (supervisorAccordion === "true") {
+                supervisor = true;
+                $(".supervisor").show();
+                document.getElementById("supervisorPlus").innerHTML = "-";
+            } else {
+                supervisor = false;
+                $(".supervisor").hide();
+                document.getElementById("supervisorPlus").innerHTML = "+";
+            }
+
+            var financeAccrodion = localStorage.getItem('financeAccordion');
+            if (financeAccrodion === "true") {
+                finance = true;
+                $(".finance").show();
+                document.getElementById("financePlus").innerHTML = "-";
+            } else {
+                finance = false;
+                $(".finance").hide();
+                document.getElementById("financePlus").innerHTML = "+";
+            }
+
+            var miscAccrodion = localStorage.getItem('miscAccordion');
+            if (miscAccrodion === "true") {
+                misc = true;
+                $(".misc").show();
+                document.getElementById("miscPlus").innerHTML = "-";
+            } else {
+                misc = false;
+                $(".misc").hide();
+                document.getElementById("miscPlus").innerHTML = "+";
+            }
+
+            if (scrollpos) window.scrollTo(0, scrollpos);
+            
+        })
+
+        window.onbeforeunload = function (e) {
+            localStorage.setItem('scrollpos', window.scrollY);
+            localStorage.setItem('hrAccordion', hr);
+            localStorage.setItem('ergoAccordion', ergo);
+            localStorage.setItem('facilityAccordion', facility);
+            localStorage.setItem('helpAccordion', help);
+            localStorage.setItem('isAccordion', is);
+            localStorage.setItem('supervisorAccordion', supervisor);
+            localStorage.setItem('miscAccordion', misc);
+            localStorage.setItem('financeAccordion', finance);
+            
+        }
+
+        function onSubmitButtonClicked() {
+            //var submit = confirm("Are you sure you want to submit this form?");
+            //var requestType = document.getElementById("BusinessCardModel_RequestType").value;
+            document.getElementById("completed").value = "false";
+
+            document.getElementById("submitButton").type = "submit";
+
+        }
+
+        $(document).ready(function () {
+            $('#deleteButton').click(function (event) {
+                event.preventDefault();
+                if (onclick = confirm("Are you sure you want to delete this checklist ? Selecting OK will premanently delete this form and its data will not be retrievable.")) {
+                    window.location.href = $(this).attr('href');
+                }
+            })
+        })
+        var ergo;
+        function ergoAccordion() {
+            $(".ergo").toggle();
+            if (!ergo) {
+                ergo = true;
+                document.getElementById("ergoPlus").innerHTML = "-";
+            } else if (ergo) {
+                ergo = false;
+                document.getElementById("ergoPlus").innerHTML = "+"
+            }
+        }
+        var facility;
+        function facilitiesAccordion() {
+            $(".facility").toggle();
+            if (!facility) {
+                facility = true;
+                document.getElementById("facilityPlus").innerHTML = "-";
+            } else if (facility) {
+                facility = false;
+                document.getElementById("facilityPlus").innerHTML = "+";
+            }
+        }
+        var help;
+        function helpDeskAccordion() {
+            $(".help").toggle();
+            if (!help) {
+                help = true;
+                document.getElementById("helpPlus").innerHTML = "-";
+            } else if (help) {
+                help = false;
+                document.getElementById("helpPlus").innerHTML = "+";
+            }
+        }
+
+        var hr;
+        function hrAccordion() {
+            $(".hr").toggle();
+            
+            if (!hr) {
+                hr = true;
+                document.getElementById("hrPlus").innerHTML = "-";
+            } else if (hr) {
+                hr = false;
+                document.getElementById("hrPlus").innerHTML = "+";
+            }
+        }
+        var is;
+        function isAccordion() {
+            $(".is").toggle();
+            if (!is) {
+                is = true;
+                document.getElementById("isPlus").innerHTML = "-";
+            } else if (is) {
+                is = false;
+                document.getElementById("isPlus").innerHTML = "+";
+            }
+        }
+        var supervisor;
+        function supervisorAccordion() {
+            $(".supervisor").toggle();
+            if (!supervisor) {
+                supervisor = true;
+                document.getElementById("supervisorPlus").innerHTML = "-";
+            } else if (supervisor) {
+                supervisor = false;
+                document.getElementById("supervisorPlus").innerHTML = "+";
+            }
+        }
+        var finance;
+        function financeAccordion() {
+            $(".finance").toggle();
+            if (!finance) {
+                finance = true;
+                document.getElementById("financePlus").innerHTML = "-";
+            } else if (finance) {
+                finance = false;
+                document.getElementById("financePlus").innerHTML = "+";
+            }
+        }
+        var misc;
+        function miscAccordion() {
+            $(".misc").toggle();
+            if (!misc) {
+                misc = true;
+                document.getElementById("miscPlus").innerHTML = "-";
+            } else if (misc) {
+                misc = false;
+                document.getElementById("miscPlus").innerHTML = "+";
+            }
+        }
+
+        function onEditButtonClicked() {
+            var notSelected = document.getElementById("notSelected");
+            var selected = document.getElementById("selected");
+
+            if (editButton === true) {
+                editButton = false;
+                document.getElementById("editButton").value = "Edit";
+                notSelected.disabled = true;
+                selected.disabled = true;
+            } else if (editButton === false) {
+                editButton = true;
+                document.getElementById("editButton").value = "Cancel";
+                notSelected.disabled = false;
+                selected.disabled = false;
+            }
+            notSelected.disabled = false;
+            selected.disabled = false;
+        }
+
+        function onMoreButtonClicked() {
+            if (moreButton === true) {
+                moreButton = false;
+                document.getElementById("moreButton").innerHTML = "See More";
+
+                document.getElementById("firstTwenty").hidden = true;
+            } else if (moreButton === false) {
+                moreButton = true;
+                document.getElementById("moreButton").innerHTML = "See Less";
+
+                document.getElementById("firstTwenty").hidden = false;
+            }
+        }
+
+        function onDeleteButtonClicked() {
+
+            if (confirm("Are you sure you want to delete this checklist? Selecting OK will premanently delete this form and its data will not be retrievable.")) {
+                document.getElementById("deleteButton").type = "submit";
+            }
+        }
+
+
+
+        function sortTable(n) {
+            var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+            table = document.getElementById("submittedForms");
+            switching = true;
+
+            // Sort direction ascending
+            dir = "asc";
+
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+
+                for (i = 1; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("TD")[n];
+                    y = rows[i + 1].getElementsByTagName("TD")[n];
+
+                    if (dir == "asc") {
+                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else if (dir == "desc") {
+                        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+
+                    switchcount++;
+                } else {
+                    if (switchcount == 0 && dir == "asc") {
+                        dir = "desc";
+                        switching = true;
+                    }
+                }
+            }
+
+        }
+
+    </script>
+}

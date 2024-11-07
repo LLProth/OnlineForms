@@ -1,0 +1,40 @@
+﻿@model OnlineForms.ViewModels.ESCRFViewModel
+@{
+    ViewBag.FormInfo = new Dictionary<string, string>();
+    ViewBag.FormInfo.Add("FormName", "Employee Status Change Request Form");
+    ViewBag.FormInfo.Add("Division", "Human Resource Division");
+    ViewBag.FormInfo.Add("Info", "Assigned Task");
+}
+@section topHeader {
+    @Html.Partial("~/Views/Shared/_FormHeader.cshtml", (Dictionary<string, string>)ViewBag.FormInfo)
+}
+
+
+@section sideBarNav {
+    @Html.Partial("~/Views/Forms/ESCRF/_Sidebar.cshtml")
+}
+<div id="recentHeading" class="p-1">
+    <h2>Task for: @Model.CreateHolder.Name()</h2>
+    <h2>Change Type: @Model.CreateHolder.ChangeType()</h2>
+</div>
+
+
+@using (Html.BeginForm("CompleteTask", "ESCRF", new { id = Model.TaskListItem.ID }))
+{
+    <div class="mb-5 my-5">
+        <div class="form-group col-12 form-floating">
+            @Html.EditorFor(m => m.TaskListItem.Task, new { htmlAttributes = new { @class = "form-control fw-bold Validation", @placeholder = Html.DisplayNameFor(m => m.TaskListItem.Task), @readonly = "readonly" } })
+            @Html.LabelFor(m => m.TaskListItem.Task, htmlAttributes: new { @class = "fw-bold" })
+            @Html.ValidationMessageFor(m => m.TaskListItem.Task, "", new { @class = "validationText" })
+        </div>
+    </div>
+    if (Model.TaskListItem.SignedOn == DateTime.MinValue)
+    { 
+                <button id="submitButton" type="submit" class="btn w-100">Complete Task</button>
+    }
+    else
+    {
+                <button id="submitButton" disabled type="submit" class="btn w-100">Task Completed On: @Model.TaskList.FinishedDate.ToShortDateString()</button>
+    }
+
+}

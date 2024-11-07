@@ -1,0 +1,128 @@
+﻿@model OnlineForms.ViewModels.ESCRFViewModel
+@{
+    ViewBag.FormInfo = new Dictionary<string, string>();
+    ViewBag.FormInfo.Add("FormName", "Employee Status Change Request Form");
+    ViewBag.FormInfo.Add("Division", "Human Resource Division");
+    ViewBag.FormInfo.Add("Info", "Change Edit");
+    string[] Flsa = { "Exempt", "Non-Exempt" };
+}
+
+@section topHeader {
+    @Html.Partial("~/Views/Shared/_ESCRFHeader.cshtml", (Dictionary<string, string>)ViewBag.FormInfo)
+}
+@section sideBarNav {
+    @Html.Partial("~/Views/Forms/ESCRF/_Sidebar.cshtml")
+}
+
+
+@using (Html.BeginForm("UpdateChange", "ESCRF", new { id = Model.Change.ID }))
+{
+    <div>
+        <div class="row mb-5 formRow">
+            <div class="form-group col-6 form-floating">
+                @Html.EditorFor(m => m.Change.EmployeeName, new { htmlAttributes = new { @class = "form-control fw-bold w-100", @placeholder = Html.DisplayNameFor(m => m.Change.EmployeeName), @readonly = "readonly" } })
+                @Html.LabelFor(m => m.Change.EmployeeName, htmlAttributes: new { @class = "fw-bold" })
+            </div>
+            <div class="form-group col-4 form-floating">
+                @Html.EditorFor(m => m.Change.PhoneNumber, new { htmlAttributes = new { @class = "form-control fw-bold", @readonly = "readonly" } })
+                @Html.LabelFor(m => m.Change.PhoneNumber, htmlAttributes: new { @class = "fw-bold" })
+            </div>
+        </div>
+        <div class="row mb-5 formRow">
+            <div class="form-group col-4 form-floating">
+                @Html.EditorFor(m => m.Change.Department, new { htmlAttributes = new { @class = "form-control fw-bold", @readonly = "readonly" } })
+                @Html.LabelFor(m => m.Change.Department, htmlAttributes: new { @class = "fw-bold" })
+            </div>
+            <div class="form-group col-4 form-floating">
+                @Html.EditorFor(m => m.Change.OfficeLocation, new { htmlAttributes = new { @class = "form-control fw-bold", @readonly = "readonly" } })
+                @Html.LabelFor(m => m.Change.OfficeLocation, htmlAttributes: new { @class = "fw-bold" })
+            </div>
+            <div class="form-group col-4 form-floating">
+                @Html.EditorFor(m => m.Change.CurrentSupervisor, new { htmlAttributes = new { @class = "form-control fw-bold", @readonly = "readonly" } })
+                @Html.LabelFor(m => m.Change.CurrentSupervisor, htmlAttributes: new { @class = "fw-bold" })
+            </div>
+        </div>
+        <div class="row mb-5 formRow form-floating">
+            <div class="form-group col-6">
+                @Html.CheckBoxFor(m => m.Change.IsNewPosition, new { @id = "check-new-position", @disabled = "disabled" })
+                @Html.LabelFor(m => m.Change.IsNewPosition, htmlAttributes: new { @class = "fw-bold" })
+                @Html.ValidationMessageFor(m => m.Change.IsNewPosition)
+            </div>
+            @if (Model.Change.IsNewPosition)
+            {
+                <div class="form-group col-6 form-floating" id="input-new-supervisor">
+                    @Html.EditorFor(m => m.Change.PositionName, new { htmlAttributes = new { @class = "form-control fw-bold Validation2", @placeholder = Html.DisplayNameFor(m => m.Change.PositionName), @maxlength = "100", @list = "names1", @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.Change.PositionName, htmlAttributes: new { @class = "fw-bold" })
+                    @Html.ValidationMessageFor(m => m.Change.PositionName, "", new { @class = "validationText" })
+                </div>
+            }
+
+        </div>
+        <div class="row mb-5 formRow form-floating">
+            <div class="form-group col-6">
+                @Html.CheckBoxFor(m => m.Change.IsNewSupervisor, new { @id = "check-new-position", @disabled = "disabled" })
+                @Html.LabelFor(m => m.Change.IsNewSupervisor, htmlAttributes: new { @class = "fw-bold" })
+                @Html.ValidationMessageFor(m => m.Change.IsNewSupervisor)
+            </div>
+            @if (Model.Change.IsNewSupervisor)
+            {
+                <div class="form-group col-6 form-floating" id="input-new-supervisor">
+                    @Html.EditorFor(m => m.Change.NewSupervisor, new { htmlAttributes = new { @class = "form-control fw-bold Validation2", @placeholder = Html.DisplayNameFor(m => m.Change.NewSupervisor), @maxlength = "100", @list = "names1", @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.Change.NewSupervisor, htmlAttributes: new { @class = "fw-bold" })
+                    @Html.ValidationMessageFor(m => m.Change.NewSupervisor, "", new { @class = "validationText" })
+                </div>
+            }
+        </div>
+        <div class="row d-flex align-items-center mb-5">
+            <div class="form-group col-4">
+                @Html.CheckBoxFor(m => m.Change.IsTempToFte, new { @id = "check-new-position", @disabled = "disabled" })
+                @Html.LabelFor(m => m.Change.IsTempToFte, htmlAttributes: new { @class = "fw-bold" })
+                @Html.ValidationMessageFor(m => m.Change.IsTempToFte)
+            </div>
+            <div class="form-group col-4 form-floating">
+                @Html.DropDownListFor(m => m.Change.FLSAStatus, new SelectList(Flsa), new { @class = "form-control fw-bold" })
+                @Html.LabelFor(m => m.Change.FLSAStatus, htmlAttributes: new { @class = "fw-bold" })
+                @Html.ValidationMessageFor(m => m.Change.FLSAStatus)
+            </div>
+            <div class="form-group col-4 form-floating">
+                @Html.EditorFor(m => m.Change.EffectiveDate, new { htmlAttributes = new { @class = "form-control fw-bold", @Value = Model.Change.EffectiveDate.ToString("yyyy-MM-dd"), @type = "date" } })
+                @Html.LabelFor(m => m.Change.EffectiveDate, htmlAttributes: new { @class = "fw-bold" })
+            </div>
+        </div>
+        <div class="row mb-5">
+            <div class="form-group col-12 form-floating">
+                @Html.EditorFor(m => m.Change.Comments, new { htmlAttributes = new { @class = "form-control fw-bold w-100", @placeholder = Html.DisplayNameFor(m => m.Change.CurrentSupervisor), @readonly = "readonly" } })
+                @Html.LabelFor(m => m.Change.Comments, htmlAttributes: new { @class = "fw-bold" })
+            </div>
+        </div>
+        <div class="row mb-5 formRow">
+            <div class="form-group col-3 form-floating">
+                @Html.EditorFor(m => m.Change.ModifiedBy, new { htmlAttributes = new { @class = "form-control fw-bold w-100", @placeholder = Html.DisplayNameFor(m => m.Change.ModifiedBy), @readonly = "readonly" } })
+                @Html.LabelFor(m => m.Change.ModifiedBy, htmlAttributes: new { @class = "fw-bold" })
+            </div>
+            <div class="form-group col-3 form-floating">
+                @Html.EditorFor(m => m.Change.ChangeType, new { htmlAttributes = new { @class = "form-control fw-bold w-100", @placeholder = Html.DisplayNameFor(m => m.Change.ChangeType), @readonly = "readonly" } })
+                @Html.LabelFor(m => m.Change.ChangeType, htmlAttributes: new { @class = "fw-bold" })
+            </div>
+            <div class="form-group col-3 form-floating">
+                @Html.EditorFor(m => m.Change.CreatedDate, new { htmlAttributes = new { @class = "form-control fw-bold", @Value = Model.Change.CreatedDate.ToShortDateString(), @type = "date", @readonly = "readonly" } })
+                @Html.LabelFor(m => m.Change.CreatedDate, htmlAttributes: new { @class = "fw-bold" })
+            </div>
+        </div>
+        @Html.HiddenFor(m => m.Change.ID);
+    </div>
+    <div class="d-flex flex-row">
+
+        <div class="col-2 py-5" style="margin-right: 2rem;">
+            <button id="submitButton" type="submit" class="btn w-100">
+                Save
+            </button>
+        </div>
+        <div class="col-2 py-5">
+            @Html.ActionLink("Cancel", "BackToView", "ESCRF", new { @id = "button", @class = "btn button w-100" })
+        </div>
+    </div>
+    @Html.AntiForgeryToken()
+}
+
+

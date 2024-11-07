@@ -1,0 +1,121 @@
+﻿@model  OnlineForms.ViewModels.SFN52712IndexViewmodel
+
+
+@{
+    ViewBag.Title = "My Approvals";
+}
+
+@section topHeader {
+    @Html.Partial("~/Views/Shared/_FormHeader.cshtml", (Dictionary<string, string>)ViewBag.FormInfo)
+}
+
+<div class="container-fluid">
+    <div class="container-fluid">
+        <div class="row flex-nowrap">
+            @section sideBarNav {
+                @Html.Partial("~/Views/Forms/SFN52712/Sidebar.cshtml")
+            }
+            <div>
+                <table class="table" id="submittedForms">
+                    <thead>
+                        <tr>
+                            <th id="nameSort" style="cursor: pointer; width: 40%" onclick="sortTable(0)">Destination City<img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                            <th id="nameSort" style="cursor: pointer; width: 30%" onclick="sortTable(1)">Person Traveling<img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                            <th id="dateSort" style="cursor: pointer; width: 30%" onclick="sortTable(2)">Submit Date<img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (ViewBag.jobTitle == "Procurement Officer" || ViewBag.jobTitle == "Executive Assistant" || ViewBag.jobtitle == "HR Director")
+                        {
+                            for (int i = 0; i < Model.SFN52712s.Count; i++)
+                            {
+                                if (Model.SFN52712s[@i].FormSubmitted && Model.SFN52712s[@i].FormCompleted == false 
+                                    && Model.SFN52712s[@i].FormDenied == false && Model.SFN52712Approvals[@i].DirectorSignature != "")
+                                {
+                                    <tr>
+                                        <td>@Html.DisplayFor(m => m.SFN52712Destinations[@i].City), @Html.DisplayFor(m => m.SFN52712Destinations[@i].State)</td>
+                                        <td>@Html.DisplayFor(m => m.SFN52712s[@i].Name)</td>
+                                        <td>@Model.SFN52712s[@i].CreationDate.ToString("MM/dd/yyyy")</td>
+                                        <td>
+                                            @Html.ActionLink("Approval", "Approval", "SFN52712", new { ID = Model.SFN52712s[@i].ID }, new { @id = "button", @class = "btn button" })
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        }
+                        else
+                        {
+                            for (int i = 0; i < Model.SFN52712s.Count; i++)
+                            {
+                                if (Model.SFN52712s[@i].WaitingApproval == ViewBag.UserName && Model.SFN52712s[@i].FormSubmitted)
+                                {
+                                    <tr>
+                                        <td>@Html.DisplayFor(m => m.SFN52712Destinations[@i].City), @Html.DisplayFor(m => m.SFN52712Destinations[@i].State)</td>
+                                        <td>@Html.DisplayFor(m => m.SFN52712s[@i].Name)</td>
+                                        <td>@Model.SFN52712s[@i].CreationDate.ToString("MM/dd/yyyy")</td>
+                                        <td>
+                                            @Html.ActionLink("Approval", "Approval", "SFN52712", new { ID = Model.SFN52712s[@i].ID }, new { @id = "button", @class = "btn button" })
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <partial name="_ValidationScriptsPartial" />
+
+    <script type="text/javascript">
+        function sortTable(n) {
+            var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+            table = document.getElementById("submittedForms");
+            switching = true;
+
+            // Sort direction ascending
+            dir = "asc";
+
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+
+                for (i = 1; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("TD")[n];
+                    y = rows[i + 1].getElementsByTagName("TD")[n];
+
+                    if (dir == "asc") {
+                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else if (dir == "desc") {
+                        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+
+                    switchcount++;
+                } else {
+                    if (switchcount == 0 && dir == "asc") {
+                        dir = "desc";
+                        switching = true;
+                    }
+                }
+            }
+
+        }
+    </script>
+    }

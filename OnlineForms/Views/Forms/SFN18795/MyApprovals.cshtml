@@ -1,0 +1,82 @@
+﻿@model OnlineForms.ViewModels.SFN18795IndexViewModel
+
+@{
+    ViewBag.Title = "MyApprovals";
+}
+
+
+
+@section topHeader {
+    @Html.Partial("~/Views/Shared/_FormHeader.cshtml", (Dictionary<string, string>
+    )ViewBag.FormInfo)
+}
+
+<div class="container-fluid">
+    <div class="container-fluid">
+        <div class="row">
+            @section sideBarNav {
+                @Html.Partial("~/Views/Forms/SFN18795/Sidebar.cshtml")
+            }
+            <h3>Forms Needing My Approval</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th id="dateSort" style="cursor: pointer; width: 10%" onclick="sortTable(0)">Submitted Date<img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                        <th id="nameSort" style="cursor: pointer; width: 20%" onclick="sortTable(1)">Created By<img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                        <th id="nameSort" style="cursor: pointer; width: 30%" onclick="sortTable(2)">Description Scope Of Work<img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                        <th id="numberSort" style="cursor: pointer; width: 10%" onclick="sortTable(3, 'numbersort')">Total<img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                        <th id="nameSort" style="cursor: pointer; width: 10%" class="text-sm-center" onclick="sortTable(4, 'checkSort')">Revised<img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody id="submittedForms">
+                    @for (int i = 0; i < Model.SFN18795s.Count; i++)
+                    {
+                        if ((ViewBag.Username == Model.SFN18795s[@i].WaitingApproval && Model.SFN18795s[@i].FormSubmitted && Model.SFN18795s[@i].FormDenied == false) || (ViewBag.jobtitle == "Procurement Officer" && Model.SFN18795s[@i].ProcurementProcessing == false && Model.SFN18795s[@i].FormCompleted == true && Model.SFN18795s[@i].FormDenied == false))
+                        {
+
+                            <tr>
+                                <td>@Html.DisplayFor(m => m.SFN18795s[@i].DateSubmitted)</td>
+                                <td>@Html.DisplayFor(m => m.SFN18795s[@i].Name)</td>
+                                @for (int x = 0; x < Model.RequisitionItems.Count; x++)
+                                {
+                                    if (Model.SFN18795s[@i].ID == Model.RequisitionItems[@x].ID)
+                                    {
+                                        <td>@Html.DisplayFor(m => m.RequisitionItems[@x].Description)</td>
+                                    }
+                                }
+                                <td><span>$</span><span currencymask="true">@Html.DisplayFor(m => m.SFN18795s[@i].ReqItemsTotal)</span></td>
+                                <td class="text-sm-center check-container">@Html.DisplayFor(m => m.SFN18795s[@i].FormRevised)<span class="checkmark"></span></td>
+                                <td>
+                                    @Html.ActionLink("Approval", "Approval", "SFN18795", new { ID = Model.SFN18795s[@i].ID }, new { @id = "button", @class = "btn button" })
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+
+            <style>
+                th {
+                    font-size: 12px;
+                }
+            </style>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/Scripts/commonScripts.js")
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+        $(function () {
+            $("[currencymask]").inputmask({ alias: "currency", groupSeparator: "," });
+        });
+
+    </script>
+}
+

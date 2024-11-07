@@ -1,0 +1,314 @@
+﻿@model OnlineForms.ViewModels.SFN54497ViewModel
+
+
+@{
+    ViewBag.Title = "Staff Request";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<div>
+    @section topHeader {
+        @Html.Partial("~/Views/Shared/_FormHeader.cshtml", (Dictionary<string, string>)ViewBag.FormInfo)
+    }
+
+    @section sideBarNav {
+        @Html.Partial("~/Views/Forms/SFN54497/Sidebar.cshtml")
+    }
+
+    @using (Html.BeginForm("SFN54497", "SFN54497", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div id="wait">
+            <h4>Please wait...</h4>
+            <input id="closeButton" class="w-100" type="button" value="Close" onclick="onClosedButtonClicked()" />
+        </div>
+
+        <div>
+            <h5>Section 1</h5>
+        </div>
+
+        <div class="row row-cols-3 mb-2 formRow">
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.StaffRequestModel.PositionTitle, new { htmlAttributes = new { @name = "PositionTitle", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.StaffRequestModel.PositionTitle), @id = "reqName", @maxlength = "200", @required = "required" } })
+                @Html.LabelFor(m => m.StaffRequestModel.PositionTitle, htmlAttributes: new { @for = "reqName", @class = "fw-bold label" })
+                @Html.ValidationMessageFor(m => m.StaffRequestModel.PositionTitle, "", new { @class = "validationText" })
+            </div>
+            <datalist id="departments">
+                <option>WSI-Claims</option>
+                <option>WSI-Communications</option>
+                <option>WSI-Customer Service</option>
+                <option>WSI-Decision Review Department</option>
+                <option>WSI-Executive Office</option>
+                <option>WSI-Facility Management</option>
+                <option>WSI-Finance</option>
+                <option>WSI-Human Resources</option>
+                <option>WSI-Information Services</option>
+                <option>WSI-Internal Audit</option>
+                <option>WSI-Legal Services</option>
+                <option>WSI-Loss Control</option>
+                <option>WSI-Medical Services</option>
+                <option>WSI-Office Services</option>
+                <option>WSI-Pharmacy</option>
+                <option>WSI-Policyholder Services</option>
+                <option>WSI-Return to Work</option>
+                <option>WSI-Special Investigation Unit</option>
+                <option>WSI-Strategic Operations</option>
+
+            </datalist>
+
+            <div class="col-4 form-floating">
+                @Html.EditorFor(m => m.StaffRequestModel.Department, new { htmlAttributes = new { @list = "departments", @name = "PositionReportsTo", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.StaffRequestModel.Department), @required = "required" } })
+                @Html.LabelFor(m => m.StaffRequestModel.Department, htmlAttributes: new { @for = "reqDepartment", @class = "fw-bold label" })
+                @Html.ValidationMessageFor(m => m.StaffRequestModel.Department, "", new { @class = "validationText" })
+            </div>
+
+            <datalist id="locations">
+                <option>Bismarck</option>
+                <option>Devils Lake</option>
+                <option>Dickinson</option>
+                <option>Fargo</option>
+                <option>Grand Forks</option>
+                <option>Jamestown</option>
+                <option>Minot</option>
+                <option>Williston</option>
+            </datalist>
+
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.StaffRequestModel.Location, new { htmlAttributes = new { @list = "locations", @name = "NumberOfOpenings", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.StaffRequestModel.Location), @required = "required" } })
+                @Html.LabelFor(m => m.StaffRequestModel.Location, htmlAttributes: new { @for = "reqDate", @class = "fw-bold label" })
+                @Html.ValidationMessageFor(m => m.StaffRequestModel.Location, "", new { @class = "validationText" })
+            </div>
+        </div>
+
+        <div class="row row-cols-3 mb-2 formRow">
+            <datalist id="hireTypes">
+                <option>Staffing Agency</option>
+                <option>Non-Competitive</option>
+            </datalist>
+
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.StaffRequestModel.TypeOfHire, new { htmlAttributes = new { @list = "hireTypes", @name = "TypeOfHire", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.StaffRequestModel.TypeOfHire), @maxlength = "20", @required = "required" } })
+                @Html.LabelFor(m => m.StaffRequestModel.TypeOfHire, htmlAttributes: new { @for = "reqDate", @class = "fw-bold label" })
+                @Html.ValidationMessageFor(m => m.StaffRequestModel.TypeOfHire, "", new { @class = "validationText" })
+            </div>
+
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.StaffRequestModel.NumberOfOpenings, new { htmlAttributes = new { @name = "NumberOfOpenings", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.StaffRequestModel.NumberOfOpenings), @id = "reqDate", @maxlength = "20", @required = "required" } })
+                @Html.LabelFor(m => m.StaffRequestModel.NumberOfOpenings, htmlAttributes: new { @for = "reqDate", @class = "fw-bold label" })
+                @Html.ValidationMessageFor(m => m.StaffRequestModel.NumberOfOpenings, "", new { @class = "validationText" })
+            </div>
+
+            <div class="col-4 form-floating">
+                @Html.EditorFor(m => m.StaffRequestModel.SalaryRange, new { htmlAttributes = new { @name = "SalaryRange", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.StaffRequestModel.SalaryRange), @id = "reqDepartment", @maxlength = "300" } })
+                @Html.LabelFor(m => m.StaffRequestModel.SalaryRange, htmlAttributes: new { @for = "reqDepartment", @class = "fw-bold label" })
+            </div>
+        </div>
+
+        <div class="row row-cols-3 mb-2 formRow">
+            <datalist id="stuff">
+                @foreach (string name in ViewBag.WSIPersonnel)
+                {
+                    <option>@name</option>
+                }
+            </datalist>
+
+            <div class="col-4 form-floating">
+                @Html.EditorFor(m => m.StaffRequestModel.PositionReportsTo, new { htmlAttributes = new { @list = "stuff", @name = "PositionReportsTo", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.StaffRequestModel.PositionReportsTo), @required = "required" } })
+                @Html.LabelFor(m => m.StaffRequestModel.PositionReportsTo, htmlAttributes: new { @for = "reqDepartment", @class = "fw-bold label" })
+                @Html.ValidationMessageFor(m => m.StaffRequestModel.PositionReportsTo, "", new { @class = "validationText" })
+            </div>
+
+            <div class="col form-floating">
+                <div class="form-control" radio-button-control>
+                    <label class="pe-4">@Html.RadioButtonFor(m => m.StaffRequestModel.Hours, "Full Time", new { @class = "hours" }) Full Time</label>
+                    <label class="pe-4">@Html.RadioButtonFor(m => m.StaffRequestModel.Hours, "Part Time", new { @class = "hours" }) Part Time</label>
+                </div>
+                @Html.LabelFor(m => m.StaffRequestModel.Hours, htmlAttributes: new { @for = "reqHours", @class = "fw-bold label", @id = "hours" })
+            </div>
+
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.StaffRequestModel.HoursPerWeek, new { htmlAttributes = new { @name = "HoursPerWeek", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.StaffRequestModel.HoursPerWeek), @id = "reqName", @maxlength = "250", @required = "required" } })
+                @Html.LabelFor(m => m.StaffRequestModel.HoursPerWeek, htmlAttributes: new { @for = "reqName", @class = "fw-bold label" })
+                @Html.ValidationMessageFor(m => m.StaffRequestModel.HoursPerWeek, "", new { @class = "validationText" })
+            </div>
+        </div>
+
+        <div class="row row-cols-3 mb-4 formRow">
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.StaffRequestModel.DesiredStartDate, new { htmlAttributes = new { @name = "DesiredStartDate", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.StaffRequestModel.DesiredStartDate), @type = "date", @id = "reqDate", @mindate = DateTime.Today, @required = "required" } })
+                @Html.LabelFor(m => m.StaffRequestModel.DesiredStartDate, htmlAttributes: new { @for = "reqDate", @class = "fw-bold label" })
+                @Html.ValidationMessageFor(m => m.StaffRequestModel.DesiredStartDate, "", new { @class = "validationText" })
+            </div>
+
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.StaffRequestModel.ProjectedEndDate, new { htmlAttributes = new { @name = "ProjectedEndDate", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.StaffRequestModel.ProjectedEndDate), @type = "date", @id = "reqDate", @required = "required" } })
+                @Html.LabelFor(m => m.StaffRequestModel.ProjectedEndDate, htmlAttributes: new { @for = "reqDate", @class = "fw-bold label" })
+                @Html.ValidationMessageFor(m => m.StaffRequestModel.ProjectedEndDate, "", new { @class = "validationText" })
+            </div>
+        </div>
+
+        <div>
+            <h5>Section 2</h5>
+        </div>
+
+        <div class="row row-cols-12 mb-4 formRow">
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.StaffRequestModel.PositionJustification, new { htmlAttributes = new { @name = "PositionJustification", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.StaffRequestModel.PositionJustification), @id = "reqDate", @maxlength = "2000", @required = "required" } })
+                @Html.LabelFor(m => m.StaffRequestModel.PositionJustification, htmlAttributes: new { @for = "reqDate", @class = "fw-bold label" })
+                @Html.ValidationMessageFor(m => m.StaffRequestModel.PositionJustification, "", new { @class = "validationText" })
+            </div>
+        </div>
+
+        <div>
+            <h5>Signatures</h5>
+        </div>
+
+        <div>
+            <div class="row row-cols-3 mb-2 formRow">
+                <div class="col-8 form-floating">
+                    @Html.EditorFor(m => m.StaffRequestModel.SubmittedBy, new { htmlAttributes = new { @name = "SubmittedBy", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.StaffRequestModel.SubmittedBy), @id = "reqSubmittedBy", @Value = ViewBag.Username, @required = "required", @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.StaffRequestModel.SubmittedBy, htmlAttributes: new { @for = "reqSubmittedBy", @class = "fw-bold label" })
+                </div>
+
+                <div class="col form-floating">
+                    @Html.EditorFor(m => m.StaffRequestModel.SubmitDate, new { htmlAttributes = new { @name = "SubmitDate", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.StaffRequestModel.SubmitDate), @id = "reqDate", @Value = DateTime.Today.ToString("MM/dd/yyyy"), @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.StaffRequestModel.SubmitDate, htmlAttributes: new { @for = "reqDate", @class = "fw-bold label" })
+                </div>
+            </div>
+
+            <div class="row row-cols-3 mb-2 formRow">
+                <div class="col-12 form-floating">
+                    @Html.EditorFor(m => m.StaffRequestModel.SubmitterComments, new { htmlAttributes = new { @name = "SubmitterComments", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.StaffRequestModel.SubmitterComments), @id = "reqSubmittedDate" } })
+                    @Html.LabelFor(m => m.StaffRequestModel.SubmitterComments, htmlAttributes: new { @for = "reqSubmittedDate", @class = "fw-bold label" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row formRow">
+            <div class="col-2">
+                <input id="submitButton" class="w-100 button" type="button" value="Submit" onclick="onSubmitButtonClicked()" />
+            </div>
+
+            <div class="col-2">
+                <input id="cancelButton" class="w-100 button" type="button" value="Close" onclick="onCancelButtonClicked()" />
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+<script type="text/javascript">
+    $("#StaffRequestModel_PositionReportsTo").attr("filter", true);
+
+    $(function () {
+        $("#StaffRequestModel_PositionReportsTo").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "@Url.Action("FindPerson", "SFN54497")",
+                    dataType: "json",
+                    type: "POST",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        console.log(data);
+                        response(data);
+                    }
+                });
+            },
+            minLength: 2,
+            select: function (event, query) {
+                console.log(query);            }
+        })
+    })
+
+        var stuff = $("#stuff option").map(function () {
+            return this.value;
+        }).get();
+
+        var departments = $("#departments option").map(function () {
+            return this.value;
+        }).get();
+
+        var locations = $("#locations option").map(function () {
+            return this.value;
+        }).get();
+
+        var hireTypes = $("#hireTypes option").map(function () {
+            return this.value;
+        }).get();
+
+                function onSubmitButtonClicked() {
+                    
+                    console.log(stuff.length);
+
+                    var value = document.getElementById("StaffRequestModel_PositionReportsTo").value;
+                    var departmentsValue = document.getElementById("StaffRequestModel_Department").value;
+                    var locationsValue = document.getElementById("StaffRequestModel_Location").value;
+                    var hireTypesValue = document.getElementById("StaffRequestModel_TypeOfHire").value;
+                    
+                    for (i = 0; i <= stuff.length; i++) {
+                        if (value == stuff[i]) {
+                            document.getElementById("StaffRequestModel_PositionReportsTo").value = value;
+                            break;
+                        } else {
+                            document.getElementById("StaffRequestModel_PositionReportsTo").value = "";
+                        }
+                    }
+
+                    for (i = 0; i <= departments.length; i++) {
+                        if (departmentsValue == departments[i]) {
+                            document.getElementById("StaffRequestModel_Department").value = departmentsValue;
+                            break;
+                        } else {
+                            document.getElementById("StaffRequestModel_Department").value = "";
+                        }
+                    }
+
+                    for (i = 0; i <= locations.length; i++) {
+                        if (locationsValue == locations[i]) {
+                            document.getElementById("StaffRequestModel_Location").value = locationsValue;
+                            break;
+                        } else {
+                            document.getElementById("StaffRequestModel_Location").value = "";
+                        }
+                    }
+
+                    for (i = 0; i <= hireTypes.length; i++) {
+                        if (hireTypesValue == hireTypes[i]) {
+                            document.getElementById("StaffRequestModel_TypeOfHire").value = hireTypesValue;
+                            break;
+                        } else {
+                            document.getElementById("StaffRequestModel_TypeOfHire").value = "";
+                        }
+                    }
+
+                        document.getElementById("submitButton").type = "submit";
+                        $("#wait").show();
+                        $(".button").hide();
+                    
+
+                    
+                        document.getElementById("submitButton").type = "submit";
+    }
+
+
+                function onClosedButtonClicked() {
+                    $("#wait").hide();
+                    $(".button").show();
+                }
+
+                function onCancelButtonClicked() {
+                    var cancel = confirm("All data will be lost if the form is closed. Are you sure that you want to close? Click OK to proceed.");
+                    if (cancel) {
+                        window.location.href = "Index";
+                    }
+                }
+</script>
+}

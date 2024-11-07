@@ -1,0 +1,161 @@
+﻿
+@model  OnlineForms.ViewModels.ESCRFViewModel
+@{
+
+    ViewBag.FormInfo = new Dictionary<string, string>();
+    ViewBag.FormInfo.Add("FormName", "Employee Status Change Request Form");
+    ViewBag.FormInfo.Add("Division", "Human Resource Division");
+    ViewBag.FormInfo.Add("Info", "Termination");
+
+    DateTime defaultDate = DateTime.Now.AddDays(-5);
+}
+
+@section topHeader {
+    @Html.Partial("~/Views/Shared/_ESCRFHeader.cshtml", (Dictionary<string, string>)ViewBag.FormInfo)
+}
+
+@section sideBarNav {
+    @Html.Partial("~/Views/Forms/ESCRF/_Sidebar.cshtml")
+}
+
+@using (Html.BeginForm("SubmitTermination", "ESCRF"))
+{
+    <div>
+        <div class="row mb-5 formRow">
+            <div class="form-group col-3 form-floating">
+                @Html.EditorFor(m => m.Termination.EmployeeName, new { htmlAttributes = new { @class = "form-control fw-bold w-100 textboxfor Validation Verify", @placeholder = Html.DisplayNameFor(m => m.Termination.EmployeeName), @maxlength = "207", @required = "required", @list = "names" } })
+                @Html.LabelFor(m => m.Termination.EmployeeName, htmlAttributes: new { @class = "fw-bold" })
+                @Html.ValidationMessageFor(m => m.Termination.EmployeeName, "", new { @class = "validationText" })
+            </div>
+            <div class="form-group col-3 form-floating">
+                @Html.EditorFor(m => m.Termination.CurrentSupervisor, new { htmlAttributes = new { @class = "form-control fw-bold", @readonly = "readonly", @id = "manager" } })
+                @Html.LabelFor(m => m.Termination.CurrentSupervisor, htmlAttributes: new { @class = "fw-bold" })
+            </div>
+            <div class="form-group col-3 form-floating">
+                @Html.EditorFor(m => m.Termination.PhoneNumber, new { htmlAttributes = new { @class = "form-control fw-bold", @readonly = "readonly", @id = "phoneNumber", @type = "tel" } })
+                @Html.LabelFor(m => m.Termination.PhoneNumber, htmlAttributes: new { @class = "fw-bold" })
+            </div>
+            <div class="form-group col-3 form-floating">
+                @Html.EditorFor(m => m.Termination.Department, new { htmlAttributes = new { @class = "form-control fw-bold", @readonly = "readonly", @id = "department" } })
+                @Html.LabelFor(m => m.Termination.Department, htmlAttributes: new { @class = "fw-bold" })
+            </div>
+        </div>
+        <div class="row mb-4 formRow">
+            <div class="form-group col-3 form-floating">
+                @Html.EditorFor(m => m.Termination.LastDateWorked, new { htmlAttributes = new { @class = "form-control fw-bold", @type = "date" } })
+                @Html.LabelFor(m => m.Termination.LastDateWorked, htmlAttributes: new { @class = "fw-bold" })
+                @Html.ValidationMessageFor(m => m.Termination.LastDateWorked, "", new { @class = "validationText" })
+            </div>
+            <div class="form-group col-3 form-floating">
+                @Html.EditorFor(m => m.Termination.EffectiveDate, new { htmlAttributes = new { @class = "form-control fw-bold", @type = "date" } })
+                @Html.LabelFor(m => m.Termination.EffectiveDate, htmlAttributes: new { @class = "fw-bold" })
+                @Html.ValidationMessageFor(m => m.Termination.EffectiveDate, "", new { @class = "validationText" })
+            </div>
+            <div class="form-group col-3 form-floating">
+                @Html.EditorFor(m => m.Termination.OfficeLocation, new { htmlAttributes = new { @class = "form-control fw-bold", @readonly = "readonly", @id = "location", @required = "required" } })
+                @Html.LabelFor(m => m.Termination.OfficeLocation, htmlAttributes: new { @class = "fw-bold" })
+            </div>
+            <div class="form-group col-3">
+                @Html.CheckBoxFor(m => m.Termination.TransferringToAgency)
+                @Html.LabelFor(m => m.Termination.TransferringToAgency, htmlAttributes: new { @class = "fw-bold" })
+                @Html.ValidationMessageFor(m => m.Termination.TransferringToAgency)
+            </div>
+            <div>
+                @Html.HiddenFor(m => m.Termination.ModifiedBy, new { @Value = ViewBag.Name })
+                @Html.HiddenFor(m => m.Termination.ChangeType, new { @Value = ViewBag.FormInfo["Info"] })
+                @Html.HiddenFor(m => m.Termination.CreatedDate, new { @Value = DateTime.Now.ToShortDateString() })
+                @Html.HiddenFor(m => m.Termination.TaskListID, new { @Value = 0 })
+            </div>
+        </div>
+            <div class="row">
+                <div class="form-group col-12 form-floating">
+                    @Html.EditorFor(m => m.Termination.Comments, new { htmlAttributes = new { @class = "form-control fw-bold w-100", @placeholder = Html.DisplayNameFor(m => m.NewHire.Comments), @maxlength = "500" } })
+                    @Html.LabelFor(m => m.NewHire.Comments, htmlAttributes: new { @class = "fw-bold" })
+                    @Html.ValidationMessageFor(m => m.NewHire.Comments, "", new { @class = "validationText" })
+                </div>
+            </div>
+            <div class="py-5">
+                <div class="col-2">
+                    <button id="submitButton" type="submit" class="btn w-100">Submit</button>
+                </div>
+            </div>
+            @Html.AntiForgeryToken()
+        
+
+    </div>
+    <datalist id="names">
+    </datalist>
+}
+
+@section scripts
+    {
+    @Scripts.Render("~/bundles/jqueryval")
+   
+    <script type="text/javascript">
+        var names = [];
+        $('.Validation').on("keypress", function () {
+            $.ajax({
+                //url: "/api/Validation/?query=" + $('.Validation').val().trim(),
+                url: '@ViewBag.Validation' + $('.Validation').val().trim(),
+                method: 'GET',
+                success: function (data) {
+                    data.forEach(function (name) {
+                        if (!names.includes(name)) {
+                            names.push(name);
+                            var option = document.createElement('option')
+                            option.value = name
+                            document.getElementById('names').appendChild(option)
+                        }
+                        
+                    })
+                }
+            })
+        })
+    </script>
+
+    <script>
+            $('.Verify').on("change", function () {
+                $.ajax({
+                    //url: '/api/Verify/?query=' + $('.Verify').val(),
+                    url: '@ViewBag.Verify' + $('.Verify').val(),
+                    method: 'GET',
+                    success: function (data) {
+                        if (data) {
+                            $.ajax({
+                                //url: '/api/Retrieve/?query=' + $('.Verify').val(),
+                                url: '@ViewBag.Retrieve' + $('.Verify').val(),
+                                method: 'GET',
+                                success: function (data) {
+                                    var info = data.split("+")
+                                    var firstParen = info[1].replace("(", "")
+                                    var secondParen = firstParen.replace(")", "")
+                                    var whiteSpace = secondParen.replace(" ", "")
+                                    var hyphen = whiteSpace.replace("-", "")
+                                    var name = info[4].split(",")
+                                    var first = name[0]
+                                    var noCN = first.slice(3)
+                                    noSlash = noCN.slice(0, -1)
+                                    var name3 = name[1]
+                                    var name4 = name[2];
+                                    var distinguishedName = noSlash + "," + name3
+                                    $('#phoneNumber').val(info[1])
+                                    $('#department').val(info[2])
+                                    $('#location').val(info[3])
+                                    if (info[4] == "No Manager in DB") {
+                                        $('#manager').val(info[7])
+                                    }
+                                    else {
+                                        var managerArray = info[4].split("=")
+                                        $('#manager').val(info[4])
+                                    }
+                                }
+                            })
+                        }
+                    },
+                })
+            })
+    </script>
+}
+
+
+

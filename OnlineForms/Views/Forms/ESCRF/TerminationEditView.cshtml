@@ -1,0 +1,99 @@
+﻿@model OnlineForms.ViewModels.ESCRFViewModel
+@{
+    ViewBag.FormInfo = new Dictionary<string, string>();
+    ViewBag.FormInfo.Add("FormName", "Employee Status Change Request Form");
+    ViewBag.FormInfo.Add("Division", "Human Resource Division");
+    ViewBag.FormInfo.Add("Info", "Termination Edit");
+}
+
+@section topHeader {
+    @Html.Partial("~/Views/Shared/_ESCRFHeader.cshtml", (Dictionary<string, string>)ViewBag.FormInfo)
+}
+
+@section sideBarNav {
+    @Html.Partial("~/Views/Forms/ESCRF/_Sidebar.cshtml")
+}
+<div>
+    @using (Html.BeginForm("UpdateTermination", "ESCRF", new { id = Model.Termination.ID }))
+    {
+        <div>
+            <div>
+                <div class="row mb-5 formRow">
+                    <div class="form-group col-3 form-floating">
+                        @Html.EditorFor(m => m.Termination.EmployeeName, new { htmlAttributes = new { @class = "form-control fw-bold w-100", @placeholder = Html.DisplayNameFor(m => m.Termination.EmployeeName), @readonly = "readonly" } })
+                        @Html.LabelFor(m => m.Termination.EmployeeName, htmlAttributes: new { @class = "fw-bold" })
+                    </div>
+                    <div class="form-group col-3 form-floating">
+                        @Html.EditorFor(m => m.Termination.CurrentSupervisor, new { htmlAttributes = new { @class = "form-control fw-bold", @readonly = "readonly" } })
+                        @Html.LabelFor(m => m.Termination.CurrentSupervisor, htmlAttributes: new { @class = "fw-bold" })
+                    </div>
+                    <div class="form-group col-3 form-floating">
+                        @Html.EditorFor(m => m.Termination.PhoneNumber, new { htmlAttributes = new { @class = "form-control fw-bold", @readonly = "readonly" } })
+                        @Html.LabelFor(m => m.Termination.PhoneNumber, htmlAttributes: new { @class = "fw-bold" })
+                    </div>
+                    <div class="form-group col-3 form-floating">
+                        @Html.EditorFor(m => m.Termination.Department, new { htmlAttributes = new { @class = "form-control fw-bold", @readonly = "readonly" } })
+                        @Html.LabelFor(m => m.Termination.Department, htmlAttributes: new { @class = "fw-bold" })
+                    </div>
+                </div>
+                <div class="row mb-2 formRow">
+                    <div class="form-group col-3 form-floating">
+                        @Html.EditorFor(m => m.Termination.LastDateWorked, new { htmlAttributes = new { @class = "form-control fw-bold", @Value = Model.Termination.LastDateWorked.ToString("yyyy-MM-dd"), @type = "date" } })
+                        @Html.LabelFor(m => m.Termination.LastDateWorked, htmlAttributes: new { @class = "fw-bold" })
+                    </div>
+                    <div class="form-group col-3 form-floating">
+                        @Html.EditorFor(m => m.Termination.EffectiveDate, new { htmlAttributes = new { @class = "form-control fw-bold", @Value = Model.Termination.EffectiveDate.ToString("yyyy-MM-dd"), @type = "date" } })
+                        @Html.LabelFor(m => m.Termination.EffectiveDate, htmlAttributes: new { @class = "fw-bold" })
+                    </div>
+                    <div class="form-group col-3 form-floating">
+                        @Html.EditorFor(m => m.Termination.OfficeLocation, new { htmlAttributes = new { @class = "form-control fw-bold", @readonly = "readonly", } })
+                        @Html.LabelFor(m => m.Termination.OfficeLocation, htmlAttributes: new { @class = "fw-bold" })
+                    </div>
+                    <div class="form-group col-3">
+                        @Html.CheckBoxFor(m => m.Termination.TransferringToAgency)
+                        @Html.LabelFor(m => m.Termination.TransferringToAgency, htmlAttributes: new { @class = "fw-bold" })
+                        @Html.ValidationMessageFor(m => m.Termination.TransferringToAgency)
+                    </div>
+                </div>
+                <div class="row mb-5 formRow">
+                    <div class="form-group col-3 form-floating">
+                        @Html.EditorFor(m => m.Termination.ModifiedBy, new { htmlAttributes = new { @class = "form-control fw-bold w-100 textboxfor", @placeholder = Html.DisplayNameFor(m => m.Termination.ModifiedBy), @readonly = "readonly" } })
+                        @Html.LabelFor(m => m.Termination.ModifiedBy, htmlAttributes: new { @class = "fw-bold" })
+                    </div>
+                    <div class="form-group col-3 form-floating">
+                        @Html.EditorFor(m => m.Termination.ChangeType, new { htmlAttributes = new { @class = "form-control fw-bold w-100", @placeholder = Html.DisplayNameFor(m => m.Termination.ChangeType), @readonly = "readonly" } })
+                        @Html.LabelFor(m => m.Termination.ChangeType, htmlAttributes: new { @class = "fw-bold" })
+                    </div>
+                    <div class="form-group col-3 form-floating">
+                        @Html.EditorFor(m => m.Termination.CreatedDate, new { htmlAttributes = new { @class = "form-control fw-bold", @Value = Model.Termination.CreatedDate.ToString("yyyy-MM-dd"), @readonly = "readonly" } })
+                        @Html.LabelFor(m => m.Termination.CreatedDate, htmlAttributes: new { @class = "fw-bold" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-12 form-floating">
+                        @Html.EditorFor(m => m.Termination.Comments, new { htmlAttributes = new { @class = "form-control fw-bold w-100", @placeholder = Html.DisplayNameFor(m => m.NewHire.Comments), @maxlength = "500", @readonly = "readonly" } })
+                        @Html.LabelFor(m => m.NewHire.Comments, htmlAttributes: new { @class = "fw-bold" })
+                        @Html.ValidationMessageFor(m => m.NewHire.Comments, "", new { @class = "validationText" })
+                    </div>
+                </div>
+            </div>
+            <div>
+                @Html.HiddenFor(m => m.Termination.ID)
+            </div>
+        </div>
+        <div class="d-flex flex-row">
+
+            <div class="col-2 py-5" style="margin-right: 2rem;">
+                <button id="submitButton" type="submit" class="btn w-100">
+                    Save
+                </button>
+            </div>
+            <div class="col-2 py-5">
+                @Html.ActionLink("Cancel", "BackToView", "ESCRF", new { @id = "button", @class = "btn button w-100" })
+            </div>
+        </div>
+        @Html.AntiForgeryToken()
+    }
+</div>
+
+

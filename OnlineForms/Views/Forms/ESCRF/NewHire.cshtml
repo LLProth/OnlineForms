@@ -1,0 +1,135 @@
+﻿
+@model  OnlineForms.ViewModels.ESCRFViewModel
+@{
+    ViewBag.FormInfo = new Dictionary<string, string>();
+    ViewBag.FormInfo.Add("FormName", "Employee Status Change Request Form");
+    ViewBag.FormInfo.Add("Division", "Human Resource Division");
+    ViewBag.FormInfo.Add("Info", "New Hire");
+
+    string[] EmploymentTypes = { "FTE", "WSI TEMP", "Temp Staffing Agency", "Contractor" };
+    ViewBag.Employment = EmploymentTypes;
+    string[] Flsa = { "Exempt", "Non-Exempt" };
+    ViewBag.Flsa = Flsa;
+    DateTime defaultDate = DateTime.Now.AddDays(-5);
+}
+
+@section topHeader {
+    @Html.Partial("~/Views/Shared/_ESCRFHeader.cshtml", (Dictionary<string, string>)ViewBag.FormInfo)
+}
+
+@section sideBarNav {
+    @Html.Partial("~/Views/Forms/ESCRF/_Sidebar.cshtml")
+}
+
+@using (Html.BeginForm("SubmitNewHire", "ESCRF"))
+{
+    <div>
+        <div class="row mb-5 ">
+            <div class="form-group col-5 form-floating">
+                @Html.EditorFor(m => m.NewHire.FirstName, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = Html.DisplayNameFor(m => m.NewHire.FirstName), @maxlength = "100", @required = "required" } })
+                @Html.LabelFor(m => m.NewHire.FirstName, htmlAttributes: new { @class = "fw-bold" })
+                @Html.ValidationMessageFor(m => m.NewHire.FirstName, "", new { @class = "validationText" })
+            </div>
+            <div class="form-group col-5 form-floating">
+                @Html.EditorFor(m => m.NewHire.LastName, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = Html.DisplayNameFor(m => m.NewHire.LastName), @maxlength = "100", @required = "required" } })
+                @Html.LabelFor(m => m.NewHire.LastName, htmlAttributes: new { @class = "fw-bold" })
+                @Html.ValidationMessageFor(m => m.NewHire.LastName, "", new { @class = "validationText" })
+            </div>
+            <div class="form-group col-2 form-floating">
+                @Html.EditorFor(m => m.NewHire.MiddleInitial, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = Html.DisplayNameFor(m => m.NewHire.MiddleInitial), @maxlength = "3" } })
+                @Html.LabelFor(m => m.NewHire.MiddleInitial, htmlAttributes: new { @class = "fw-bold" })
+                @Html.ValidationMessageFor(m => m.NewHire.MiddleInitial, "", new { @class = "validationText" })
+            </div>
+        </div>
+        <div class="row mb-5">
+            <div class="form-group col-4 form-floating">
+                @Html.DropDownListFor(m => m.NewHire.JobTitle, new SelectList(ViewBag.Titles), " ", new { @class = "form-control" })
+                @Html.LabelFor(m => m.NewHire.JobTitle, htmlAttributes: new { @class = "fw-bold" })
+                @Html.ValidationMessageFor(m => m.NewHire.JobTitle, "", new { @class = "validationText" })
+            </div>
+            <div class="form-group col-4 form-floating">
+                @Html.EditorFor(m => m.NewHire.EffectiveDate, new { htmlAttributes = new { @class = "form-control fw-bold", @type = "date" } })
+                @Html.LabelFor(m => m.NewHire.EffectiveDate, htmlAttributes: new { @class = "fw-bold" })
+                @Html.ValidationMessageFor(m => m.NewHire.EffectiveDate, "", new { @class = "validationText" })
+            </div>
+            <div class="form-group col-4 form-floating">
+                @Html.EditorFor(m => m.NewHire.CurrentSupervisor, new { htmlAttributes = new { @class = "form-control fw-bold w-100", @placeholder = Html.DisplayNameFor(m => m.NewHire.CurrentSupervisor), @maxlength = "207", @required = "required", @list = "names", @id = "Validation" } })
+                @Html.LabelFor(m => m.NewHire.CurrentSupervisor, htmlAttributes: new { @class = "fw-bold" })
+                @Html.ValidationMessageFor(m => m.NewHire.CurrentSupervisor, "", new { @class = "validationText" })
+            </div>
+        </div>
+        <div class="row mb-5">
+            <div class="form-group col-4 form-floating">
+                @Html.DropDownListFor(m => m.NewHire.EmployeeType, new SelectList(ViewBag.Employment), " ", new { @class = "form-control" })
+                @Html.LabelFor(m => m.NewHire.EmployeeType, htmlAttributes: new { @class = "fw-bold" })
+                @Html.ValidationMessageFor(m => m.NewHire.EmployeeType, "", new { @class = "validationText" })
+            </div>
+            <div class="form-group col-4 form-floating">
+                @Html.DropDownListFor(m => m.NewHire.FLSAStatus, new SelectList(ViewBag.Flsa), " ", new { @class = "form-control" })
+                @Html.LabelFor(m => m.NewHire.FLSAStatus, htmlAttributes: new { @class = "fw-bold" })
+                @Html.ValidationMessageFor(m => m.NewHire.FLSAStatus, "", new { @class = "validationText" })
+            </div>
+            <div class="form-group col-4">
+                @Html.CheckBoxFor(m => m.NewHire.TransferringFromAgency)
+                @Html.LabelFor(m => m.NewHire.TransferringFromAgency, htmlAttributes: new { @class = "fw-bold" })
+                @Html.ValidationMessageFor(m => m.NewHire.TransferringFromAgency)
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-12 form-floating">
+                @Html.EditorFor(m => m.NewHire.Comments, new { htmlAttributes = new { @class = "form-control fw-bold w-100", @placeholder = Html.DisplayNameFor(m => m.NewHire.Comments), @maxlength = "500" } })
+                @Html.LabelFor(m => m.NewHire.Comments, htmlAttributes: new { @class = "fw-bold" })
+                @Html.ValidationMessageFor(m => m.NewHire.Comments, "", new { @class = "validationText" })
+            </div>
+        </div>
+        <div>
+            @Html.HiddenFor(m => m.NewHire.ModifiedBy, new { @Value = ViewBag.Name })
+            @Html.HiddenFor(m => m.NewHire.CreatedDate, new { @Value = DateTime.Now.ToShortDateString() })
+            @Html.HiddenFor(m => m.NewHire.ChangeType, new { @Value = ViewBag.FormInfo["Info"] })
+            @Html.HiddenFor(m => m.NewHire.TaskListID, new { @Value = 0 })
+        </div>
+        <div class="py-5">
+            <div class="col-2">
+                <button id="submitButton" type="submit" class="btn w-100">Submit</button>
+            </div>
+            @Html.AntiForgeryToken()
+        </div>
+    </div>
+    <datalist id="names">
+        <option></option>
+    </datalist>
+
+    <datalist id="Roles">
+        <option></option>
+    </datalist>
+    
+}
+
+@section scripts
+{
+    <script type="text/javascript">
+        var names = [];
+        $(document).ready(function () {
+            $('#Validation').on("keypress", function () {
+                
+                $.ajax({
+                    //url: "/api/validation/?query=" + $('#Validation').val().trim(),
+                    url: '@ViewBag.Validation' + $('#Validation').val().trim(),
+                    method: 'GET',
+                    success: function (data) {
+                        data.forEach(function (name) {
+                            if (!names.includes(name)) {
+                                names.push(name);
+                                var option = document.createElement('option')
+                                option.value = name
+                                document.getElementById('names').appendChild(option)
+                            }
+                        })
+                    }
+                })
+            })
+        })
+    </script>
+    @Scripts.Render("~/bundles/jqueryval")
+}
+

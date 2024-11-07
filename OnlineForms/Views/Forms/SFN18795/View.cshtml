@@ -1,0 +1,522 @@
+﻿@model OnlineForms.ViewModels.SFN18795DisplayViewModel
+
+@{
+    ViewBag.Title = "View";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@Html.Partial("~/Views/Shared/_FormHeader.cshtml", (Dictionary<string, string>)ViewBag.FormInfo)
+<div id="notPrint" class="container-fluid">
+    <div class="container-fluid">
+        <div class="row flex-nowrap">
+            @section sideBarNav {
+                @Html.Partial("~/Views/Forms/SFN18795/Sidebar.cshtml")
+            }
+        </div>
+    </div>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="row row-cols-1 text-center mb-2">
+            <div class="col bg-dark text-white fw-bold">
+                Please complete the form and submit for approval.
+            </div>
+        </div>
+        <div class="row row-cols-3 mb-2">
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.RequisitionModel.Department, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "reqDepartment", @Value = Model.RequisitionModel.Department, @readonly = "readonly" } })
+                @Html.LabelFor(m => m.RequisitionModel.Department, htmlAttributes: new { @for = "reqDepartment", @class = "fw-bold" })
+
+            </div>
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.RequisitionModel.Name, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @Value = Model.RequisitionModel.Name, @id = "reqName", @readonly = "readonly" } })
+                @Html.LabelFor(m => m.RequisitionModel.Name, htmlAttributes: new { @for = "reqName", @class = "fw-bold" })
+            </div>
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.RequisitionModel.DateSubmitted, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @Value = Model.RequisitionModel.DateSubmitted.ToShortDateString(), @id = "reqDate", @type = "text", @readonly = "readonly" } })
+                @Html.LabelFor(m => m.RequisitionModel.DateSubmitted, htmlAttributes: new { @for = "reqDate", @class = "fw-bold" })
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col-8 form-floating">
+                @Html.EditorFor(m => m.RequisitionModel.Contractor, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @Value = Model.RequisitionModel.Contractor, @id = "reqContractor", @readonly = "readonly" } })
+                @Html.LabelFor(m => m.RequisitionModel.Contractor, htmlAttributes: new { @for = "reqContractor", @class = "fw-bold" })
+            </div>
+            <div class="col-4 form-floating">
+                <div class="form-control fw-bold bg-white check-box">
+                    @Html.DisplayFor(m => m.RequisitionModel.RequisitionID, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "reqID", @readonly = "readonly" } })
+                </div>
+                @Html.LabelFor(m => m.RequisitionModel.RequisitionID, htmlAttributes: new { @for = "reqID", @class = "fw-bold" })
+            </div>
+        </div>
+
+        <div class="row row-cols-3 mb-5">
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.RequisitionModel.SoftwareHardware, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @Value = ((Model.RequisitionModel.SoftwareHardware) ? "Yes" : "No"), @id = "reqSoftwareHardware", @type = "text", @readonly = "readonly" } })
+                @Html.LabelFor(m => m.RequisitionModel.SoftwareHardware, htmlAttributes: new { @for = "", @class = "fw-bold req-form-long-label" })
+            </div>
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.RequisitionModel.EstimatedStartDate, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @Value = Model.RequisitionModel.EstimatedStartDate.Value.ToShortDateString(), @id = "reqStartDate", @type = "text", @readonly = "readonly" } })
+                @Html.LabelFor(m => m.RequisitionModel.EstimatedStartDate, htmlAttributes: new { @for = "reqStartDate", @class = "fw-bold" })
+            </div>
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.RequisitionModel.EstimatedCompleteDate, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @Value = Model.RequisitionModel.EstimatedCompleteDate.Value.ToShortDateString(), @id = "reqCompletedDate", @type = "text", @readonly = "readonly" } })
+                @Html.LabelFor(m => m.RequisitionModel.EstimatedCompleteDate, htmlAttributes: new { @for = "reqCompletedDate", @class = "fw-bold" })
+            </div>
+        </div>
+
+        <div class="row mb-1">
+            <div class="col-2 text-center fw-bold req-item-form-header">
+                Quantity
+            </div>
+            <div class="col-2 text-center fw-bold req-item-form-header">
+                Item Number
+            </div>
+            <div class="col-4 text-center fw-bold req-item-form-header">
+                Description/Scope of Work
+            </div>
+            <div class="col-2 text-center fw-bold req-item-form-header">
+                Price
+            </div>
+            <div class="col-2 text-center fw-bold req-item-form-header">
+                Estimated Cost
+            </div>
+        </div>
+
+        for (int i = 0; i < Model.RequisitionItems.Count; i++)
+        {
+            <div class="row mb-3" requisition-item="@(i + 1)">
+                <div class="col-2">
+                    @Html.EditorFor(m => m.RequisitionItem.Quantity, new { htmlAttributes = new { @class = "form-control fw-bold req-item-quantity bg-white", @Value = Model.RequisitionItems[@i].Quantity, @onkeyup = "calculateRequisitionItemRow(event); return false;" } })
+                </div>
+                <div class="col-1">
+                    @Html.EditorFor(m => m.RequisitionItem.ItemNumber, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @Value = Model.RequisitionItems[@i].ItemNumber } })
+                </div>
+                <div class="col-4">
+                    @Html.EditorFor(m => m.RequisitionItem.Description, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @Value = Model.RequisitionItems[@i].Description } })
+                </div>
+                <div class="col-2">
+                    <span class="prefix fw-bold">$</span>
+                    @Html.EditorFor(m => m.RequisitionItem.Price, new { htmlAttributes = new { @class = "form-control fw-bold bg-white text-end", @Value = Model.RequisitionItems[@i].Price, @currencymask = "true", @onkeyup = "calculateRequisitionItemRow(event); return false;" } })
+                </div>
+                <div class="col-2">
+                    <span class="prefix fw-bold">$</span>
+                    @Html.EditorFor(m => m.RequisitionItem.EstimatedCost, new { htmlAttributes = new { @class = "form-control fw-bold bg-white text-end", @Value = Model.RequisitionItems[@i].EstimatedCost, @currencymask = "true", @readonly = "readonly" } })
+                </div>
+            </div>
+        }
+
+        <div class="row mb-3">
+            <div class="col-2 d-flex">
+            </div>
+            <div class="col-6"></div>
+            <div class="col-2 text-center fw-bold req-item-form-header d-flex align-items-center justify-content-center">
+                Total
+            </div>
+            <div class="col-2 fw-bold">
+                <span class="prefix fw-bold">$</span>
+                <input type="text" class="form-control fw-bold bg-white text-end" readonly="readonly" name="RequisitionModel.TotalPrice" currencymask="true" value='@decimal.Parse(ViewBag.TotalPrice).ToString("n2")' total-price />
+
+            </div>
+        </div>
+
+        if (Model.RequisitionModel.SoftwareHardware == true && Model.RequisitionModel.ITRepSignature.IsEmpty())
+        {
+            <div class="row mb-1">
+                <div id="notPrint" class="col-8 form-floating">
+                    @Html.EditorFor(m => m.RequisitionModel.ITRepSignature, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @Value = "Waiting on IT Representative to Approve", @id = "itSignature", @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.RequisitionModel.ITRepSignature, htmlAttributes: new { @for = "itSignature", @class = "fw-bold" })
+                </div>
+                <div id="notPrint" class="col-4 form-floating">
+                    @Html.EditorFor(m => m.RequisitionModel.ITRepSignatureDate, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "itSignatureDate", @type = "text", @Value = @Model.RequisitionModel.ITRepSignatureDate.ToShortDateString(), @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.RequisitionModel.ITRepSignatureDate, htmlAttributes: new { @for = "itSignatureDate", @class = "fw-bold" })
+                </div>
+            </div>
+        }
+        else if (Model.RequisitionModel.SoftwareHardware == true && !Model.RequisitionModel.ITRepSignature.IsEmpty())
+        {
+            <div class="row mb-1">
+                <div class="col-8 form-floating">
+                    @Html.EditorFor(m => m.RequisitionModel.ITRepSignature, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @Value = Model.RequisitionModel.ITRepSignature, @id = "itSignature", @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.RequisitionModel.ITRepSignature, htmlAttributes: new { @for = "itSignature", @class = "fw-bold" })
+                </div>
+                <div class="col-4 form-floating">
+                    @Html.EditorFor(m => m.RequisitionModel.ITRepSignatureDate, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "itSignatureDate", @type = "text", @Value = @Model.RequisitionModel.ITRepSignatureDate.ToShortDateString(), @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.RequisitionModel.ITRepSignatureDate, htmlAttributes: new { @for = "itSignatureDate", @class = "fw-bold" })
+                </div>
+            </div>
+        }
+
+        if (double.Parse(ViewBag.TotalPrice) <= 500.00 && Model.RequisitionModel.SupervisorSignature.IsEmpty())
+        {
+            <div class="row mb-1">
+                <div class="col-8 form-floating">
+                    @Html.EditorFor(m => m.RequisitionModel.SupervisorSignature, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @Value = "Waiting on Supervisor Approval ", @id = "supervisorSignature", @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.RequisitionModel.SupervisorSignature, htmlAttributes: new { @for = "supervisorSignature", @class = "fw-bold" })
+                </div>
+                <div class="col-4 form-floating">
+                    @Html.EditorFor(m => m.RequisitionModel.SupervisorSignatureDate, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "supervisorSignatureDate", @type = "date", @Value = @Model.RequisitionModel.SupervisorSignatureDate.ToShortDateString(), @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.RequisitionModel.SupervisorSignatureDate, htmlAttributes: new { @for = "supervisorSignatureDate", @class = "fw-bold" })
+                </div>
+            </div>
+        }
+        else if (double.Parse(ViewBag.TotalPrice) <= 500.00 && !Model.RequisitionModel.SupervisorSignature.IsEmpty())
+        {
+            <div class="row mb-1">
+                <div class="col-8 form-floating">
+                    @Html.EditorFor(m => m.RequisitionModel.SupervisorSignature, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @Value = Model.RequisitionModel.SupervisorSignature, @id = "supervisorSignature", @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.RequisitionModel.SupervisorSignature, htmlAttributes: new { @for = "supervisorSignature", @class = "fw-bold" })
+                </div>
+                <div class="col-4 form-floating">
+                    @Html.EditorFor(m => m.RequisitionModel.SupervisorSignatureDate, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "supervisorSignatureDate", @type = "date", @Value = @Model.RequisitionModel.SupervisorSignatureDate.ToString("yyyy-MM-dd"), @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.RequisitionModel.SupervisorSignatureDate, htmlAttributes: new { @for = "supervisorSignatureDate", @class = "fw-bold" })
+                </div>
+            </div>
+        }
+
+        if ((double.Parse(ViewBag.TotalPrice) > 500.00 && double.Parse(ViewBag.TotalPrice) <= 5000.00 && Model.RequisitionModel.DepartmentSignature.IsEmpty()) ||
+             (double.Parse(ViewBag.TotalPrice) > 5000.00 && ViewBag.Department != "Director" && Model.RequisitionModel.DepartmentSignature.IsEmpty()))
+        {
+            <div class="row mb-1">
+                <div id="notPrint" class="col-8 form-floating">
+                    @Html.EditorFor(m => m.RequisitionModel.DepartmentSignature, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @Value = "Waiting on Department Director Approval " + ViewBag.WaitingApproval, @id = "departmentSignature", @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.RequisitionModel.DepartmentSignature, htmlAttributes: new { @for = "DepartmentSignature", @class = "fw-bold" })
+                </div>
+                <div id="notPrint" class="col-4 form-floating">
+                    @Html.EditorFor(m => m.RequisitionModel.DepartmentSignatureDate, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "departmentSignatureDate", @type = "date", @Value = @Model.RequisitionModel.DepartmentSignatureDate.ToShortDateString(), @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.RequisitionModel.DepartmentSignatureDate, htmlAttributes: new { @for = "DepartmentSignatureDate", @class = "fw-bold" })
+                </div>
+            </div>
+        }
+        else if (double.Parse(ViewBag.TotalPrice) > 500.00 && !Model.RequisitionModel.DepartmentSignature.IsEmpty())
+        {
+            <div class="row mb-1">
+                <div class="col-8 form-floating">
+                    @Html.EditorFor(m => m.RequisitionModel.DepartmentSignature, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @Value = Model.RequisitionModel.DepartmentSignature, @id = "departmentSignature", @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.RequisitionModel.DepartmentSignature, htmlAttributes: new { @for = "DepartmentSignature", @class = "fw-bold" })
+                </div>
+                <div class="col-4 form-floating">
+                    @Html.EditorFor(m => m.RequisitionModel.DepartmentSignatureDate, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "departmentSignatureDate", @type = "date", @Value = @Model.RequisitionModel.DepartmentSignatureDate.ToString("yyyy-MM-dd"), @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.RequisitionModel.DepartmentSignatureDate, htmlAttributes: new { @for = "DepartmentSignatureDate", @class = "fw-bold" })
+                </div>
+            </div>
+        }
+
+        if ((double.Parse(ViewBag.TotalPrice) > 5000.00 == true && double.Parse(ViewBag.TotalPrice) <= 50000.00 && Model.RequisitionModel.ChiefSignature.IsEmpty()) ||
+            (double.Parse(ViewBag.TotalPrice) > 5000.00 == true && ViewBag.Department == "Director" && Model.RequisitionModel.ChiefSignature.IsEmpty()))
+        {
+            <div class="row mb-1">
+                <div id="notPrint" class="col-8 form-floating">
+                    @Html.EditorFor(m => m.RequisitionModel.ChiefSignature, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @Value = "Waiting on Chief Approval", @id = "chiefSignature", @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.RequisitionModel.ChiefSignature, htmlAttributes: new { @for = "ChiefSignature", @class = "fw-bold" })
+                </div>
+                <div id="notPrint" class="col-4 form-floating">
+                    @Html.EditorFor(m => m.RequisitionModel.ChiefSignatureDate, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "chiefSignatureDate", @type = "date", @Value = @Model.RequisitionModel.ChiefSignatureDate.ToShortDateString(), @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.RequisitionModel.ChiefSignatureDate, htmlAttributes: new { @for = "ChiefSignatureDate", @class = "fw-bold" })
+                </div>
+            </div>
+        }
+        else if (double.Parse(ViewBag.TotalPrice) > 5000.00 && !Model.RequisitionModel.ChiefSignature.IsEmpty())
+        {
+            <div class="row mb-1">
+                <div class="col-8 form-floating">
+                    @Html.EditorFor(m => m.RequisitionModel.ChiefSignature, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @Value = Model.RequisitionModel.ChiefSignature, @id = "chiefSignature", @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.RequisitionModel.ChiefSignature, htmlAttributes: new { @for = "ChiefSignature", @class = "fw-bold" })
+                </div>
+                <div class="col-4 form-floating">
+                    @Html.EditorFor(m => m.RequisitionModel.ChiefSignatureDate, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "chiefSignatureDate", @type = "date", @Value = @Model.RequisitionModel.ChiefSignatureDate.ToString("yyyy-MM-dd"), @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.RequisitionModel.ChiefSignatureDate, htmlAttributes: new { @for = "ChiefSignatureDate", @class = "fw-bold" })
+                </div>
+            </div>
+        }
+
+        if (double.Parse(ViewBag.TotalPrice) > 50000.00 && Model.RequisitionModel.DirectorSignature.IsEmpty())
+        {
+            <div class="row mb-1">
+                <div id="notPrint" class="col-8 form-floating">
+                    @Html.EditorFor(m => m.RequisitionModel.DirectorSignature, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @Value = "Waiting on Director Approval", @id = "directorSignature", @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.RequisitionModel.DirectorSignature, htmlAttributes: new { @for = "DirectorSignature", @class = "fw-bold" })
+                </div>
+                <div id="notPrint" class="col-4 form-floating">
+                    @Html.EditorFor(m => m.RequisitionModel.DirectorSignatureDate, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "directorSignatureDate", @type = "date", @Value = @Model.RequisitionModel.DirectorSignatureDate.ToShortDateString(), @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.RequisitionModel.DirectorSignatureDate, htmlAttributes: new { @for = "DirectorSignatureDate", @class = "fw-bold" })
+                </div>
+            </div>
+        }
+        else if (double.Parse(ViewBag.TotalPrice) > 50000.00 && !Model.RequisitionModel.DirectorSignature.IsEmpty())
+        {
+            <div class="row mb-1">
+                <div class="col-8 form-floating">
+                    @Html.EditorFor(m => m.RequisitionModel.DirectorSignature, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @Value = Model.RequisitionModel.DirectorSignature, @id = "directorSignature", @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.RequisitionModel.DirectorSignature, htmlAttributes: new { @for = "DirectorSignature", @class = "fw-bold" })
+                </div>
+                <div class="col-4 form-floating">
+                    @Html.EditorFor(m => m.RequisitionModel.DirectorSignatureDate, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "directorSignatureDate", @type = "date", @Value = @Model.RequisitionModel.DirectorSignatureDate.ToString("yyyy-MM-dd"), @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.RequisitionModel.DirectorSignatureDate, htmlAttributes: new { @for = "DirectorSignatureDate", @class = "fw-bold" })
+                </div>
+            </div>
+        }
+        if (!Model.RequisitionModel.ProcurementOfficerSignature.IsEmpty())
+        {
+            <div class="row mb-1">
+                <div class="col-8 form-floating">
+                    @Html.EditorFor(m => m.RequisitionModel.ProcurementOfficerSignature, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @Value = Model.RequisitionModel.ProcurementOfficerSignature, @id = "directorSignature", @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.RequisitionModel.ProcurementOfficerSignature, htmlAttributes: new { @for = "DirectorSignature", @class = "fw-bold" })
+                </div>
+                <div class="col-4 form-floating">
+                    @Html.EditorFor(m => m.RequisitionModel.ProcurementOfficerSignatureDate, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "directorSignatureDate", @type = "date", @Value = @Model.RequisitionModel.ProcurementOfficerSignatureDate.ToString("yyyy-MM-dd"), @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.RequisitionModel.ProcurementOfficerSignatureDate, htmlAttributes: new { @for = "DirectorSignatureDate", @class = "fw-bold" })
+                </div>
+            </div>
+            <div>
+                <h5>Administration Section</h5>
+                <div class="row mb-3">
+                    <div class="col-9 form-floating border check-container">
+                        Procurement, please check below when you have printed the form for processing.
+                        <br />
+                        @Html.DisplayFor(m => m.RequisitionModel.ProcurementProcessing, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @Value = Model.RequisitionModel.ProcurementProcessing, @id = "procurementOfficerSignature", @readonly = "readonly" } })<span class="checkmark" style=" top: auto; left: 30px; "></span>
+                        Form is being processed by Procurement
+                    </div>
+                    <div class="col-3 form-floating">
+                        @Html.EditorFor(m => m.RequisitionModel.ProcurementProcessedDate, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "ProcurementProcessedDate", @type = "date", @Value = Model.RequisitionModel.ProcurementProcessedDate.ToString("yyyy-MM-dd") } })
+                        @Html.LabelFor(m => m.RequisitionModel.ProcurementProcessedDate, htmlAttributes: new { @for = "ProcurementOfficerSignatureDate", @class = "fw-bold" })
+                    </div>
+                </div>
+            </div>
+        }
+        if (Model.RequisitionModel.Name == ViewBag.User || ViewBag.JobTitle == "Procurement Officer")
+        {
+            if (!Model.RequisitionModel.WaitingApproval.IsEmpty() && !Model.RequisitionModel.FormDenied)
+            {
+                <div class="row mb-1">
+                    <div id="notPrint" class="col-8 form-floating">
+                        @Html.EditorFor(m => m.RequisitionModel.WaitingApproval, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @Value = @Model.RequisitionModel.WaitingApproval, @id = "waitingapproval", @readonly = "readonly" } })
+                        @Html.Label("WaitingApproval", "Waiting Approval From", new { @class = "fw-bold" })
+                    </div>
+                </div>
+            }
+        }
+    }
+
+    <div class="row">
+        <div class="col-3">
+            <button id="submitButton" type="button" onclick="printPage()" class="w-100" data-dismiss="modal">Print</button>
+        </div>
+    </div>
+</div>
+
+<table id="printTable">
+    <tbody>
+        <tr class="printRow">
+            <td class="printCell" colspan="4">
+                @Html.LabelFor(m => m.RequisitionModel.Department) <br />
+                <span class="userInput">@Html.DisplayFor(m => m.RequisitionModel.Department)</span>
+            </td>
+            <td class="printCell" colspan="4">
+                @Html.LabelFor(m => m.RequisitionModel.Name) <br />
+                <span class="userInput">@Html.DisplayFor(m => m.RequisitionModel.Name)</span>
+            </td>
+            <td class="printCell" colspan="4">
+                @Html.LabelFor(m => m.RequisitionModel.DateSubmitted) <br />
+                <span class="userInput">@Html.DisplayFor(m => m.RequisitionModel.DateSubmitted)</span>
+            </td>
+        </tr>
+        <tr class="printRow">
+            <td class="printCell" colspan="8">
+                @Html.LabelFor(m => m.RequisitionModel.Contractor) <br />
+                <span class="userInput">@Html.DisplayFor(m => m.RequisitionModel.Contractor)</span>
+            </td>
+            <td class="printCell" colspan="4">
+                @Html.LabelFor(m => m.RequisitionModel.RequisitionID) <br />
+                <span class="userInput">@Html.DisplayFor(m => m.RequisitionModel.RequisitionID)</span>
+            </td>
+        </tr>
+        <tr class="printRow">
+            <td class="printCell" colspan="4">
+                @Html.LabelFor(m => m.RequisitionModel.SoftwareHardware) <br />
+                @if (Model.RequisitionModel.SoftwareHardware)
+                {
+                    <span class="userInput">Yes</span>
+                }
+                else
+                { <span class="userInput">No</span>}
+
+            </td>
+            <td class="printCell" colspan="4">
+                @Html.LabelFor(m => m.RequisitionModel.EstimatedStartDate) <br />
+                <span class="userInput">@Html.DisplayFor(m => m.RequisitionModel.EstimatedStartDate)</span>
+            </td>
+            <td class="printCell" colspan="4">
+                @Html.LabelFor(m => m.RequisitionModel.EstimatedCompleteDate) <br />
+                <span class="userInput">@Html.DisplayFor(m => m.RequisitionModel.EstimatedCompleteDate)</span>
+            </td>
+        </tr>
+        <tr class="printHeading">
+            <th colspan="2">Quantity</th>
+            <th colspan="2">Item Number</th>
+            <th colspan="4">Description/Scope of work</th>
+            <th colspan="2">Price</th>
+            <th colspan="2">Estimated Cost</th>
+        </tr>
+        @for (int i = 0; i < Model.RequisitionItems.Count; i++)
+        {
+            <tr class="printRow">
+                <td class="printCell" colspan="2">
+                    @Html.LabelFor(m => m.RequisitionItems[@i].Quantity) <br />
+                    <span class="userInput">@Html.DisplayFor(m => m.RequisitionItems[@i].Quantity)</span>
+                </td>
+                <td class="printCell" colspan="2">
+                    @Html.LabelFor(m => m.RequisitionItems[@i].ItemNumber) <br />
+                    <span class="userInput">@Html.DisplayFor(m => m.RequisitionItems[@i].ItemNumber)</span>
+                </td>
+                <td class="printCell" colspan="4">
+                    @Html.LabelFor(m => m.RequisitionItems[@i].Description) <br />
+                    <span class="userInput">@Html.DisplayFor(m => m.RequisitionItems[@i].Description)</span>
+                </td>
+                <td class="printCell" colspan="2">
+                    @Html.LabelFor(m => m.RequisitionItems[@i].Price) <br />
+                    <span class="userInput">@Html.DisplayFor(m => m.RequisitionItems[@i].Price)</span>
+                </td>
+                <td class="printCell" colspan="2">
+                    @Html.LabelFor(m => m.RequisitionItems[@i].EstimatedCost) <br />
+                    <span class="userInput">@Html.DisplayFor(m => m.RequisitionItems[@i].EstimatedCost)</span>
+                </td>
+            </tr>
+        }
+        <tr class="printRow">
+            <td class="printCell" colspan="8">
+            </td>
+            <td class="printCell" colspan="2">
+                Total
+            </td>
+            <td class="printCell" colspan="2">
+                @Html.LabelFor(m => m.RequisitionModel.ReqItemsTotal) <br />
+                <span class="userInput">@Html.DisplayFor(m => m.RequisitionModel.ReqItemsTotal)</span>
+            </td>
+        </tr>
+        <tr class="printHeading">
+            <th colspan="12">Signatures</th>
+        </tr>
+        @if (!Model.RequisitionModel.ITRepSignature.IsEmpty())
+        {
+            <tr class="printRow">
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.RequisitionModel.ITRepSignature) <br />
+                    <span class="userInput">@Html.DisplayFor(m => m.RequisitionModel.ITRepSignature)</span>
+                </td>
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.RequisitionModel.ITRepSignatureDate) <br />
+                    <span class="userInput">@Html.DisplayFor(m => m.RequisitionModel.ITRepSignatureDate)</span>
+                </td>
+            </tr>
+        }
+        @if (!Model.RequisitionModel.SupervisorSignature.IsEmpty())
+        {
+            <tr class="printRow">
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.RequisitionModel.SupervisorSignature) <br />
+                    <span class="userInput">@Html.DisplayFor(m => m.RequisitionModel.SupervisorSignature)</span>
+                </td>
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.RequisitionModel.SupervisorSignatureDate) <br />
+                    <span class="userInput">@Html.DisplayFor(m => m.RequisitionModel.SupervisorSignatureDate)</span>
+                </td>
+            </tr>
+        }
+        @if (!Model.RequisitionModel.DepartmentSignature.IsEmpty())
+        {
+            <tr class="printRow">
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.RequisitionModel.DepartmentSignature) <br />
+                    <span class="userInput">@Html.DisplayFor(m => m.RequisitionModel.DepartmentSignature)</span>
+                </td>
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.RequisitionModel.DepartmentSignatureDate) <br />
+                    <span class="userInput">@Html.DisplayFor(m => m.RequisitionModel.DepartmentSignatureDate)</span>
+                </td>
+            </tr>
+        }
+        @if (!Model.RequisitionModel.ChiefSignature.IsEmpty())
+        {
+            <tr class="printRow">
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.RequisitionModel.ChiefSignature) <br />
+                    <span class="userInput">@Html.DisplayFor(m => m.RequisitionModel.ChiefSignature)</span>
+                </td>
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.RequisitionModel.ChiefSignatureDate) <br />
+                    <span class="userInput">@Html.DisplayFor(m => m.RequisitionModel.ChiefSignatureDate)</span>
+                </td>
+            </tr>
+        }
+        @if (!Model.RequisitionModel.DirectorSignature.IsEmpty())
+        {
+            <tr class="printRow">
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.RequisitionModel.DirectorSignature) <br />
+                    <span class="userInput">@Html.DisplayFor(m => m.RequisitionModel.DirectorSignature)</span>
+                </td>
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.RequisitionModel.DirectorSignatureDate) <br />
+                    <span class="userInput">@Html.DisplayFor(m => m.RequisitionModel.DirectorSignatureDate)</span>
+                </td>
+            </tr>
+        }
+        @if (!Model.RequisitionModel.ProcurementOfficerSignature.IsEmpty())
+        {
+            <tr class="printRow">
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.RequisitionModel.ProcurementOfficerSignature) <br />
+                    <span class="userInput">@Html.DisplayFor(m => m.RequisitionModel.ProcurementOfficerSignature)</span>
+                </td>
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.RequisitionModel.ProcurementOfficerSignatureDate) <br />
+                    <span class="userInput">@Html.DisplayFor(m => m.RequisitionModel.ProcurementOfficerSignatureDate)</span>
+                </td>
+            </tr>
+        }
+        @if (Model.RequisitionModel.ProcurementProcessing == true)
+        {
+        <tr class="printRow">
+            <td class="printCell" colspan="6">
+                <h5>Administration Section</h5>
+            </td>
+        </tr>
+        <tr class="printRow">
+            <td class="printCell" colspan="6">
+                @Html.LabelFor(m => m.RequisitionModel.ProcurementProcessing) <br />
+                @if (Model.RequisitionModel.ProcurementProcessing == true)
+                {
+                    <input type="checkbox" id="printCheck" style="appearance: auto; background-color: transparent; accent-color: #29479d; width:auto; height: auto" checked="checked" />
+                }
+                else
+                {
+                    <input type="checkbox" id="printCheck" style="appearance: auto; background-color: transparent; width:auto; height: auto" />
+                }
+            </td>
+            <td class="printCell" colspan="6">
+                @Html.LabelFor(m => m.RequisitionModel.ProcurementProcessedDate) <br />
+                <span class="userInput">@Html.DisplayFor(m => m.RequisitionModel.ProcurementProcessedDate)</span>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+        @section Scripts {
+            @Scripts.Render("~/bundles/jqueryval")
+            <partial name="_ValidationScriptsPartial" />
+
+            <script type="text/javascript">
+                $(function () {
+                    $("[currencymask]").inputmask({ alias: "currency", groupSeparator: "," });
+                });
+
+                function printPage() {
+                    window.print();
+                }
+
+            </script>
+        }

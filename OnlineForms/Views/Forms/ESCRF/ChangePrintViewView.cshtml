@@ -1,0 +1,117 @@
+﻿@model OnlineForms.ViewModels.ESCRFViewModel
+@{
+    ViewBag.FormInfo = new Dictionary<string, string>();
+    ViewBag.FormInfo.Add("FormName", "Employee Status Change Request Form");
+    ViewBag.FormInfo.Add("Division", "Human Resource Division");
+    ViewBag.FormInfo.Add("Info", "Change Edit");
+}
+
+@section topHeader {
+    @Html.Partial("~/Views/Shared/_FormHeader.cshtml", (Dictionary<string, string>)ViewBag.FormInfo)
+}
+
+
+
+
+<div class="row mb-5">
+    <div class="col-6">
+        @Html.LabelFor(m => m.Change.EmployeeName)
+        @Html.TextBoxFor(m => m.Change.EmployeeName, new { @class = "form-control", @disabled = "disabled", @Value = Model.Change.EmployeeName })
+    </div>
+    <div class="form-group col-6">
+        @Html.LabelFor(m => m.Change.PhoneNumber)
+        @Html.TextBoxFor(m => m.Change.PhoneNumber, new { @class = "form-control", @disabled = "disabled", @Value = Model.Change.PhoneNumber })
+    </div>
+</div>
+<div class="row mb-5">
+    <div class="form-group col-4">
+        @Html.LabelFor(m => m.Change.Department)
+        @Html.TextBoxFor(m => m.Change.Department, new { @class = "form-control", @disabled = "disabled", @Value = Model.Change.Department })
+    </div>
+    <div class="form-group col-4">
+        @Html.LabelFor(m => m.Change.OfficeLocation)
+        @Html.TextBoxFor(m => m.Change.OfficeLocation, new { @class = "form-control", @disabled = "disabled", @Value = Model.Change.OfficeLocation })
+    </div>
+    <div class="form-group col-4">
+        @Html.LabelFor(m => m.Change.CurrentSupervisor)
+        @Html.TextBoxFor(m => m.Change.CurrentSupervisor, new { @class = "form-control", @disabled = "disabled", @Value = Model.Change.CurrentSupervisor })
+    </div>
+</div>
+<div class="row mb-5">
+    <div class="form-group col-6">
+        @Html.LabelFor(m => m.Change.IsNewPosition)
+        @Html.CheckBoxFor(m => m.Change.IsNewPosition, new { @disabled = "disabled", @Value = Model.Change.IsNewPosition })
+    </div>
+    <div class="form-group col-6">
+        @Html.LabelFor(m => m.Change.IsNewSupervisor)
+        @Html.CheckBoxFor(m => m.Change.IsNewSupervisor, new { @disabled = "disabled", @Value = Model.Change.IsNewSupervisor })
+    </div>
+</div>
+<div class="d-flex mb-5" id="input-controller">
+    @if (Model.Change.IsNewPosition == true)
+    {
+        <div class="form-group col-6 d-flex inv" id="input-new-position">
+            @Html.LabelFor(m => m.Change.PositionName)
+            @Html.TextBoxFor(m => m.Change.PositionName, new { @class = "form-control", @disabled = "disabled", @Value = Model.Change.PositionName })
+        </div>
+    }
+
+    @if (Model.Change.IsNewSupervisor == true)
+    {
+        <div class="form-group col-6 d-flex" id="input-new-supervisor">
+            @Html.LabelFor(m => m.Change.NewSupervisor)
+            @Html.TextBoxFor(m => m.Change.NewSupervisor, new { @class = "form-control", @disabled = "disabled", @Value = Model.Change.NewSupervisor })
+            @Html.ValidationMessageFor(m => m.Change.NewSupervisor)
+        </div>
+    }
+</div>
+<div class="row d-flex align-items-center mb-5">
+    <div class="form-group col-4">
+        @Html.LabelFor(m => m.Change.IsTempToFte)
+        @Html.CheckBoxFor(m => m.Change.IsTempToFte, new { @disabled = "disabled", @Value = Model.Change.IsTempToFte })
+    </div>
+    <div class="form-group col-4">
+        @Html.LabelFor(m => m.Change.FLSAStatus)
+        @Html.TextBoxFor(m => m.Change.FLSAStatus, new { @class = "form-control", @disabled = "disabled", @Value = Model.Change.FLSAStatus })
+    </div>
+    <div class="form-group col-4">
+        @Html.LabelFor(m => m.Change.EffectiveDate)
+        @Html.TextBoxFor(m => m.Change.EffectiveDate, new { @class = "form-control", @Value = Model.Change.EffectiveDate.ToShortDateString() })
+    </div>
+</div>
+<div class="row mb-5">
+    <div>
+        @Html.LabelFor(m => m.Change.Comments)
+        @Html.TextAreaFor(m => m.Change.Comments, new { @class = "form-control", @disabled = "disabled", @Value = Model.Change.Comments })
+    </div>
+</div>
+<div class="row mb-5">
+    <div class="form-group col-4">
+        @Html.LabelFor(m => m.Change.CreatedDate)
+        @Html.TextBoxFor(m => m.Change.CreatedDate, new { @class = "form-control", @Value = Model.Change.CreatedDate.ToShortDateString() })
+
+    </div>
+    <div class="form-group col-4">
+        @Html.LabelFor(m => m.Change.ModifiedBy)
+        @Html.TextBoxFor(m => m.Change.ModifiedBy, new { @class = "form-control", @disabled = "disabled", @Value = Model.Change.ModifiedBy })
+
+    </div>
+    <div class="form-group col-4">
+        @Html.LabelFor(m => m.Change.ChangeType)
+        @Html.TextBoxFor(m => m.Change.ChangeType, new { @class = "form-control", @disabled = "disabled", @Value = Model.Change.ChangeType.ToString() })
+    </div>
+</div>
+
+
+@section scripts
+        {
+    <script src="~/Scripts/Datepicker.js"></script>
+
+    <script type="text/javascript">
+        $(function () { // will trigger when the document is ready
+            $('.datepicker').datepicker(); //Initialise any date pickers
+        });
+    </script>
+
+}
+

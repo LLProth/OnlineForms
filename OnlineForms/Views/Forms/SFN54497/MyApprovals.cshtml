@@ -1,0 +1,162 @@
+﻿@model OnlineForms.ViewModels.SFN54497DisplayViewModel
+
+@{
+    ViewBag.Title = "Staff Request";
+}
+<div class="row mb-3">
+    @section topHeader {
+        @Html.Partial("~/Views/Shared/_FormHeader.cshtml", (Dictionary<string, string>)ViewBag.FormInfo)
+    }
+    @*@Html.Partial("~/Views/Shared/_TestStuff.cshtml", (Dictionary<string, string>)ViewBag.CharitableInfo)*@
+</div>
+
+<div class="container-fluid">
+    <div class="container-fluid">
+        <div class="row flex-nowrap">
+            @section sideBarNav {
+                @Html.Partial("~/Views/Forms/SFN54497/Sidebar.cshtml")
+            }
+            <div>
+                <div class="row row-cols-1 text-start mb-2">
+                    <div>
+                        <h5 class="display-5">
+                            <a href="~/SFN54497/Create" type="button" id="createButton" class="btn btn-dark">Create New Form</a>
+                        </h5>
+                    </div>
+                </div>
+
+                <div id="formView">
+                    <div class="col py-3">
+                        <div class="text-start mb-2">
+                            <div id="recentHeading" class="col">
+                                <h3>Forms Needing My Approval</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <table class="table" id="submittedForms">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th id="dateSort" style="cursor: pointer" onclick="sortTable(1)">Date Submitted <img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                                <th id="titleSore" style="cursor: pointer" onclick="sortTable(2)">Position Title <img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                                <th id="nameSort" style="cursor: pointer" onclick="sortTable(3)">Created By <img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                                <th id="deptSort" style="cursor: pointer" onclick="sortTable(4)">Department <img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                                <th id="formApproved" style="cursor:pointer" onclick="sortTable(5)">Form Approved <img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                                <th id="formDenied" style="cursor:pointer" onclick="sortTable(6)">Form Denied <img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                                <th id="formSubmitted" style="cursor:pointer" onclick="sortTable(7)">Form Submitted <img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.StaffRequestModel.Count; i++)
+                            {
+                                if (i <= 19 && Model.StaffRequestModel[@i].WaitingApproval.ToString().Contains(ViewBag.Username))
+                                {
+                            <tr>
+                                <td class="text-end">@Html.ActionLink("View", "View", "SFN54497", new { id = Model.StaffRequestModel[@i].ID }, new { @id = "button", @class = "btn btn-primary" })</td>
+                                <td>@DateTime.Parse(Model.StaffRequestModel[@i].SubmitDate).ToString("MM/dd/yyyy")</td>
+                                <td>@Model.StaffRequestModel[i].PositionTitle</td>
+                                <td>@Model.StaffRequestModel[@i].SubmittedBy</td>
+                                <td>@Model.StaffRequestModel[i].Department</td>
+                                <td>@Html.DisplayFor(m => m.StaffRequestModel[i].FormApproved)</td>
+                                <td>@Html.DisplayFor(m => m.StaffRequestModel[i].FormDenied)</td>
+                                <td>@Html.DisplayFor(m => m.StaffRequestModel[i].FormSubmitted)</td>
+                            </tr>
+                                }
+                            }
+                        </tbody>
+
+                        <tbody id="firstTwenty" hidden>
+                            @* Show all submitted forms if user is a superuser*@
+                            @for (int i = 0; i < Model.StaffRequestModel.Count; i++)
+                            {
+                                if (i >= 20 && i <= 99 && Model.StaffRequestModel[@i].WaitingApproval.ToString().Contains(ViewBag.Username))
+                                {
+                            <tr>
+                                <td class="text-end">@Html.ActionLink("View", "View", "SFN54497", new { id = Model.StaffRequestModel[@i].ID }, new { @id = "button", @class = "btn btn-primary" })</td>
+                                <td>@DateTime.Parse(Model.StaffRequestModel[@i].SubmitDate).ToString("MM/dd/yyyy")</td>
+                                <td>@Model.StaffRequestModel[i].PositionTitle</td>
+                                <td>@Model.StaffRequestModel[@i].SubmittedBy</td>
+                                <td>@Model.StaffRequestModel[i].Department</td>
+                                <td>@Html.DisplayFor(m => m.StaffRequestModel[i].FormApproved)</td>
+                                <td>@Html.DisplayFor(m => m.StaffRequestModel[i].FormDenied)</td>
+                                <td>@Html.DisplayFor(m => m.StaffRequestModel[i].FormSubmitted)</td>
+                            </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                    @* Show more forms or hide the extras *@
+                    <button id="moreButton" class="btn button" onclick="onMoreButtonClicked()">See More</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+        var moreButton = false;
+
+        function onMoreButtonClicked() {
+            if (moreButton === true) {
+                moreButton = false;
+                document.getElementById("moreButton").innerHTML = "See More";
+
+                document.getElementById("firstTwenty").hidden = true;
+            } else if (moreButton === false) {
+                moreButton = true;
+                document.getElementById("moreButton").innerHTML = "See Less";
+
+                document.getElementById("firstTwenty").hidden = false;
+            }
+        }
+
+        function sortTable(n) {
+            var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+            table = document.getElementById("submittedForms");
+            switching = true;
+
+            // Sort direction ascending
+            dir = "asc";
+
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+
+                for (i = 1; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("TD")[n];
+                    y = rows[i + 1].getElementsByTagName("TD")[n];
+
+                    if (dir == "asc") {
+                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else if (dir == "desc") {
+                        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+
+                    switchcount++;
+                } else {
+                    if (switchcount == 0 && dir == "asc") {
+                        dir = "desc";
+                        switching = true;
+                    }
+                }
+            }
+
+        }
+
+    </script>
+}

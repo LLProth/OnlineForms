@@ -1,0 +1,174 @@
+﻿@model OnlineForms.ViewModels.ESCRFViewModel
+@{
+    ViewBag.FormInfo = new Dictionary<string, string>();
+    ViewBag.FormInfo.Add("FormName", "Employee Status Change Request Form");
+    ViewBag.FormInfo.Add("Division", "Human Resource Division");
+    ViewBag.FormInfo.Add("Info", "Name Change");
+
+    DateTime defaultDate = DateTime.Now.AddDays(-5);
+}
+
+@section topHeader {
+    @Html.Partial("~/Views/Shared/_ESCRFHeader.cshtml", (Dictionary<string, string>)ViewBag.FormInfo)
+}
+
+@section sideBarNav {
+    @Html.Partial("~/Views/Forms/ESCRF/_Sidebar.cshtml")
+}
+
+
+
+@using (Html.BeginForm("SubmitName", "ESCRF"))
+{
+    <div>
+        <div class="row mb-5">
+            <div class="form-group col-4 form-floating">
+                @Html.EditorFor(m => m.Name.EmployeeName, new { htmlAttributes = new { @class = "form-control fw-bold w-100 Validation Verify", @placeholder = Html.DisplayNameFor(m => m.Name.EmployeeName), @maxlength = "207", @required = "required", @list = "names" } })
+                @Html.LabelFor(m => m.Name.EmployeeName, htmlAttributes: new { @class = "fw-bold" })
+                @Html.ValidationMessageFor(m => m.Name.EmployeeName, "", new { @class = "validationText" })
+            </div>
+            <div class="form-group col-4 form-floating">
+                @Html.EditorFor(m => m.Name.PhoneNumber, new { htmlAttributes = new { @class = "form-control fw-bold", @readonly = "readonly", @id = "phoneNumber" } })
+                @Html.LabelFor(m => m.Name.PhoneNumber, htmlAttributes: new { @class = "fw-bold" })
+            </div>
+            <div class="form-group col-4 form-floating">
+                @Html.EditorFor(m => m.Name.CurrentSupervisor, new { htmlAttributes = new { @class = "form-control fw-bold", @readonly = "readonly", @id = "manager" } })
+                @Html.LabelFor(m => m.Name.CurrentSupervisor, htmlAttributes: new { @class = "fw-bold" })
+            </div>
+        </div>
+        <div class="row mb-5">
+            <div class="form-group col-4 form-floating">
+                @Html.EditorFor(m => m.Name.Department, new { htmlAttributes = new { @class = "form-control fw-bold", @readonly = "readonly", @id = "department" } })
+                @Html.LabelFor(m => m.Name.Department, htmlAttributes: new { @class = "fw-bold" })
+            </div>
+            <div class="form-group col-4 form-floating">
+                @Html.EditorFor(m => m.Name.OfficeLocation, new
+                {
+                    htmlAttributes = new
+                    {
+                  @class = "form-control fw-bold",
+                        @readonly = "readonly",
+                        @id = "location"
+                    }
+                })
+                @Html.LabelFor(m => m.Name.OfficeLocation, htmlAttributes: new { @class = "fw-bold" })
+            </div>
+            <div class="form-group col-4 form-floating">
+                @Html.EditorFor(m => m.Name.EffectiveDate, new { htmlAttributes = new { @class = "form-control fw-bold", @type = "date" } })
+                @Html.LabelFor(m => m.Name.EffectiveDate, htmlAttributes: new { @class = "fw-bold" })
+                @Html.ValidationMessageFor(m => m.Name.EffectiveDate, "", new { @class = "validationText" })
+            </div>
+        </div>
+        <div class="row mb-5">
+            <div class="form-group col-5 form-floating">
+                @Html.EditorFor(m => m.Name.FirstName, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = Html.DisplayNameFor(m => m.Name.FirstName), @maxlength = "100", @required = "required" } })
+                @Html.LabelFor(m => m.Name.FirstName, htmlAttributes: new { @class = "fw-bold" })
+                @Html.ValidationMessageFor(m => m.Name.FirstName, "", new { @class = "validationText" })
+            </div>
+            <div class="form-group col-5 form-floating">
+                @Html.EditorFor(m => m.Name.LastName, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = Html.DisplayNameFor(m => m.Name.LastName), @maxlength = "100", @required = "required" } })
+                @Html.LabelFor(m => m.Name.LastName, htmlAttributes: new { @class = "fw-bold" })
+                @Html.ValidationMessageFor(m => m.Name.LastName, "", new { @class = "validationText" })
+            </div>
+            <div class="form-group col-2 form-floating">
+                @Html.EditorFor(m => m.Name.MiddleInitial, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = Html.DisplayNameFor(m => m.Name.MiddleInitial), @maxlength = "3" } })
+                @Html.LabelFor(m => m.Name.MiddleInitial, htmlAttributes: new { @class = "fw-bold" })
+                @Html.ValidationMessageFor(m => m.Name.MiddleInitial, "", new { @class = "validationText" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-12 form-floating">
+                @Html.EditorFor(m => m.Name.Comments, new { htmlAttributes = new { @class = "form-control fw-bold w-100", @placeholder = Html.DisplayNameFor(m => m.Name.CurrentSupervisor), @maxlength = "500" } })
+                @Html.LabelFor(m => m.Name.Comments, htmlAttributes: new { @class = "fw-bold" })
+                @Html.ValidationMessageFor(m => m.Name.Comments, "", new { @class = "validationText" })
+            </div>
+        </div>
+        <div>
+            @Html.HiddenFor(m => m.Name.ModifiedBy, new { @Value = ViewBag.Name })
+            @Html.HiddenFor(m => m.Name.ChangeType, new { @Value = ViewBag.FormInfo["Info"] })
+            @Html.HiddenFor(m => m.Name.CreatedDate, new { @Value = DateTime.Now.ToShortDateString() })
+            @Html.HiddenFor(m => m.Name.TaskListID, new { @Value = 0 })
+        </div>
+    </div>
+
+    <datalist id="names">
+    </datalist>
+    @Html.AntiForgeryToken()
+    <div class="py-5">
+        <div class="col-2">
+            <button id="submitButton" type="submit" class="btn w-100">Submit</button>
+        </div>
+    </div>
+}
+
+@section scripts
+    {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        var names = [];
+        $('.Validation').on("keypress", function () {
+            $.ajax({
+                //url: "/api/Validation/?query=" + $('.Validation').val().trim(),
+                url: '@ViewBag.Validation' + $('.Validation').val().trim(),
+                method: 'GET',
+                success: function (data) {
+                    data.forEach(function (name) {
+                        if (!names.includes(name)) {
+                            names.push(name);
+                            var option = document.createElement('option')
+                            option.value = name
+                            document.getElementById('names').appendChild(option)
+                        }
+                    })
+                }
+            })
+        })
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('.Verify').on("change", function () {
+                $.ajax({
+                    //url: '/api/verify/?query=' + $('.Verify').val(),
+                    url: '@ViewBag.Verify' + $('.Verify').val(),
+                    method: 'GET',
+                    success: function (data) {
+                        if (data) {
+                            $.ajax({
+                                //url: '/api/Retrieve/?query=' + $('.Verify').val(),
+                                url: '@ViewBag.Retrieve' + $('.Verify').val(),
+                                method: 'GET',
+                                success: function (data) {
+                                    var info = data.split("+")
+                                    var firstParen = info[1].replace("(", "")
+                                    var secondParen = firstParen.replace(")", "")
+                                    var whiteSpace = secondParen.replace(" ", "")
+                                    var hyphen = whiteSpace.replace("-", "")
+                                    var name = info[4].split(",")
+                                    var first = name[0]
+                                    var noCN = first.slice(3)
+                                    noSlash = noCN.slice(0, -1)
+                                    var name3 = name[1]
+                                    var name4 = name[2];
+                                    var distinguishedName = noSlash + "," + name3
+                                    $('#phoneNumber').val(info[1])
+                                    $('#department').val(info[2])
+                                    $('#location').val(info[3])
+                                    if (info[4] == "No Manager in DB") {
+                                        $('#manager').val(info[7])
+                                    }
+                                    else {
+                                        var managerArray = info[4].split("=")
+                                        $('#manager').val(info[4])
+                                    }
+
+                                }
+                            })
+                        }
+                    },
+                })
+            })
+        })
+    </script>
+}
+

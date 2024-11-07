@@ -1,0 +1,211 @@
+﻿@model OnlineForms.ViewModels.ESCRFViewModel
+@{
+
+    IDictionary<string, string> FormInfo = new Dictionary<string, string>();
+    FormInfo.Add("FormName", "Employee Status Change Request Form");
+    FormInfo.Add("Division", "Human Resource Division");
+    FormInfo.Add("Info", "CreateList");
+
+
+    DateTime early = DateTime.MinValue;
+}
+
+<div class="row mb-3">
+    @section topHeader {
+        @Html.Partial("~/Views/Shared/_FormHeader.cshtml", (Dictionary<string, string>)FormInfo)
+    }
+</div>
+
+@section sideBarNav {
+    @Html.Partial("~/Views/Forms/ESCRF/_Sidebar.cshtml")
+}
+
+
+<div class="d-flex flex-column align-items-center">
+    <h3>Task List for: @Model.CreateHolder.Name()</h3>
+    <h4>Change Type: @Model.CreateHolder.ChangeType()</h4>
+</div>
+
+@using (Html.BeginForm("AddNewTaskListItem", "ESCRF"))
+{
+    <div class="row py-3 px-0">
+        <div class="form-group col-12 form-floating">
+            @Html.EditorFor(m => m.TaskListItem.Task, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = Html.DisplayNameFor(m => m.TaskListItem.Task), @required = "required" } })
+            @Html.LabelFor(m => m.TaskListItem.Task, htmlAttributes: new { @class = "fw-bold" })
+            @Html.ValidationMessageFor(m => m.TaskListItem.Task, "", new { @class = "validationText" })
+        </div>
+    </div>
+    <datalist id="departments">
+        <option>Facility Management</option>
+        <option>Finance</option>
+        <option>ERGO</option>
+        <option>Help Desk</option>
+        <option>HR</option>
+        <option>IS Tech</option>
+        <option>Supervisor</option>
+    </datalist>
+    <div class="row py-3 px-0">
+        <div class="form-group col-12 form-floating">
+            @Html.EditorFor(m => m.TaskListItem.Deputy, new { htmlAttributes = new { @class = "form-control fw-bold Validation", @placeholder = Html.DisplayNameFor(m => m.TaskListItem.Deputy), @maxlength = "207", @required = "required", @list = "names" } })
+            @Html.LabelFor(m => m.TaskListItem.Deputy, htmlAttributes: new { @class = "fw-bold" })
+            @Html.ValidationMessageFor(m => m.TaskListItem.Deputy, "", new { @class = "validationText" })
+        </div>
+    </div>
+    <div>
+        @Html.HiddenFor(m => m.TaskListItem.SignedOn, new { @Value = early })
+        @Html.HiddenFor(m => m.TaskListItem.TaskListID, new { @Value = Model.TaskList.ID })
+    </div>
+    <div class="mb-5 row">
+        <div class="col-2">
+            <button id="submitButton" type="submit" class="btn w-100">Add Checklist Item</button>
+        </div>
+    </div>
+    @Html.AntiForgeryToken()
+}
+<div class="row py-3 w-100">
+    <table class="table" id="submittedForms">
+        <thead>
+            <tr>
+                <th>
+                    Task:
+                </th>
+                <th>
+                    Assigned To:
+                </th>
+                <th>
+                    Delete Task:
+                </th>
+                <th>
+                    Edit Task:
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.TaskListItemHolder != null)
+            {
+                for (int i = 0; i < Model.TaskListItemHolder.Count; i++)
+                {
+                    <tr>
+                        <td>
+                            @Model.TaskListItemHolder[i].Task.ToString();
+                        </td>
+                        <td>
+                            @Model.TaskListItemHolder[i].Deputy.ToString();
+                        </td>
+                        <td>
+                            @Html.ActionLink("Delete", "DeleteTaskListItem", "ESCRF", new { id = Model.TaskListItemHolder[i].ID }, new { @id = "button", @class = "btn deleteButton" })
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "TaskEditView", "ESCRF", new { id = Model.TaskListItemHolder[i].ID }, new { @id = "button", @class = "btn" })
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<datalist id="names">
+    <option></option>
+</datalist>
+
+@if (Model.TaskList.CreatedDate.ToShortDateString() == early.ToShortDateString())
+{
+    using (Html.BeginForm("DeployTaskList", "ESCRF", new { taskListID = Model.TaskList.ID }))
+    {
+        <div class="py-2">
+            <div class="col-2">
+                <button id="submitButton" type="submit" class="w-100 btn">Create Checklist</button>
+            </div>
+        </div>
+    }
+
+
+    @Html.AntiForgeryToken()
+}
+
+
+
+
+
+@section scripts
+    {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.deleteButton').click(function (event) {
+                event.preventDefault();
+                if (onclick = confirm("Are you sure you want to delete this task?")) {
+                    window.location.href = $(this).attr('href');
+                }
+            })
+        })
+    </script>
+
+    <script type="text/javascript">
+        var names = [];
+        $('.Validation').on("keypress", function () {
+            $.ajax({
+                //url: "/api/validation/?query=" + $('.Validation').val().trim(),
+                url: '@ViewBag.Validation' + $('.Validation').val().trim(),
+                method: 'GET',
+                success: function (data) {
+                    data.forEach(function (name) {
+                        if (!names.includes(name)) {
+                            names.push(name);
+                            var option = document.createElement('option')
+                            option.value = name
+                            document.getElementById('names').appendChild(option)
+                        }
+                    })
+                }
+            })
+        })
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('.Verify').on("change", function () {
+                $.ajax({
+                    //url: '/api/Verify/?query=' + $('.Verify').val(),
+                    url: '@ViewBag.Verify' + $('.Verify').val(),
+                    method: 'GET',
+                    success: function (data) {
+                        if (data) {
+                            $.ajax({
+                                //url: '/api/Retrieve/?query=' + $('.Verify').val(),
+                                url: '@ViewBag.Retrieve' + $('.Verify').val(),
+                                method: 'GET',
+                                success: function (data) {
+                                    var info = data.split("+")
+                                    var firstParen = info[1].replace("(", "")
+                                    var secondParen = firstParen.replace(")", "")
+                                    var whiteSpace = secondParen.replace(" ", "")
+                                    var hyphen = whiteSpace.replace("-", "")
+                                    var name = info[4].split(",")
+                                    var first = name[0]
+                                    var noCN = first.slice(3)
+                                    noSlash = noCN.slice(0, -1)
+                                    var name3 = name[1]
+                                    var name4 = name[2];
+                                    var distinguishedName = noSlash + "," + name3
+                                    $('#phoneNumber').val(hyphen)
+                                    $('#department').val(info[2])
+                                    $('#location').val(info[3])
+                                    if (info[4] == "No Manager in DB") {
+                                        $('#manager').val(info[4])
+                                    }
+                                    else {
+                                        var managerArray = info[4].split("=")
+                                        $('#manager').val(distinguishedName)
+                                    }
+
+                                }
+                            })
+                        }
+                    },
+                })
+            })
+        })
+    </script>
+}

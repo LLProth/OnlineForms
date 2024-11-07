@@ -1,0 +1,1052 @@
+﻿@model OnlineForms.ViewModels.SFN60026DisplayViewModel
+
+@{
+    ViewBag.Title = "Approve";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section topHeader {
+    @Html.Partial("~/Views/Shared/_FormHeader.cshtml", (Dictionary<string, string>)ViewBag.FormInfo)
+}
+
+<div id="notPrint" class="container-fluid">
+    <div class="container-fluid">
+        <div class="row flex-nowrap">
+            @section sideBarNav {
+                @Html.Partial("~/Views/Forms/SFN61065/Sidebar.cshtml")
+            }
+
+        </div>
+    </div>
+
+    @using (Html.BeginForm("Approve", "SFN60026", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="row row-cols-1 text-center mb-2">
+            <div class="col bg-dark text-white fw-bold">
+                Please complete the form and submit for approval.
+            </div>
+        </div>
+        <div class="row row-cols-3 mb-2 formRow">
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.BonusRecommendationModel.NomineeName, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "reqName", @Value = Model.BonusRecommendationModel.NomineeName } })
+                @Html.LabelFor(m => m.BonusRecommendationModel.NomineeName, htmlAttributes: new { @for = "reqName", @class = "fw-bold" })
+            </div>
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.BonusRecommendationModel.NomineePosition, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @Value = Model.BonusRecommendationModel.NomineePosition, @id = "reqPosition", @readonly = "readonly" } })
+                @Html.LabelFor(m => m.BonusRecommendationModel.NomineePosition, htmlAttributes: new { @for = "reqPosition", @class = "fw-bold" })
+            </div>
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.BonusRecommendationModel.NomineeDepartment, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @Value = Model.BonusRecommendationModel.NomineeDepartment, @id = "reqDepartment", @type = "text", @readonly = "readonly" } })
+                @Html.LabelFor(m => m.BonusRecommendationModel.NomineeDepartment, htmlAttributes: new { @for = "reqDepartment", @class = "fw-bold" })
+            </div>
+        </div>
+        <div>
+            <h5>Justification of Performance Bonus</h5>
+        </div>
+        <div class="row row-cols-1 mb-2 formRow">
+            <div class="col form-floating">
+                Date Range for Nominee's Accomplishments:
+            </div>
+        </div>
+        <div class="row row-cols-2 mb-2 formRow">
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.BonusRecommendationModel.AccomplishmentStartDate, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "reqStDate", @Value = Model.BonusRecommendationModel.AccomplishmentStartDate.ToString("yyyy-MM-dd"), @type = "date", @readonly = "readonly" } })
+                @Html.LabelFor(m => m.BonusRecommendationModel.AccomplishmentStartDate, htmlAttributes: new { @for = "reqStDate", @class = "fw-bold" })
+
+            </div>
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.BonusRecommendationModel.AccomplishmentEndDate, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @Value = Model.BonusRecommendationModel.AccomplishmentEndDate.ToString("yyyy-MM-dd"), @id = "reqEdDate", @type = "date", @readonly = "readonly" } })
+                @Html.LabelFor(m => m.BonusRecommendationModel.AccomplishmentEndDate, htmlAttributes: new { @for = "reqEdDate", @class = "fw-bold" })
+            </div>
+        </div>
+        <div class="row row-cols-1 mb-2 formRow">
+            <div class="col form-floating">
+                @Html.TextAreaFor(m => m.BonusRecommendationModel.Justification, new { @class = "form-control bg-white", @id = "reqJustification", style = "height: auto", @Value = Model.BonusRecommendationModel.Justification, @readonly = "readonly" })
+                @Html.LabelFor(m => m.BonusRecommendationModel.Justification, htmlAttributes: new { @for = "reqJustification", @class = "fw-bold" })
+            </div>
+        </div>
+        if (Model.BonusRecommendationModel.CurrentStatus == 4 && ViewBag.InHR)
+        {
+            <div>
+                <div>
+                    <h5>Nominee's Eligibility Requirements</h5>
+                </div>
+                <div class="row row-cols-1 mb-2 formRow">
+                    <div class="col form-floating">
+                        @if (Model.BonusRecommendationModel.StateEmployeeOneYear == true)
+                        {
+                            <div class="form-control" radio-button-control>
+                                <label class="pe-4">@Html.RadioButtonFor(m => m.BonusRecommendationModel.StateEmployeeOneYear, "true", new { @checked = "checked" }) Yes</label>
+                                <label>@Html.RadioButtonFor(m => m.BonusRecommendationModel.StateEmployeeOneYear, "false")No</label>
+                            </div>
+                        }
+                        else if (Model.BonusRecommendationModel.StateEmployeeOneYear == false)
+                        {
+                            <div class="form-control" radio-button-control>
+                                <label class="pe-4">@Html.RadioButtonFor(m => m.BonusRecommendationModel.StateEmployeeOneYear, "true") Yes</label>
+                                <label>@Html.RadioButtonFor(m => m.BonusRecommendationModel.StateEmployeeOneYear, "false", new { @checked = "checked" })No</label>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="form-control" radio-button-control>
+                                <label class="pe-4">@Html.RadioButtonFor(m => m.BonusRecommendationModel.StateEmployeeOneYear, "true") Yes</label>
+                                <label>@Html.RadioButtonFor(m => m.BonusRecommendationModel.StateEmployeeOneYear, "false")No</label>
+                            </div>
+                        }
+                        @Html.LabelFor(m => m.BonusRecommendationModel.StateEmployeeOneYear, htmlAttributes: new { @for = "", @class = "fw-bold req-form-long-label" })
+                        @Html.ValidationMessageFor(m => m.BonusRecommendationModel.StateEmployeeOneYear, "", new { @class = "validationText" })
+                    </div>
+                </div>
+                <div class="row row-cols-1 mb-2 formRow">
+                    <div class="col form-floating">
+                        <table>
+                            <tr>
+                                <th>Check all that apply:</th>
+                                <th></th>
+                            </tr>
+                            <tr>
+                                <td>Probationary Employee</td>
+                                <td>@Html.CheckBoxFor(m => m.BonusRecommendationModel.ProbationaryEmployee, new { @checked = Model.BonusRecommendationModel.ProbationaryEmployee })</td>
+                            </tr>
+                            <tr>
+                                <td>Full Time</td>
+                                <td>@Html.CheckBoxFor(m => m.BonusRecommendationModel.FullTime, new { @checked = Model.BonusRecommendationModel.FullTime })</td>
+                            </tr>
+                            <tr>
+                                <td>Part Time</td>
+                                <td>@Html.CheckBoxFor(m => m.BonusRecommendationModel.PartTime, new { @checked = Model.BonusRecommendationModel.PartTime })</td>
+                            </tr>
+                            <tr>
+                                <td>Temporary</td>
+                                <td>@Html.CheckBoxFor(m => m.BonusRecommendationModel.Temporary, new { @checked = Model.BonusRecommendationModel.Temporary })</td>
+                            </tr>
+                        </table>
+                        @Html.ValidationMessageFor(m => m.BonusRecommendationModel.ProbationaryEmployee, "", new { @class = "validationText" })
+                    </div>
+                </div>
+                <div class="row row-cols-2 mb-2 formRow">
+                    <div class="col form-floating">
+                        @if (Model.BonusRecommendationModel.LastBonusDate.HasValue && Model.BonusRecommendationModel.LastBonusDate.Value.CompareTo(DateTime.Parse("1/1/2000")) > 0)
+                        {
+                            Html.EnableClientValidation(false);
+                        }
+                        @Html.EditorFor(m => m.BonusRecommendationModel.LastBonusDate, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "reqLastBonus", @Value = (Model.BonusRecommendationModel.LastBonusDate.HasValue && Model.BonusRecommendationModel.LastBonusDate.Value.CompareTo(DateTime.Parse("1/1/2000")) > 0) ? Model.BonusRecommendationModel.LastBonusDate.Value.ToString("yyyy-MM-dd") : "", @type = "date" } })
+                        @if (Model.BonusRecommendationModel.LastBonusDate.HasValue && Model.BonusRecommendationModel.LastBonusDate.Value.CompareTo(DateTime.Parse("1/1/2000")) > 0)
+                        {
+                            Html.EnableClientValidation(true);
+                        }
+                        @Html.LabelFor(m => m.BonusRecommendationModel.LastBonusDate, htmlAttributes: new { @for = "reqLastBonus", @class = "fw-bold" })
+                    </div>
+                    <div class="col form-floating">
+                        @Html.EditorFor(m => m.BonusRecommendationModel.LastBonusAmount, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "reqLastAmount", @Value = Model.BonusRecommendationModel.LastBonusAmount, @currencymask = "true" } })
+                        @Html.LabelFor(m => m.BonusRecommendationModel.LastBonusAmount, htmlAttributes: new { @for = "reqLastAmount", @class = "fw-bold" })
+                        @Html.ValidationMessageFor(m => m.BonusRecommendationModel.LastBonusAmount, "", new { @class = "validationText" })
+                    </div>
+                </div>
+                <div class="row row-cols-1 mb-2 formRow">
+                    <div class="col form-floating">
+                        @Html.EditorFor(m => m.BonusRecommendationModel.LastPerformanceScore, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "reqLastScore", @Value = Model.BonusRecommendationModel.LastPerformanceScore } })
+                        @Html.LabelFor(m => m.BonusRecommendationModel.LastPerformanceScore, htmlAttributes: new { @for = "reqLastScore", @class = "fw-bold" })
+                        @Html.ValidationMessageFor(m => m.BonusRecommendationModel.LastPerformanceScore, "", new { @class = "validationText" })
+                    </div>
+                </div>
+                <div class="row row-cols-1 mb-2 formRow">
+                    <div class="col form-floating">
+                        @if (Model.BonusRecommendationModel.HRAction)
+                        {
+                            <div class="form-control" radio-button-control>
+                                <label class="pe-4">@Html.RadioButtonFor(m => m.BonusRecommendationModel.HRAction, "true", new { @checked = "checked" }) Yes</label>
+                                <label>@Html.RadioButtonFor(m => m.BonusRecommendationModel.HRAction, "false") No</label>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="form-control" radio-button-control>
+                                <label class="pe-4">@Html.RadioButtonFor(m => m.BonusRecommendationModel.HRAction, "true") Yes</label>
+                                <label>@Html.RadioButtonFor(m => m.BonusRecommendationModel.HRAction, "false", new { @checked = "checked" }) No</label>
+                            </div>
+                        }
+                        @Html.LabelFor(m => m.BonusRecommendationModel.HRAction, htmlAttributes: new { @for = "", @class = "fw-bold req-form-long-label" })
+                    </div>
+                </div>
+                <div class="row row-cols-1 mb-2 formRow">
+                    <div class="col form-floating">
+                        @if (Model.BonusRecommendationModel.MeetsRequirements)
+                        {
+                            <div class="form-control" radio-button-control>
+                                <label class="pe-4">@Html.RadioButtonFor(m => m.BonusRecommendationModel.MeetsRequirements, "true", new { @checked = "checked" }) Yes</label>
+                                <label>@Html.RadioButtonFor(m => m.BonusRecommendationModel.MeetsRequirements, "false") No</label>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="form-control" radio-button-control>
+                                <label class="pe-4">@Html.RadioButtonFor(m => m.BonusRecommendationModel.MeetsRequirements, "true") Yes</label>
+                                <label>@Html.RadioButtonFor(m => m.BonusRecommendationModel.MeetsRequirements, "false", new { @checked = "checked" }) No</label>
+                            </div>
+                        }
+                        @Html.LabelFor(m => m.BonusRecommendationModel.MeetsRequirements, htmlAttributes: new { @for = "", @class = "fw-bold req-form-long-label" })
+                        @Html.ValidationMessageFor(m => m.BonusRecommendationModel.MeetsRequirements, "", new { @class = "validationText" })
+                    </div>
+                </div>
+            </div>
+        }
+        else if (Model.BonusRecommendationModel.CurrentStatus > 4 || (Model.BonusRecommendationModel.CurrentStatus == 4 && !ViewBag.InHR))
+        {
+            <div>
+                <div>
+                    <h5>Nominee's Eligibility Requirements</h5>
+                </div>
+                <div class="row row-cols-1 mb-2 formRow">
+                    <div class="col form-floating">
+                        @if (Model.BonusRecommendationModel.StateEmployeeOneYear)
+                        {
+                            <div class="form-control" radio-button-control>
+                                <label class="pe-4">@Html.RadioButtonFor(m => m.BonusRecommendationModel.StateEmployeeOneYear, "true", new { @checked = "checked", @readonly = "readonly" }) Yes</label>
+                                <label>@Html.RadioButtonFor(m => m.BonusRecommendationModel.StateEmployeeOneYear, "false", new { @disabled = "disabled" })No</label>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="form-control" radio-button-control>
+                                <label class="pe-4">@Html.RadioButtonFor(m => m.BonusRecommendationModel.StateEmployeeOneYear, "true", new { @disabled = "disabled" }) Yes</label>
+                                <label>@Html.RadioButtonFor(m => m.BonusRecommendationModel.StateEmployeeOneYear, "false", new { @checked = "checked", @readonly = "readonly" })No</label>
+                            </div>
+                        }
+                        @Html.LabelFor(m => m.BonusRecommendationModel.StateEmployeeOneYear, htmlAttributes: new { @for = "", @class = "fw-bold req-form-long-label" })
+                    </div>
+                </div>
+                <div class="row row-cols-2 mb-2 formRow">
+                    <div class="col form-floating">
+                        <table>
+                            <tr>
+                                <th>Check all that apply:</th>
+                                <th></th>
+                            </tr>
+                            <tr>
+                                <td>Probationary Employee</td>
+                                <td>@Html.CheckBoxFor(m => m.BonusRecommendationModel.ProbationaryEmployee, new { @id = "prob-check", @checked = Model.BonusRecommendationModel.ProbationaryEmployee, @disabled = "disabled" })</td>
+                            </tr>
+                            <tr>
+                                <td>Full Time</td>
+                                <td>@Html.CheckBoxFor(m => m.BonusRecommendationModel.FullTime, new { @id = "full-check", @checked = Model.BonusRecommendationModel.FullTime, @disabled = "disabled" })</td>
+                            </tr>
+                            <tr>
+                                <td>Part Time</td>
+                                <td>@Html.CheckBoxFor(m => m.BonusRecommendationModel.PartTime, new { @id = "part-check", @checked = Model.BonusRecommendationModel.PartTime, @disabled = "disabled" })</td>
+                            </tr>
+                            <tr>
+                                <td>Temporary</td>
+                                <td>@Html.CheckBoxFor(m => m.BonusRecommendationModel.Temporary, new { @id = "temp-check", @checked = Model.BonusRecommendationModel.Temporary, @disabled = "disabled" })</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col form-floating">
+                    </div>
+                </div>
+                <div class="row row-cols-2 mb-2 formRow">
+                    <div class="col form-floating">
+                        @Html.EditorFor(m => m.BonusRecommendationModel.LastBonusDate, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "reqLastBonus", @Value = (Model.BonusRecommendationModel.LastBonusDate.HasValue && Model.BonusRecommendationModel.LastBonusDate.Value.CompareTo(new DateTime(2000, 1, 1)) > 0) ? Model.BonusRecommendationModel.LastBonusDate.Value.ToString("yyyy-MM-dd") : "", @type = "date", @readonly = "readonly" } })
+                        @Html.LabelFor(m => m.BonusRecommendationModel.LastBonusDate, htmlAttributes: new { @for = "reqLastBonus", @class = "fw-bold" })
+                    </div>
+                    <div class="col form-floating">
+                        @Html.EditorFor(m => m.BonusRecommendationModel.LastBonusAmount, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "reqLastAmount", @Value = Model.BonusRecommendationModel.LastBonusAmount, @readonly = "readonly" } })
+                        @Html.LabelFor(m => m.BonusRecommendationModel.LastBonusAmount, htmlAttributes: new { @for = "reqLastAmount", @class = "fw-bold" })
+                    </div>
+                </div>
+                <div class="row row-cols-1 mb-2 formRow">
+                    <div class="col form-floating">
+                        @Html.EditorFor(m => m.BonusRecommendationModel.LastPerformanceScore, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "reqLastScore", @Value = Model.BonusRecommendationModel.LastPerformanceScore, @readonly = "readonly" } })
+                        @Html.LabelFor(m => m.BonusRecommendationModel.LastPerformanceScore, htmlAttributes: new { @for = "reqLastScore", @class = "fw-bold" })
+                    </div>
+                </div>
+                <div class="row row-cols-1 mb-2 formRow">
+                    <div class="col form-floating">
+                        @if (Model.BonusRecommendationModel.HRAction)
+                        {
+                            <div class="form-control" radio-button-control>
+                                <label class="pe-4">@Html.RadioButtonFor(m => m.BonusRecommendationModel.HRAction, "true", new { @checked = "checked", @readonly = "readonly" }) Yes</label>
+                                <label>@Html.RadioButtonFor(m => m.BonusRecommendationModel.HRAction, "false", new { @disabled = "disabled" }) No</label>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="form-control" radio-button-control>
+                                <label class="pe-4">@Html.RadioButtonFor(m => m.BonusRecommendationModel.HRAction, "true", new { @disabled = "disabled" }) Yes</label>
+                                <label>@Html.RadioButtonFor(m => m.BonusRecommendationModel.HRAction, "false", new { @checked = "checked", @readonly = "readonly" }) No</label>
+                            </div>
+                        }
+                        @Html.LabelFor(m => m.BonusRecommendationModel.HRAction, htmlAttributes: new { @for = "", @class = "fw-bold req-form-long-label" })
+                    </div>
+                </div>
+                <div class="row row-cols-1 mb-2 formRow">
+                    <div class="col form-floating">
+                        @if (Model.BonusRecommendationModel.MeetsRequirements)
+                        {
+                            <div class="form-control" radio-button-control>
+                                <label class="pe-4">@Html.RadioButtonFor(m => m.BonusRecommendationModel.MeetsRequirements, "true", new { @checked = "checked", @readonly = "readonly" }) Yes</label>
+                                <label>@Html.RadioButtonFor(m => m.BonusRecommendationModel.MeetsRequirements, "false", new { @disabled = "disabled" }) No</label>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="form-control" radio-button-control>
+                                <label class="pe-4">@Html.RadioButtonFor(m => m.BonusRecommendationModel.MeetsRequirements, "true", new { @disabled = "disabled" }) Yes</label>
+                                <label>@Html.RadioButtonFor(m => m.BonusRecommendationModel.MeetsRequirements, "false", new { @checked = "checked", @readonly = "readonly" }) No</label>
+                            </div>
+                        }
+                        @Html.LabelFor(m => m.BonusRecommendationModel.MeetsRequirements, htmlAttributes: new { @for = "", @class = "fw-bold req-form-long-label" })
+                    </div>
+                </div>
+            </div>
+        }
+        if (Model.BonusRecommendationModel.CurrentStatus == 5)
+        {
+            <div>
+                <h5>Committee Section</h5>
+            </div>
+            <div class="row row-cols-2 mb-2 formRow">
+                <div class="col form-floating">
+                    @Html.DropDownListFor(m => m.BonusRecommendationModel.CommitteeApproval,
+                                new SelectList(Enum.GetValues(typeof(OnlineForms.Models.SFN60026.SFN60026Model.Approval))), new { @class = "form-control", @id = "reqApproval", @Value = Model.BonusRecommendationModel.CommitteeApproval })
+                    @Html.LabelFor(m => m.BonusRecommendationModel.CommitteeApproval, htmlAttributes: new { @for = "reqApproval", @class = "fw-bold" })
+                    @Html.ValidationMessageFor(m => m.BonusRecommendationModel.CommitteeApproval, "", new { @class = "validationText" })
+                </div>
+                <div class="col form-floating">
+                    @Html.EditorFor(m => m.BonusRecommendationModel.CommitteeApprovalAmount, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "reqApprovalAmount", @Value = Model.BonusRecommendationModel.CommitteeApprovalAmount, @currencymask = "true" } })
+                    @Html.LabelFor(m => m.BonusRecommendationModel.CommitteeApprovalAmount, htmlAttributes: new { @for = "reqApprovalAmount", @class = "fw-bold" })
+                    @Html.ValidationMessageFor(m => m.BonusRecommendationModel.CommitteeApprovalAmount, "", new { @class = "validationText" })
+                </div>
+            </div>
+            <div class="row row-cols-1 mb-2 formRow">
+                <div class="col form-floating">
+                    @Html.EditorFor(m => m.BonusRecommendationModel.Comments, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "reqComments", @Value = Model.BonusRecommendationModel.Comments } })
+                    @Html.LabelFor(m => m.BonusRecommendationModel.Comments, htmlAttributes: new { @for = "reqComments", @class = "fw-bold" })
+                </div>
+            </div>
+        }
+        else if (Model.BonusRecommendationModel.CurrentStatus > 5)
+        {
+            <div>
+                <h5>Committee Section</h5>
+            </div>
+            <div class="row row-cols-2 mb-2 formRow">
+                <div class="col form-floating">
+                    @Html.EditorFor(m => m.BonusRecommendationModel.CommitteeApproval, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "reqApproval", @Value = Model.BonusRecommendationModel.CommitteeApproval, @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.BonusRecommendationModel.CommitteeApproval, htmlAttributes: new { @for = "reqApproval", @class = "fw-bold" })
+                </div>
+                <div class="col form-floating">
+                    @Html.EditorFor(m => m.BonusRecommendationModel.CommitteeApprovalAmount, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "reqApprovalAmount", @Value = Model.BonusRecommendationModel.CommitteeApprovalAmount, @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.BonusRecommendationModel.CommitteeApprovalAmount, htmlAttributes: new { @for = "reqApprovalAmount", @class = "fw-bold" })
+                </div>
+            </div>
+            <div class="row row-cols-1 mb-2 formRow">
+                <div class="col form-floating">
+                    @Html.EditorFor(m => m.BonusRecommendationModel.Comments, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "reqComments", @Value = Model.BonusRecommendationModel.Comments, @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.BonusRecommendationModel.Comments, htmlAttributes: new { @for = "reqComments", @class = "fw-bold" })
+                </div>
+            </div>
+        }
+        <div class="row row-cols-1 mb-2 formRow">
+            <div>
+                <h5>Required Signatures</h5>
+            </div>
+        </div>
+        <div class="row row-cols-3 mb-2 formRow">
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.BonusRecommendationModel.SubmitterName, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "reqSubmitterName", @Value = Model.BonusRecommendationModel.SubmitterName, @readonly = "readonly" } })
+                @Html.LabelFor(m => m.BonusRecommendationModel.SubmitterName, htmlAttributes: new { @for = "reqSubmitterName", @class = "fw-bold" })
+            </div>
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.BonusRecommendationModel.SubmitterPosition, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "reqSubmitterPosition", @Value = Model.BonusRecommendationModel.SubmitterPosition, @readonly = "readonly" } })
+                @Html.LabelFor(m => m.BonusRecommendationModel.SubmitterPosition, htmlAttributes: new { @for = "reqSubmitterPosition", @class = "fw-bold" })
+            </div>
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.BonusRecommendationModel.SubmitterDate, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "reqSubmitterDate", @Value = Model.BonusRecommendationModel.SubmitterDate.ToString("yyyy-MM-dd"), @type = "date", @readonly = "readonly" } })
+                @Html.LabelFor(m => m.BonusRecommendationModel.SubmitterDate, htmlAttributes: new { @for = "reqSubmitterDate", @class = "fw-bold" })
+            </div>
+        </div>
+        <div class="row row-cols-3 mb-2 formRow">
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.BonusRecommendationModel.SupervisorSignature, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "reqSupSig", @Value = Model.BonusRecommendationModel.SupervisorSignature, @readonly = "readonly" } })
+                @Html.LabelFor(m => m.BonusRecommendationModel.SupervisorSignature, htmlAttributes: new { @for = "reqSupSig", @class = "fw-bold" })
+            </div>
+            @if (Model.BonusRecommendationModel.SupervisorSignatureDate.CompareTo(new DateTime(2000, 1, 1)) > 0)
+            {
+                <div class="col form-floating">
+                    @Html.EditorFor(m => m.BonusRecommendationModel.SupervisorSignatureDate, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "reqSupDate", @Value = Model.BonusRecommendationModel.SupervisorSignatureDate.ToString("yyyy-MM-dd"), @type = "date", @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.BonusRecommendationModel.SupervisorSignatureDate, htmlAttributes: new { @for = "reqSupDate", @class = "fw-bold" })
+                </div>
+                <div class="col form-floating">
+                    <div class="form-control" radio-button-control>
+                        @if (Model.BonusRecommendationModel.SupervisorEndorsement)
+                        {
+                            <label class="pe-4">@Html.RadioButtonFor(m => m.BonusRecommendationModel.SupervisorEndorsement, "true", new { @checked = "checked", @readonly = "readonly" }) Yes</label>
+                            <label>@Html.RadioButtonFor(m => m.BonusRecommendationModel.SupervisorEndorsement, false, new { @disabled = "disabled" }) No</label>
+                        }
+                        else
+                        {
+                            <label class="pe-4">@Html.RadioButtonFor(m => m.BonusRecommendationModel.SupervisorEndorsement, "true", new { @disabled = "disabled" }) Yes</label>
+                            <label>@Html.RadioButtonFor(m => m.BonusRecommendationModel.SupervisorEndorsement, false, new { @checked = "checked", @readonly = "readonly" }) No</label>
+                        }
+                    </div>
+                    @Html.LabelFor(m => m.BonusRecommendationModel.SupervisorEndorsement, htmlAttributes: new { @for = "", @class = "fw-bold req-form-long-label" })
+                </div>
+            }
+        </div>
+        if (Model.BonusRecommendationModel.CurrentStatus >= 2)
+        {
+            <div>
+                <div class="row row-cols-3 mb-2 formRow">
+                    <div class="col form-floating">
+                        @Html.EditorFor(m => m.BonusRecommendationModel.DepartmentSignature, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "reqDptSig", @Value = Model.BonusRecommendationModel.DepartmentSignature, @readonly = "readonly" } })
+                        @Html.LabelFor(m => m.BonusRecommendationModel.DepartmentSignature, htmlAttributes: new { @for = "reqDptSig", @class = "fw-bold" })
+                    </div>
+                    @if (Model.BonusRecommendationModel.CurrentStatus >= 3)
+                    {
+                        <div class="col form-floating">
+                            @Html.EditorFor(m => m.BonusRecommendationModel.DepartmentSignatureDate, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "reqDptDate", @Value = Model.BonusRecommendationModel.DepartmentSignatureDate.ToString("yyyy-MM-dd"), @type = "date", @readonly = "readonly" } })
+                            @Html.LabelFor(m => m.BonusRecommendationModel.DepartmentSignatureDate, htmlAttributes: new { @for = "reqDptDate", @class = "fw-bold" })
+                        </div>
+                        <div class="col form-floating">
+                            <div class="form-control" radio-button-control>
+                                @if (Model.BonusRecommendationModel.DepartmentEndorsement)
+                                {
+                                    <label class="pe-4">@Html.RadioButtonFor(m => m.BonusRecommendationModel.DepartmentEndorsement, "true", new { @checked = "checked", @readonly = "readonly" }) Yes</label>
+                                    <label>@Html.RadioButtonFor(m => m.BonusRecommendationModel.DepartmentEndorsement, "false", new { @disabled = "disabled" }) No</label>
+                                }
+                                else
+                                {
+                                    <label class="pe-4">@Html.RadioButtonFor(m => m.BonusRecommendationModel.DepartmentEndorsement, "true", new { @disabled = "disabled" }) Yes</label>
+                                    <label>@Html.RadioButtonFor(m => m.BonusRecommendationModel.DepartmentEndorsement, "false", new { @checked = "checked", @readonly = "readonly" }) No</label>
+                                }
+                            </div>
+                            @Html.LabelFor(m => m.BonusRecommendationModel.DepartmentEndorsement, htmlAttributes: new { @for = "", @class = "fw-bold req-form-long-label" })
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="col form-floating visually-hidden">
+                @Html.EditorFor(m => m.BonusRecommendationModel.DepartmentSignature, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "reqDptSig", @Value = Model.BonusRecommendationModel.DepartmentSignature, @readonly = "readonly" } })
+            </div>
+        }
+        if (Model.BonusRecommendationModel.CurrentStatus >= 3)
+        {
+            <div class="row row-cols-3 mb-2 formRow">
+                <div class="col form-floating">
+                    @Html.EditorFor(m => m.BonusRecommendationModel.ChiefSignature, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "reqChiefSig", @Value = Model.BonusRecommendationModel.ChiefSignature, @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.BonusRecommendationModel.ChiefSignature, htmlAttributes: new { @for = "reqChiefSig", @class = "fw-bold" })
+                </div>
+                @if (Model.BonusRecommendationModel.CurrentStatus >= 4)
+                {
+                    <div class="col form-floating">
+                        @Html.EditorFor(m => m.BonusRecommendationModel.ChiefSignatureDate, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "reqChiefDate", @Value = Model.BonusRecommendationModel.ChiefSignatureDate.ToString("yyyy-MM-dd"), @type = "date", @readonly = "readonly" } })
+                        @Html.LabelFor(m => m.BonusRecommendationModel.ChiefSignatureDate, htmlAttributes: new { @for = "reqChiefDate", @class = "fw-bold" })
+                    </div>
+                    <div class="col form-floating">
+                        <div class="form-control" radio-button-control>
+                            <label class="pe-4"><input checked="checked" id="ChiefEndorsement" name="ChiefEndorsement" readonly="readonly" type="radio" value="true" /> Yes</label>
+                            <label><input disabled="disabled" id="ChiefEndorsement" name="ChiefEndorsement" type="radio" value="false" /> No</label>
+                        </div>
+                        <label class="fw-bold req-form-long-label" for="">Division Chief Approval</label>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="col form-floating visually-hidden">
+                @Html.EditorFor(m => m.BonusRecommendationModel.ChiefSignature, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "reqDptSig", @Value = Model.BonusRecommendationModel.ChiefSignature, @readonly = "readonly" } })
+            </div>
+        }
+        if (Model.BonusRecommendationModel.CurrentStatus >= 4)
+        {
+            <div class="row row-cols-3 mb-2 formRow">
+                <div class="col form-floating">
+                    @Html.EditorFor(m => m.BonusRecommendationModel.HRRepresentative, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "reqHRSig", @Value = Model.BonusRecommendationModel.HRRepresentative, @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.BonusRecommendationModel.HRRepresentative, htmlAttributes: new { @for = "reqHRSig", @class = "fw-bold" })
+                </div>
+                @if (Model.BonusRecommendationModel.CurrentStatus >= 5)
+                {
+                    <div class="col form-floating">
+                        @Html.EditorFor(m => m.BonusRecommendationModel.HRRepresentativeDate, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "reqHRDate", @Value = Model.BonusRecommendationModel.HRRepresentativeDate.ToString("yyyy-MM-dd"), @type = "date", @readonly = "readonly" } })
+                        @Html.LabelFor(m => m.BonusRecommendationModel.HRRepresentativeDate, htmlAttributes: new { @for = "reqHRDate", @class = "fw-bold" })
+                    </div>
+                    <div class="col form-floating">
+                        <div class="form-control" radio-button-control>
+                            <label class="pe-4"><input checked="checked" id="HRApproval" name="HRApproval" readonly="readonly" type="radio" value="true" /> Yes</label>
+                            <label><input disabled="disabled" id="HRApproval" name="HRApproval" type="radio" value="false" /> No</label>
+                        </div>
+                        <label class="fw-bold req-form-long-label" for="">Human Resources Approval</label>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="col form-floating visually-hidden">
+                @Html.EditorFor(m => m.BonusRecommendationModel.HRRepresentative, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "reqDptSig", @Value = Model.BonusRecommendationModel.HRRepresentative, @readonly = "readonly" } })
+            </div>
+        }
+        @*if (Model.BonusRecommendationModel.CurrentStatus >= 5)
+            {
+                <div class="row row-cols-3 mb-2">
+                    <div class="col form-floating">
+                        @Html.EditorFor(m => m.BonusRecommendationModel.CommitteeApprovalList, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "reqHRSig", @Value = Model.BonusRecommendationModel.CommitteeApprovalList, @readonly = "readonly" } })
+                        @Html.LabelFor(m => m.BonusRecommendationModel.CommitteeApprovalList, htmlAttributes: new { @for = "reqHRSig", @class = "fw-bold" })
+                    </div>
+                    @if (Model.BonusRecommendationModel.CurrentStatus >= 6)
+                    {
+                        <div class="col form-floating">
+                            @Html.EditorFor(m => m.BonusRecommendationModel.CommitteeApprovalDate, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "reqHRDate", @Value = Model.BonusRecommendationModel.CommitteeApprovalDate.ToString("yyyy-MM-dd"), @type = "date", @readonly = "readonly" } })
+                            @Html.LabelFor(m => m.BonusRecommendationModel.CommitteeApprovalDate, htmlAttributes: new { @for = "reqHRDate", @class = "fw-bold" })
+                        </div>
+                        <div class="col form-floating">
+                            <div class="form-control" radio-button-control>
+                                @if (ViewBag.deniedStep != 5)
+                                {
+                                    <label class="pe-4"><input checked="checked" id="BonusCommitteeApproval" name="BonusCommitteeApproval" readonly="readonly" type="radio" value="true" /> Yes</label>
+                                    <label><input disabled="disabled" id="BonusCommitteeApproval" name="BonusCommitteeApproval" type="radio" value="false" /> No</label>
+                                }
+                                else
+                                {
+                                    <label class="pe-4"><input disabled="disabled" id="BonusCommitteeApproval" name="BonusCommitteeApproval" type="radio" value="true" /> Yes</label>
+                                    <label><input checked="checked" id="BonusCommitteeApproval" name="BonusCommitteeApproval" type="radio" readonly="readonly" value="false" /> No</label>
+                                }
+                            </div>
+                            <label class="fw-bold req-form-long-label" for="">Bonus Committee Approval</label>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="col form-floating visually-hidden">
+                    @Html.EditorFor(m => m.BonusRecommendationModel.CommitteeApprovalList, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "reqDptSig", @Value = Model.BonusRecommendationModel.CommitteeApprovalList, @readonly = "readonly" } })
+                </div>
+            }*@
+        if (Model.BonusRecommendationModel.CurrentStatus >= 6)
+        {
+            <div class="row row-cols-2 mb-2 formRow">
+                <div class="col form-floating">
+                    @Html.EditorFor(m => m.BonusRecommendationModel.ChiefEndorsement, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "reqChiefEndorsementSig", @Value = Model.BonusRecommendationModel.ChiefEndorsement, @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.BonusRecommendationModel.ChiefEndorsement, htmlAttributes: new { @for = "reqChiefEndorsementSig", @class = "fw-bold" })
+                </div>
+                @if (Model.BonusRecommendationModel.CurrentStatus >= 7)
+                {
+                    <div class="col form-floating">
+                        @Html.EditorFor(m => m.BonusRecommendationModel.ChiefEndorsementDate, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "reqChiefEndorsementDate", @Value = Model.BonusRecommendationModel.ChiefEndorsementDate.ToString("yyyy-MM-dd"), @type = "date", @readonly = "readonly" } })
+                        @Html.LabelFor(m => m.BonusRecommendationModel.ChiefEndorsementDate, htmlAttributes: new { @for = "reqChiefEndorsementDate", @class = "fw-bold" })
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="col form-floating visually-hidden">
+                @Html.EditorFor(m => m.BonusRecommendationModel.ChiefEndorsement, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "reqDptSig", @Value = Model.BonusRecommendationModel.ChiefEndorsement, @readonly = "readonly" } })
+            </div>
+        }
+        if (Model.BonusRecommendationModel.CurrentStatus >= 7)
+        {
+            <div class="row row-cols-2 mb-2 formRow">
+                <div class="col form-floating">
+                    @Html.EditorFor(m => m.BonusRecommendationModel.AgencyDirectorEndorsement, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "reqAgySig", @Value = Model.BonusRecommendationModel.AgencyDirectorEndorsement, @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.BonusRecommendationModel.AgencyDirectorEndorsement, htmlAttributes: new { @for = "reqAgySig", @class = "fw-bold" })
+                </div>
+                @if (Model.BonusRecommendationModel.CurrentStatus >= 8)
+                {
+                    <div class="col form-floating">
+                        @Html.EditorFor(m => m.BonusRecommendationModel.AgencyDirectorEndorsementDate, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "reqAgyDate", @Value = Model.BonusRecommendationModel.AgencyDirectorEndorsementDate.ToString("yyyy-MM-dd"), @type = "date", @readonly = "readonly" } })
+                        @Html.LabelFor(m => m.BonusRecommendationModel.AgencyDirectorEndorsementDate, htmlAttributes: new { @for = "reqAgyDate", @class = "fw-bold" })
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="col form-floating visually-hidden">
+                @Html.EditorFor(m => m.BonusRecommendationModel.AgencyDirectorEndorsement, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "reqDptSig", @Value = Model.BonusRecommendationModel.AgencyDirectorEndorsement, @readonly = "readonly" } })
+            </div>
+        }
+        <div class="row formRow visually-hidden">
+            @Html.EditorFor(m => m.BonusRecommendationModel.CurrentStatus, new { htmlAttributes = new { @class = "form-control bg-white", @id = "currentStatus", @Value = Model.BonusRecommendationModel.CurrentStatus, @readonly = "readonly" } })
+            @Html.EditorFor(m => m.BonusRecommendationModel.FormSubmitted, new { htmlAttributes = new { @class = "form-control bg-white", @id = "formSubmitted", @Value = Model.BonusRecommendationModel.FormSubmitted, @readonly = "readonly" } })
+            @Html.EditorFor(m => m.BonusRecommendationModel.ID, new { htmlAttributes = new { @class = "form-control bg-white", @id = "ID", @Value = @ViewBag.ID, @readonly = "readonly" } })
+            @Html.EditorFor(m => m.BonusRecommendationModel.CommitteeApprovalList, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "reqDptSig", @Value = Model.BonusRecommendationModel.CommitteeApprovalList, @readonly = "readonly" } })
+            @Html.EditorFor(m => m.BonusRecommendationModel.CommitteeApprovalDate, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "reqHRDate", @Value = Model.BonusRecommendationModel.CommitteeApprovalDate.ToString("yyyy-MM-dd"), @type = "date", @readonly = "readonly" } })
+        </div>
+        if ((Model.BonusRecommendationModel.ChiefSignatureDate.CompareTo(new DateTime(2000, 1, 1)) > 0) && (Model.BonusRecommendationModel.HRRepresentativeDate.CompareTo(new DateTime(2000, 1, 1)) <= 0))
+        {
+            if (ViewBag.InHR)
+            {
+                //These are the HR Representative buttons
+                <div class="row formRow">
+                    <div class="col-2">
+                        <input id="approveButton" class="w-100" type="button" value="Approve" onclick="onApproveButtonClicked()" name="command" />
+                    </div>
+                    <div class="col-2">
+                        <input id="denyButton" class="w-100" type="button" value="Deny" onclick="onDenyButtonClicked()" name="command" />
+                    </div>
+                    <div class="col-2">
+                        <input id="saveButton" class="w-100" type="button" name="command" value="Save" onclick="onSaveButtonClicked()" />
+                    </div>
+                    <div class="col-2">
+                        <input id="cancelButton" class="w-100" type="button" value="Cancel" onclick="onCancelButtonClicked()" name="command" />
+                    </div>
+                    <div class="col-2">
+                        <input id="printButton" class="w-100" type="button" value="Print" onclick="window.print()" />
+                    </div>
+                </div>
+            }
+            else if (ViewBag.SuperUser)
+            {
+                <div class="row formRow">
+                    <div class="col-2">
+                        <input id="cancelButton" class="w-100" type="button" value="Close" onclick="onCancelButtonClicked()" name="command" />
+                    </div>
+                    <div class="col-2">
+                        <input id="printButton" class="w-100" type="button" value="Print" onclick="window.print()" />
+                    </div>
+                </div>
+            }
+        }
+        else if ((Model.BonusRecommendationModel.HRRepresentativeDate.CompareTo(new DateTime(2000, 1, 1)) > 0) && (Model.BonusRecommendationModel.CommitteeApprovalDate.CompareTo(new DateTime(2000, 1, 1)) <= 0))
+        {
+            if (ViewBag.SuperUser && ViewBag.InHR)
+            {
+                //These are the Committee buttons
+                <div class="row formRow">
+                    @*<div class="col-2">
+                            <input id="approveButton" class="w-100" type="button" value="Approve" onclick="onApproveButtonClicked()" name="command" />
+                        </div>*@
+                    <div class="col-2">
+                        <input id="saveButton" class="w-100" type="button" name="command" value="Save" onclick="onSaveButtonClicked()" />
+                    </div>
+                    <div class="col-2">
+                        <input id="cancelButton" class="w-100" type="button" value="Close" onclick="onCancelButtonClicked()" name="command" />
+                    </div>
+                    <div class="col-2">
+                        <input id="printButton" class="w-100" type="button" value="Print" onclick="window.print()" />
+                    </div>
+                </div>
+            }
+            else if (ViewBag.SuperUser)
+            {
+                <div class="row formRow">
+                    <div class="col-2">
+                        <input id="cancelButton" class="w-100" type="button" value="Close" onclick="onCancelButtonClicked()" name="command" />
+                    </div>
+                    <div class="col-2">
+                        <input id="printButton" class="w-100" type="button" value="Print" onclick="window.print()" />
+                    </div>
+                </div>
+            }
+        }
+        else if ((Model.BonusRecommendationModel.CommitteeApprovalDate.CompareTo(new DateTime(2000, 1, 1)) > 0 && Model.BonusRecommendationModel.ChiefEndorsementDate.CompareTo(new DateTime(2000, 1, 1)) <= 0) ||
+                 (Model.BonusRecommendationModel.ChiefEndorsementDate.CompareTo(new DateTime(2000, 1, 1)) > 0 && Model.BonusRecommendationModel.AgencyDirectorEndorsementDate.CompareTo(new DateTime(2000, 1, 1)) <= 0))
+        {
+            //These are the Endorsement buttons
+            if ((Model.BonusRecommendationModel.ChiefEndorsementDate.CompareTo(new DateTime(2000, 1, 1)) <= 0 && Model.BonusRecommendationModel.ChiefEndorsement.Contains(ViewBag.UserName)) ||
+                (Model.BonusRecommendationModel.AgencyDirectorEndorsementDate.CompareTo(new DateTime(2000, 1, 1)) <= 0 && Model.BonusRecommendationModel.AgencyDirectorEndorsement.Contains(ViewBag.UserName)))
+            {
+                <div class="row formRow">
+                    <div class="col-2">
+                        <input id="approveButton" class="w-100" type="button" value="Approve" onclick="onApproveButtonClicked()" name="command" />
+                    </div>
+                    <div class="col-2">
+                        <input id="saveButton" class="w-100" type="button" name="command" value="Save" onclick="onSaveButtonClicked()" />
+                    </div>
+                    <div class="col-2">
+                        <input id="printButton" class="w-100" type="button" value="Print" onclick="window.print()" />
+                    </div>
+                </div>
+            }
+            else if (ViewBag.SuperUser)
+            {
+                <div class="row formRow">
+                    <div class="col-2">
+                        <input id="cancelButton" class="w-100" type="button" value="Close" onclick="onCancelButtonClicked()" name="command" />
+                    </div>
+                    <div class="col-2">
+                        <input id="printButton" class="w-100" type="button" value="Print" onclick="window.print()" />
+                    </div>
+                </div>
+            }
+        }
+        else if (Model.BonusRecommendationModel.SupervisorSignatureDate.CompareTo(new DateTime(2000, 1, 1)) <= 0 || Model.BonusRecommendationModel.DepartmentSignatureDate.CompareTo(new DateTime(2000, 1, 1)) <= 0 ||
+                 Model.BonusRecommendationModel.ChiefSignatureDate.CompareTo(new DateTime(2000, 1, 1)) <= 0)
+        {
+            // If user is the person to approve form in this step
+            if ((Model.BonusRecommendationModel.SupervisorSignatureDate.CompareTo(new DateTime(2000, 1, 1)) <= 0 && Model.BonusRecommendationModel.SupervisorSignature.Contains(ViewBag.UserName)) ||
+                (Model.BonusRecommendationModel.DepartmentSignatureDate.CompareTo(new DateTime(2000, 1, 1)) <= 0 && Model.BonusRecommendationModel.DepartmentSignature.Contains(ViewBag.UserName)) ||
+                (Model.BonusRecommendationModel.ChiefSignatureDate.CompareTo(new DateTime(2000, 1, 1)) <= 0 && Model.BonusRecommendationModel.ChiefSignature.Contains(ViewBag.UserName)))
+            {
+                <div class="row formRow">
+                    <div class="col-2">
+                        <input id="approveButton" class="w-100" type="button" value="Approve" onclick="onApproveButtonClicked()" name="command" />
+                    </div>
+                    <div class="col-2">
+                        <input id="denyButton" class="w-100" type="button" value="Deny" onclick="onDenyButtonClicked()" name="command" />
+                    </div>
+                    <div class="col-2">
+                        <input id="cancelButton" class="w-100" type="button" value="Cancel" onclick="onCancelButtonClicked()" name="command" />
+                    </div>
+                    <div class="col-2">
+                        <input id="printButton" class="w-100" type="button" value="Print" onclick="window.print()" />
+                    </div>
+                </div>
+            }
+            else if (ViewBag.SuperUser)
+            {
+                <div class="row formRow">
+                    <div class="col-2">
+                        <input id="cancelButton" class="w-100" type="button" value="Close" onclick="onCancelButtonClicked()" name="command" />
+                    </div>
+                    <div class="col-2">
+                        <input id="printButton" class="w-100" type="button" value="Print" onclick="window.print()" />
+                    </div>
+                </div>
+            }
+        }
+        else if (ViewBag.SuperUser)
+        {
+            <div class="row formRow">
+                <div class="col-2">
+                    <input id="cancelButton" class="w-100" type="button" value="Close" onclick="onCancelButtonClicked()" name="command" />
+                </div>
+                <div class="col-2">
+                    <input id="printButton" class="w-100" type="button" value="Print" onclick="window.print()" />
+                </div>
+            </div>
+        }
+    }
+
+
+</div>
+
+<table id="printTable">
+    <tbody>
+        <tr class="printRow">
+            <td class="printCell" colspan="4">
+                @Html.LabelFor(m => m.BonusRecommendationModel.NomineeName)<br />
+                <span class="userInput">@Html.DisplayFor(m => m.BonusRecommendationModel.NomineeName)</span>
+            </td>
+            <td class="printCell" colspan="4">
+                @Html.LabelFor(m => m.BonusRecommendationModel.NomineePosition)<br />
+                <span class="userInput">@Html.DisplayFor(m => m.BonusRecommendationModel.NomineePosition)</span>
+            </td>
+            <td class="printCell" colspan="4">
+                @Html.LabelFor(m => m.BonusRecommendationModel.NomineeDepartment)<br />
+                <span class="userInput">@Html.DisplayFor(m => m.BonusRecommendationModel.NomineeDepartment)</span>
+            </td>
+        </tr>
+        <tr class="printHeading">
+            <th colspan="12">
+                Justification of Performance Bonus
+            </th>
+        </tr>
+        <tr>
+            <td class="printCell" colspan="12">
+                <span>Date Range for Nominee's Accomplishments:</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="printCell" colspan="6">
+                @Html.LabelFor(m => m.BonusRecommendationModel.AccomplishmentStartDate)<br />
+                <span class="userInput">@Model.BonusRecommendationModel.AccomplishmentStartDate.ToString("MM/dd/yyyy")</span>
+            </td>
+            <td class="printCell" colspan="6">
+                @Html.LabelFor(m => m.BonusRecommendationModel.AccomplishmentEndDate)<br />
+                <span class="userInput">@Model.BonusRecommendationModel.AccomplishmentEndDate.ToString("MM/dd/yyyy")</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="printCell" colspan="12">
+                @Html.LabelFor(m => m.BonusRecommendationModel.Justification)<br />
+                <span class="userInput">@Html.DisplayFor(m => m.BonusRecommendationModel.Justification)</span>
+            </td>
+        </tr>
+        @if (Model.BonusRecommendationModel.CurrentStatus > 4)
+        {
+            <tr class="printHeading">
+                <th colspan="12">
+                    Nominee's Eligibility Requirements
+                </th>
+            </tr>
+
+            <tr>
+                <td class="printCell" colspan="12">
+                    @Html.LabelFor(m => m.BonusRecommendationModel.StateEmployeeOneYear)<br />
+                    <span class="userInput">@((Model.BonusRecommendationModel.StateEmployeeOneYear)?"Yes":"No")</span>
+                </td>
+
+            </tr>
+            <tr>
+                <td class="printCell" colspan="12">
+                    @Html.LabelFor(m => m.BonusRecommendationModel.ProbationaryEmployee)
+                    <span class="userInput">@((Model.BonusRecommendationModel.ProbationaryEmployee) ?"Yes":"No")</span><br />
+                </td>
+            </tr>
+            <tr>
+                <td class="printCell" colspan="12">
+                    @Html.LabelFor(m => m.BonusRecommendationModel.FullTime)
+                    <span class="userInput">@((Model.BonusRecommendationModel.FullTime) ?"Yes":"No")</span><br />
+                </td>
+            </tr>
+            <tr>
+                <td class="printCell" colspan="12">
+                    @Html.LabelFor(m => m.BonusRecommendationModel.PartTime)
+                    <span class="userInput">@((Model.BonusRecommendationModel.PartTime) ?"Yes":"No")</span><br />
+                </td>
+            </tr>
+            <tr>
+                <td class="printCell" colspan="12">
+                    @Html.LabelFor(m => m.BonusRecommendationModel.Temporary)
+                    <span class="userInput">@((Model.BonusRecommendationModel.Temporary) ?"Yes":"No")</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.BonusRecommendationModel.LastBonusDate)<br />
+                    <span class="userInput">@((Model.BonusRecommendationModel.LastBonusDate.HasValue && Model.BonusRecommendationModel.LastBonusDate.Value.CompareTo(DateTime.Parse("1/1/2000")) > 0) ? Model.BonusRecommendationModel.LastBonusDate.Value.ToString("MM/dd/yyyy") : "None")</span>
+                </td>
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.BonusRecommendationModel.LastBonusAmount)<br />
+                    <span class="userInput">@Html.DisplayFor(m => m.BonusRecommendationModel.LastBonusAmount)</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="printCell" colspan="12">
+                    @Html.LabelFor(m => m.BonusRecommendationModel.LastPerformanceScore)<br />
+                    <span class="userInput">@Html.DisplayFor(m => m.BonusRecommendationModel.LastPerformanceScore)</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="printCell" colspan="12">
+                    @Html.LabelFor(m => m.BonusRecommendationModel.HRAction)<br />
+                    <span class="userInput">@((Model.BonusRecommendationModel.HRAction) ?"Yes":"No")</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="printCell" colspan="12">
+                    @Html.LabelFor(m => m.BonusRecommendationModel.MeetsRequirements)<br />
+                    <span class="userInput">@((Model.BonusRecommendationModel.MeetsRequirements) ?"Yes":"No")</span>
+                </td>
+            </tr>
+        }
+        @if (Model.BonusRecommendationModel.CurrentStatus > 5)
+        {
+            <tr class="printHeading">
+                <th colspan="12">
+                    Committee Section
+                </th>
+            </tr>
+            <tr class="printRow">
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.BonusRecommendationModel.CommitteeApproval)<br />
+                    <span class="userInput">@Html.DisplayFor(m => m.BonusRecommendationModel.CommitteeApproval)</span>
+                </td>
+                <td class="printCell" colspan="6">
+                    @Html.LabelFor(m => m.BonusRecommendationModel.CommitteeApprovalAmount)<br />
+                    <span class="userInput">@Html.DisplayFor(m => m.BonusRecommendationModel.CommitteeApprovalAmount)</span>
+                </td>
+            </tr>
+            <tr class="printRow">
+                <td class="printCell" colspan="12">
+                    @Html.LabelFor(m => m.BonusRecommendationModel.Comments)<br />
+                    <span class="userInput">@Html.DisplayFor(m => m.BonusRecommendationModel.Comments)</span>
+                </td>
+            </tr>
+        }
+        <tr class="printHeading">
+            <th colspan="12">
+                Required Signatures
+            </th>
+        </tr>
+        <tr class="printRow">
+            <td class="printCell" colspan="4">
+                @Html.LabelFor(m => m.BonusRecommendationModel.SubmitterName)<br />
+                <span class="userInput">@Html.DisplayFor(m => m.BonusRecommendationModel.SubmitterName)</span>
+            </td>
+            <td class="printCell" colspan="4">
+                @Html.LabelFor(m => m.BonusRecommendationModel.SubmitterPosition)<br />
+                <span class="userInput">@Html.DisplayFor(m => m.BonusRecommendationModel.SubmitterPosition)</span>
+            </td>
+            @if (Model.BonusRecommendationModel.SubmitterDate.CompareTo(new DateTime(2000, 1, 1)) > 0)
+            {
+                <td class="printCell" colspan="4">
+                    @Html.LabelFor(m => m.BonusRecommendationModel.SubmitterDate)<br />
+                    <span class="userInput">@Model.BonusRecommendationModel.SubmitterDate.ToString("MM/dd/yyyy")</span>
+                </td>
+            }
+        </tr>
+        @if (Model.BonusRecommendationModel.SubmitterDate.CompareTo(new DateTime(2000, 1, 1)) > 0)
+        {
+            <tr class="printRow">
+                <td class="printCell" colspan="4">
+                    @Html.LabelFor(m => m.BonusRecommendationModel.SupervisorSignature)<br />
+                    <span class="userInput">@Html.DisplayFor(m => m.BonusRecommendationModel.SupervisorSignature)</span>
+                </td>
+                @if (Model.BonusRecommendationModel.SupervisorSignatureDate.CompareTo(new DateTime(2000, 1, 1)) > 0)
+                {
+                    <td class="printCell" colspan="4">
+                        @Html.LabelFor(m => m.BonusRecommendationModel.SupervisorSignatureDate)<br />
+                        <span class="userInput">@Model.BonusRecommendationModel.SupervisorSignatureDate.ToString("MM/dd/yyyy")</span>
+                    </td>
+                    <td class="printCell" colspan="4">
+                        @Html.LabelFor(m => m.BonusRecommendationModel.SupervisorEndorsement)<br />
+                        <span class="userInput">@((Model.BonusRecommendationModel.SupervisorEndorsement) ? "Yes" : "No")</span>
+                    </td>
+                }
+            </tr>
+        }
+        @if (Model.BonusRecommendationModel.SupervisorSignatureDate.CompareTo(new DateTime(2000, 1, 1)) > 0)
+        {
+            <tr class="printRow">
+                <td class="printCell" colspan="4">
+                    @Html.LabelFor(m => m.BonusRecommendationModel.DepartmentSignature)<br />
+                    <span class="userInput">@Html.DisplayFor(m => m.BonusRecommendationModel.DepartmentSignature)</span>
+                </td>
+                @if (Model.BonusRecommendationModel.DepartmentSignatureDate.CompareTo(new DateTime(2000, 1, 1)) > 0)
+                {
+                    <td class="printCell" colspan="4">
+                        @Html.LabelFor(m => m.BonusRecommendationModel.DepartmentSignatureDate)<br />
+                        <span class="userInput">@Model.BonusRecommendationModel.DepartmentSignatureDate.ToString("MM/dd/yyyy")</span>
+                    </td>
+                    <td class="printCell" colspan="4">
+                        @Html.LabelFor(m => m.BonusRecommendationModel.DepartmentEndorsement)<br />
+                        <span class="userInput">@((Model.BonusRecommendationModel.DepartmentEndorsement) ? "Yes" : "No")</span>
+                    </td>
+                }
+            </tr>
+        }
+        @if (Model.BonusRecommendationModel.DepartmentSignatureDate.CompareTo(new DateTime(2000, 1, 1)) > 0)
+        {
+            <tr class="printRow">
+                <td class="printCell" colspan="4">
+                    @Html.LabelFor(m => m.BonusRecommendationModel.ChiefSignature)<br />
+                    <span class="userInput">@Html.DisplayFor(m => m.BonusRecommendationModel.ChiefSignature)</span>
+                </td>
+                @if (Model.BonusRecommendationModel.ChiefSignatureDate.CompareTo(new DateTime(2000, 1, 1)) > 0)
+                {
+                    <td class="printCell" colspan="4">
+                        @Html.LabelFor(m => m.BonusRecommendationModel.ChiefSignatureDate)<br />
+                        <span class="userInput">@Model.BonusRecommendationModel.ChiefSignatureDate.ToString("MM/dd/yyyy")</span>
+                    </td>
+                    <td class="printCell" colspan="4">
+                        Division Chief Review<br />
+                        <span class="userInput">@((Model.BonusRecommendationModel.HRRepresentative.Length > 0) ? "Yes":"No")</span>
+                    </td>
+                }
+            </tr>
+        }
+        @if (Model.BonusRecommendationModel.ChiefSignatureDate.CompareTo(new DateTime(2000, 1, 1)) > 0)
+        {
+            <tr class="printRow">
+                <td class="printCell" colspan="4">
+                    @Html.LabelFor(m => m.BonusRecommendationModel.HRRepresentative)<br />
+                    <span class="userInput">@Html.DisplayFor(m => m.BonusRecommendationModel.HRRepresentative)</span>
+                </td>
+                @if (Model.BonusRecommendationModel.HRRepresentativeDate.CompareTo(new DateTime(2000, 1, 1)) > 0)
+                {
+                    <td class="printCell" colspan="4">
+                        @Html.LabelFor(m => m.BonusRecommendationModel.HRRepresentativeDate)<br />
+                        <span class="userInput">@Model.BonusRecommendationModel.HRRepresentativeDate.ToString("MM/dd/yyyy")</span>
+                    </td>
+                    <td class="printCell" colspan="4">
+                        Human Resources Review<br />
+                        <span class="userInput">@((Model.BonusRecommendationModel.ChiefEndorsement.Length > 0) ? "Yes":"No")</span>
+                    </td>
+                }
+            </tr>
+        }
+        @if (Model.BonusRecommendationModel.HRRepresentativeDate.CompareTo(new DateTime(2000, 1, 1)) > 0)
+        {
+            <tr class="printRow">
+                <td class="printCell" colspan="4">
+                    @Html.LabelFor(m => m.BonusRecommendationModel.ChiefEndorsement)<br />
+                    <span class="userInput">@Html.DisplayFor(m => m.BonusRecommendationModel.ChiefEndorsement)</span>
+                </td>
+                @if (Model.BonusRecommendationModel.ChiefEndorsementDate.CompareTo(new DateTime(2000, 1, 1)) > 0)
+                {
+                    <td class="printCell" colspan="4">
+                        @Html.LabelFor(m => m.BonusRecommendationModel.ChiefEndorsementDate)<br />
+                        <span class="userInput">@Model.BonusRecommendationModel.ChiefEndorsementDate.ToString("MM/dd/yyyy")</span>
+                    </td>
+                }
+            </tr>
+        }
+        @if (Model.BonusRecommendationModel.ChiefEndorsementDate.CompareTo(new DateTime(2000, 1, 1)) > 0)
+        {
+            <tr class="printRow">
+                <td class="printCell" colspan="4">
+                    @Html.LabelFor(m => m.BonusRecommendationModel.AgencyDirectorEndorsement)<br />
+                    <span class="userInput">@Html.DisplayFor(m => m.BonusRecommendationModel.AgencyDirectorEndorsement)</span>
+                </td>
+                @if (Model.BonusRecommendationModel.AgencyDirectorEndorsementDate.CompareTo(new DateTime(2000, 1, 1)) > 0)
+                {
+                    <td class="printCell" colspan="4">
+                        @Html.LabelFor(m => m.BonusRecommendationModel.AgencyDirectorEndorsementDate)<br />
+                        <span class="userInput">@Model.BonusRecommendationModel.AgencyDirectorEndorsementDate.ToString("MM/dd/yyyy")</span>
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+        window.onload = function () {
+            var textarea = document.querySelectorAll('textarea');
+            textarea.forEach((thisarea) => { thisarea.style.cssText = 'height: ' + (thisarea.scrollHeight + 2) + 'px'; });
+        };
+
+        $(function () {
+            $("[currencymask]").inputmask({ alias: "currency", prefix: "$", groupSeparator: "" });
+        });
+        $(document).ready(function () {
+
+            $(".employeeApproved").change(function () {
+                if ($(this).val() == "false") {
+                    $("#proofComments").removeAttr("hidden");
+
+                    // This stops the Postback
+                    evt.preventDefault();
+                } else if ($(this).val() == "true") {
+                    $("#proofComments").attr("hidden", "hidden");
+                    $("#proofComments").val("");
+                }
+            });
+
+        });        
+        function onSaveButtonClicked() {
+            document.getElementById("saveButton").type = "submit";
+        };
+        function onSubmitButtonClicked() {
+            document.getElementById("submitButton").type = "submit";
+        };
+        function onApproveButtonClicked() {
+            document.getElementById("approveButton").type = "submit";
+        };
+        function onDenyButtonClicked() {
+            document.getElementById("denyButton").type = "submit";
+        };
+        function onCancelButtonClicked() {
+            //var cancel = confirm("All data will be lost if the form is closed. Are you sure that you want to close? Click OK to proceed.");
+            //if (cancel) {
+            document.getElementById("cancelButton").type = "submit";
+            //}
+        }
+    </script>
+}

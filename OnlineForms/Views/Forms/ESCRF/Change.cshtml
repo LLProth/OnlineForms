@@ -1,0 +1,242 @@
+﻿@model OnlineForms.ViewModels.ESCRFViewModel
+@{
+
+    ViewBag.FormInfo = new Dictionary<string, string>();
+    ViewBag.FormInfo.Add("FormName", "Employee Status Change Request Form");
+    ViewBag.FormInfo.Add("Division", "Human Resource Division");
+    ViewBag.FormInfo.Add("Info", "Change in WSI");
+
+    string[] Flsa = { "Exempt", "Non-Exempt" };
+    ViewBag.Flsa = Flsa;
+    DateTime defaultDate = DateTime.Now.AddDays(-5);
+}
+
+@section topHeader {
+    @Html.Partial("~/Views/Shared/_ESCRFHeader.cshtml", (Dictionary<string, string>)ViewBag.FormInfo)
+}
+
+@section sideBarNav {
+    @Html.Partial("~/Views/Forms/ESCRF/_Sidebar.cshtml")
+}
+@using (Html.BeginForm("SubmitChange", "ESCRF"))
+{
+<div>
+    <div class="row mb-5 formRow">
+        <div class="form-group col-6 form-floating">
+            @Html.EditorFor(m => m.Change.EmployeeName, new { htmlAttributes = new { @class = "form-control fw-bold w-100 textboxfor Validation Verify", @placeholder = Html.DisplayNameFor(m => m.Change.EmployeeName), @maxlength = "207", @required = "required", @list = "names" } })
+            @Html.LabelFor(m => m.Change.EmployeeName, htmlAttributes: new { @class = "fw-bold" })
+            @Html.ValidationMessageFor(m => m.Change.EmployeeName, "", new { @class = "validationText" })
+        </div>
+        <div class="form-group col-4 form-floating">
+            @Html.EditorFor(m => m.Change.PhoneNumber, new { htmlAttributes = new { @class = "form-control fw-bold", @readonly = "readonly", @id = "phoneNumber" } })
+            @Html.LabelFor(m => m.Change.PhoneNumber, htmlAttributes: new { @class = "fw-bold" })
+        </div>
+    </div>
+    <div class="row mb-5 formRow">
+        <div class="form-group col-4 form-floating">
+            @Html.EditorFor(m => m.Change.Department, new { htmlAttributes = new { @class = "form-control fw-bold", @readonly = "readonly", @id = "department" } })
+            @Html.LabelFor(m => m.Change.Department, htmlAttributes: new { @class = "fw-bold" })
+        </div>
+        <div class="form-group col-4 form-floating">
+            @Html.EditorFor(m => m.Change.OfficeLocation, new { htmlAttributes = new { @class = "form-control fw-bold", @readonly = "readonly", @id = "location" } })
+            @Html.LabelFor(m => m.Change.OfficeLocation, htmlAttributes: new { @class = "fw-bold" })
+        </div>
+        <div class="form-group col-4 form-floating">
+            @Html.EditorFor(m => m.Change.CurrentSupervisor, new { htmlAttributes = new { @class = "form-control fw-bold", @readonly = "readonly", @id = "manager" } })
+            @Html.LabelFor(m => m.Change.CurrentSupervisor, htmlAttributes: new { @class = "fw-bold" })
+        </div>
+    </div>
+    <div class="row mb-5 formRow justify-content-start">
+        <div class="form-group col-6">
+            @Html.CheckBoxFor(m => m.Change.IsNewPosition, new { @id = "check-new-position" })
+            @Html.LabelFor(m => m.Change.IsNewPosition, htmlAttributes: new { @class = "fw-bold" })
+            @Html.ValidationMessageFor(m => m.Change.IsNewPosition)
+        </div>
+        <div class="form-group col-6 form-floating d-none" id="input-new-position">
+            @Html.DropDownListFor(m => m.Change.PositionName, new SelectList(ViewBag.Titles),  new { @class = "form-control fw-bold" })
+            @Html.LabelFor(m => m.Change.PositionName, htmlAttributes: new { @class = "fw-bold" })
+            @Html.ValidationMessageFor(m => m.Change.PositionName)
+        </div>
+    </div>
+    <div class="row mb-5 formRow justify-content-start">
+        <div class="form-group col-6">
+            @Html.CheckBoxFor(m => m.Change.IsNewSupervisor, new { @id = "check-new-supervisor" })
+            @Html.LabelFor(m => m.Change.IsNewSupervisor, htmlAttributes: new { @class = "fw-bold" })
+            @Html.ValidationMessageFor(m => m.Change.IsNewSupervisor)
+        </div>
+        <div class="form-group col-6 form-floating d-none" id="input-new-supervisor">
+            @Html.EditorFor(m => m.Change.NewSupervisor, new { htmlAttributes = new { @class = "form-control fw-bold Validation2", @placeholder = Html.DisplayNameFor(m => m.Change.NewSupervisor), @maxlength = "100", @list = "names1" } })
+            @Html.LabelFor(m => m.Change.NewSupervisor, htmlAttributes: new { @class = "fw-bold" })
+            @Html.ValidationMessageFor(m => m.Change.NewSupervisor, "", new { @class = "validationText" })
+        </div>
+    </div>
+    <div class="row d-flex align-items-center mb-5">
+        <div class="form-group col-4">
+            @Html.CheckBoxFor(m => m.Change.IsTempToFte)
+            @Html.LabelFor(m => m.Change.IsTempToFte, htmlAttributes: new { @class = "fw-bold" })
+            @Html.ValidationMessageFor(m => m.Change.IsTempToFte)
+        </div>
+        <div class="form-group col-4 form-floating">
+            @Html.DropDownListFor(m => m.Change.FLSAStatus, new SelectList(ViewBag.Flsa), " ", new { @class = "form-control" })
+            @Html.LabelFor(m => m.Change.FLSAStatus, htmlAttributes: new { @class = "fw-bold" })
+            @Html.ValidationMessageFor(m => m.Change.FLSAStatus)
+        </div>
+        <div class="form-group col-4 form-floating">
+            @Html.EditorFor(m => m.Change.EffectiveDate, new { htmlAttributes = new { @class = "form-control fw-bold", @type = "date" } })
+            @Html.LabelFor(m => m.Change.EffectiveDate, htmlAttributes: new { @class = "fw-bold" })
+            @Html.ValidationMessageFor(m => m.Change.EffectiveDate, "", new { @class = "validationText" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-12 form-floating">
+            @Html.EditorFor(m => m.Change.Comments, new { htmlAttributes = new { @class = "form-control fw-bold w-100", @placeholder = Html.DisplayNameFor(m => m.Change.CurrentSupervisor), @maxlength = "500" } })
+            @Html.LabelFor(m => m.Change.Comments, htmlAttributes: new { @class = "fw-bold" })
+            @Html.ValidationMessageFor(m => m.Change.Comments, "", new { @class = "validationText" })
+        </div>
+    </div>
+
+    <datalist id="names">
+        <option></option>
+    </datalist>
+
+    <datalist id="names1">
+        <option></option>
+    </datalist>
+    <div>
+
+        @Html.HiddenFor(m => m.Change.ModifiedBy, new { @Value = ViewBag.Name })
+        @Html.HiddenFor(m => m.Change.ChangeType, new { @Value = ViewBag.FormInfo["Info"] })
+        @Html.HiddenFor(m => m.Change.CreatedDate, new { @Value = DateTime.Now.ToShortDateString() })
+        @Html.HiddenFor(m => m.Change.TaskListID, new { @Value = 0 })
+    </div>
+</div>
+<div class="py-5">
+    <div class="col-2">
+        <button id="submitButton" type="submit" class="btn w-100">Submit</button>
+    </div>
+</div>
+@Html.AntiForgeryToken()
+}
+
+
+
+@section scripts
+    {
+
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        $('#check-new-position').on("change", function () {
+            let positionCheckbox = document.getElementById('check-new-position')
+            let positionInput = document.getElementById('input-new-position')
+            if (positionCheckbox.checked) {
+                positionInput.classList.remove('d-none')
+            }
+            if (!positionCheckbox.checked ){
+                positionInput.classList.add('d-none')
+            }
+        })
+    </script>
+    <script type="text/javascript">
+        $('#check-new-supervisor').on("change", function () {
+            let positionCheckbox = document.getElementById('check-new-supervisor')
+            let positionInput = document.getElementById('input-new-supervisor')
+            if (positionCheckbox.checked) {
+                positionInput.classList.remove('d-none')
+            }
+            if (!positionCheckbox.checked) {
+                positionInput.classList.add('d-none')
+            }
+        })
+    </script>
+
+    <script type="text/javascript">
+        var names = [];
+        $('.Validation').on("keypress", function () {
+            $.ajax({
+                url: "@ViewBag.Validation" + $('.Validation').val().trim(),
+                //url: "https://itdwsinett2.netstaging.nd.gov/WSI/onlineforms/api/Validation/?query=" + $('.Validation').val().trim(),
+                method: 'GET',
+                success: function (data) {
+                    data.forEach(function (name) {
+                        if (!names.includes(name)) {
+                            names.push(name);
+                            var option = document.createElement('option')
+                            option.value = name
+                            document.getElementById('names').appendChild(option)
+                        }
+                    })
+                }
+            })
+        })
+    </script>
+    <script type="text/javascript">
+        var supervisorNames = [];
+        $('.Validation2').on("keypress", function () {
+            console.log('1st check')
+            console.log(document.getElementById('names1').children.length)
+            console.log('After removal')
+            console.log(document.getElementById('names1').children.length)
+            $.ajax({
+                url: '@ViewBag.Validation' + $('.Validation2').val().trim(),
+                //url: "https://itdwsinett2.netstaging.nd.gov/WSI/onlineforms/api/Validation/?query=" + $('.Validation2').val().trim(),
+                method: 'GET',
+                success: function (data) {
+                    console.log('Beginning of success')
+                    console.log(document.getElementById('names1').children.length)
+                    data.forEach(function (name) {
+                        if (!supervisorNames.includes(name)) {
+                            supervisorNames.push(name);
+                            var option = document.createElement('option')
+                            option.value = name
+                            document.getElementById('names1').appendChild(option)
+                        }
+                    })
+                    console.log('after add')
+                    console.log(document.getElementById('names1').children.length)
+                }
+            })
+        })
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('.Verify').on("change", function () {
+                $.ajax({
+                    
+                    url: '@ViewBag.Verify' + $('.Verify').val(),
+                    //url: "https://itdwsinett2.netstaging.nd.gov/wsi/onlineforms/api/verify/?query=" + $('.Verify').val().trim(),
+                    method: 'GET',
+                    success: function (data) {
+                        if (data) {
+                            $.ajax({
+                                url: '@ViewBag.Retrieve' + $('.Verify').val(),
+                                //url: "https://itdwsinett2.netstaging.nd.gov/wsi/onlineforms/api/retrieve/?query=" + $('.Verify').val().trim(),
+                                method: 'GET',
+                                success: function (data) {
+                                    var info = data.split("+")
+                                    var name = info[4].split(",")
+                                    var first = name[0]
+                                    var noCN = first.slice(3)
+                                    noSlash = noCN.slice(0, -1)
+                                    var name3 = name[1]
+                                    var name4 = name[2];
+                                    var distinguishedName = noSlash + "," + name3
+                                    $('#phoneNumber').val(info[1])
+                                    $('#department').val(info[2])
+                                    $('#location').val(info[3])
+                                    if (info[4] == "No Manager in DB") {
+                                        $('#manager').val(info[7])
+                                    }
+                                    else {
+                                        var managerArray = info[4].split("=")
+                                        $('#manager').val(info[4])
+                                    }
+                                }
+                            })
+                        }
+                    },
+                })
+            })
+        })
+    </script>
+}
+

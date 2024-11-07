@@ -1,0 +1,232 @@
+﻿@model OnlineForms.ViewModels.SFN61579DisplayViewModel
+
+
+@{
+    ViewBag.Title = "Request For Charitable Event";
+}
+
+@section topHeader {
+    @Html.Partial("~/Views/Shared/_FormHeader.cshtml", (Dictionary<string, string>)ViewBag.FormInfo)
+}
+<div id="notPrint" class="container-fluid forms">
+    <div class="container-fluid">
+        <div class="row flex-nowrap">
+            @section sideBarNav {
+                @Html.Partial("~/Views/Forms/SFN61579/Sidebar.cshtml")
+            }
+
+            @* Readonly form view *@
+            <div id="table">
+                @using (Html.BeginForm("Reviewed", "SFN61579", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                    <div id="sectionOne" class="formSection">
+                        <h5>Section 1 - Charity Information</h5>
+                    </div>
+
+                    <div class="row mb-2 formRow">
+                        <div class="col form-floating">
+                            @Html.EditorFor(m => m.CharityInfoModels.Organization, new { htmlAttributes = new { @name = "Organization", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.CharityInfoModels.Organization), @id = "reqOrganization", @maxlength = "1000", @readonly = "readonly" } })
+                            @Html.LabelFor(m => m.CharityInfoModels.Organization, htmlAttributes: new { @for = "reqOrganization", @class = "fw-bold label" })
+                            @Html.ValidationMessageFor(m => m.CharityInfoModels.Organization, "", new { @class = "validationText" })
+                        </div>
+                    </div>
+
+                    <div class="row row-cols-3 mb-2 formRow">
+                        <div class="col-12 form-floating">
+                            @Html.EditorFor(m => m.CharityInfoModels.AddressLineOne, new { htmlAttributes = new { @name = "Organization", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.CharityInfoModels.AddressLineOne), @id = "reqOrganization", @maxlength = "1000", @readonly = "readonly" } })
+                            @Html.LabelFor(m => m.CharityInfoModels.AddressLineOne, htmlAttributes: new { @for = "reqOrganization", @class = "fw-bold label" })
+                            @Html.ValidationMessageFor(m => m.CharityInfoModels.AddressLineOne, "", new { @class = "validationText" })
+                        </div>
+                    </div>
+
+                    <div class="row row-cols-3 mb-2 formRow">
+                        <div class="col-12 form-floating">
+                            @Html.EditorFor(m => m.CharityInfoModels.AddressLineTwo, new { htmlAttributes = new { @name = "Name", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.CharityInfoModels.AddressLineTwo), @id = "reqName", @readonly = "readonly" } })
+                            @Html.LabelFor(m => m.CharityInfoModels.AddressLineTwo, htmlAttributes: new { @for = "reqName", @class = "fw-bold label" })
+                        </div>
+                    </div>
+
+                    <div class="row row-cols-3 mb-2 formRow">
+                        <div class="col form-floating">
+                            @Html.EditorFor(m => m.CharityInfoModels.City, new { htmlAttributes = new { @name = "DateSubmitted", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.CharityInfoModels.City), @id = "reqDate", @readonly = "readonly" } })
+                            @Html.LabelFor(m => m.CharityInfoModels.City, htmlAttributes: new { @for = "reqDate", @class = "fw-bold label" })
+                            @Html.ValidationMessageFor(m => m.CharityInfoModels.City, "", new { @class = "validationText" })
+                        </div>
+
+                        <div class="col form-floating">
+                            @Html.EditorFor(m => m.CharityInfoModels.State, new { htmlAttributes = new { @name = "State", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.CharityInfoModels.State), @readonly = "readonly" } })
+                            @Html.LabelFor(m => m.CharityInfoModels.State, htmlAttributes: new { @for = "reqDate", @class = "fw-bold label" })
+                            @Html.ValidationMessageFor(m => m.CharityInfoModels.State, "", new { @class = "validationText" })
+                        </div>
+
+                        <div class="col form-floating">
+                            @Html.EditorFor(m => m.CharityInfoModels.ZipCode, new { htmlAttributes = new { @name = "Name", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.CharityInfoModels.ZipCode), @id = "reqName", @readonly = "readonly" } })
+                            @Html.LabelFor(m => m.CharityInfoModels.ZipCode, htmlAttributes: new { @for = "reqName", @class = "fw-bold label" })
+                            @Html.ValidationMessageFor(m => m.CharityInfoModels.ZipCode, "", new { @class = "validationText" })
+                        </div>
+                    </div>
+
+                    <div class="row row-cols-3 mb-2 formRow">
+                        <div class="col-6 form-floating" select-list-control>
+                            @* Display only months in the same quarter as the current quarter of the year *@
+                            @Html.EditorFor(m => m.CharityInfoModels.Month, new { htmlAttributes = new { @name = "Month", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.CharityInfoModels.Month), @readonly = "readonly" } })
+                            @Html.LabelFor(m => m.CharityInfoModels.Month, htmlAttributes: new { @for = "reqStartDate", @class = "fw-bold label" })
+                            @Html.ValidationMessageFor(m => m.CharityInfoModels.Month, "", new { @class = "validationText" })
+                        </div>
+
+                        <div class="col-6 form-floating">
+                            @Html.EditorFor(m => m.CharityInfoModels.Website, new { htmlAttributes = new { @name = "DateSubmitted", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.CharityInfoModels.Website), @id = "reqDate", @maxlength = "1000", @readonly = "readonly" } })
+                            @Html.LabelFor(m => m.CharityInfoModels.Website, htmlAttributes: new { @for = "reqDate", @class = "fw-bold label" })
+                        </div>
+                    </div>
+
+                    <div id="forms" class="row row-cols-3 mb-5 formRow">
+                        <div class="col-12 form-floating">
+                            @Html.EditorFor(m => m.CharityInfoModels.CharityDescription, new { htmlAttributes = new { @name = "CharityDescription", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.CharityInfoModels.CharityDescription), @id = "reqCharityDescription", @maxlength = "2000", @readonly = "readonly" } })
+                            @Html.LabelFor(m => m.CharityInfoModels.CharityDescription, htmlAttributes: new { @for = "reqCharityDescription", @class = "fw-bold label" })
+                            @Html.ValidationMessageFor(m => m.CharityInfoModels.CharityDescription, "", new { @class = "validationText" })
+                        </div>
+                    </div>
+
+                    <div class="formSection">
+                        <h5>Section 2 - Requestor Information</h5>
+                    </div>
+
+                    <div class="row mb-2 formRow">
+                        <div class="col form-floating">
+                            @Html.EditorFor(m => m.CharitableModels.Name, new { htmlAttributes = new { @name = "Name", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.CharitableModels.Name), @id = "reqName", @readonly = "readonly" } })
+                            @Html.LabelFor(m => m.CharitableModels.Name, htmlAttributes: new { @for = "reqName", @class = "fw-bold label" })
+                        </div>
+
+                        <div class="col form-floating">
+                            @Html.EditorFor(m => m.CharitableModels.DateSubmitted, new { htmlAttributes = new { @name = "DateSubmitted", @class = "form-control fw-bold", @placeholder = Html.DisplayNameFor(m => m.CharitableModels.DateSubmitted), @Value = Model.CharitableModels.DateSubmitted.ToString("MM/dd/yyyy"), @id = "reqDate", @readonly = "readonly" } })
+                            @Html.LabelFor(m => m.CharitableModels.DateSubmitted, htmlAttributes: new { @for = "reqDate", @class = "fw-bold label" })
+                        </div>
+
+                        <div class="col form-floating" hidden>
+                            @Html.EditorFor(m => m.CharitableModels.ID, new { htmlAttributes = new { @name = "Name", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.CharitableModels.ID), @id = "reqName", @readonly = "readonly" } })
+                            @Html.LabelFor(m => m.CharitableModels.ID, htmlAttributes: new { @for = "reqName", @class = "fw-bold label" })
+                        </div>
+                    </div>
+
+                    @* If user is a super user, show the "Mark as Reviewed" button *@
+                    if (ViewBag.Access == true && Model.CharitableModels.Reviewed == false)
+                    {
+
+                        <div class="row">
+                            <div class="col-2">
+                                <input id="submitButton" class="w-100" type="submit" value="Mark as Reviewed" action="@Url.Action("Index", "SFN61579")" />
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+    <div class="row formRow">
+        <div class="col-3">
+            <input id="submitButton" class="w-100" type="button" value="Print" onclick="window.print()" />
+        </div>
+    </div>
+</div>
+
+<table id="printTable">
+    <thead>
+        <tr class="printHeading">
+            <th colspan="3">SECTION 1 &#8212; <span class="sectionName">Charity information</span></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr class="printRow">
+            <td class="printCell" colspan="3">
+                @Html.LabelFor(m => m.CharityInfoModels.Organization) <br />
+                <span class="userInput">@Html.DisplayFor(m => m.CharityInfoModels.Organization)</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="printCell" colspan="3">
+                @Html.LabelFor(m => m.CharityInfoModels.AddressLineOne) <br />
+                <span class="userInput">@Html.DisplayFor(m => m.CharityInfoModels.AddressLineOne)</span>
+            </td>
+        </tr>
+        <tr class="printRow">
+            <td class="printCell" colspan="3">
+                @Html.LabelFor(m => m.CharityInfoModels.AddressLineTwo) <br />
+                <span class="userInput">@Html.DisplayFor(m => m.CharityInfoModels.AddressLineTwo)</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="printCell">
+                @Html.LabelFor(m => m.CharityInfoModels.City) <br />
+                <span class="userInput">@Html.DisplayFor(m => m.CharityInfoModels.City)</span>
+            </td>
+            <td class="printCell">
+                @Html.LabelFor(m => m.CharityInfoModels.State) <br />
+                <span class="userInput">@Html.DisplayFor(m => m.CharityInfoModels.State)</span>
+            </td>
+            <td class="printCell">
+                @Html.LabelFor(m => m.CharityInfoModels.ZipCode) <br />
+                <span class="userInput">@Html.DisplayFor(m => m.CharityInfoModels.ZipCode)</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="printCell">
+                @Html.LabelFor(m => m.CharityInfoModels.Month) <br />
+                <span class="userInput">@Html.DisplayFor(m => m.CharityInfoModels.Month)</span>
+            </td>
+            <td class="printCell" colspan="2">
+                @Html.LabelFor(m => m.CharityInfoModels.Website) <br />
+                <span class="userInput">@Html.DisplayFor(m => m.CharityInfoModels.Website)</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="printCell" colspan="3">
+                @Html.LabelFor(m => m.CharityInfoModels.CharityDescription) <br />
+                <span class="userInput">@Html.DisplayFor(m => m.CharityInfoModels.CharityDescription)</span>
+            </td>
+        </tr>
+        <tr class="printHeading">
+            <th colspan="3">SECTION 2 &#8212; <span class="sectionName">Requestor Information</span></th>
+        </tr>
+        <tr>
+            <td class="printCell" colspan="2">
+                @Html.LabelFor(m => m.CharitableModels.Name) <br />
+                <span class="userInput">@Html.DisplayFor(m => m.CharitableModels.Name)</span>
+            </td>
+            <td class="printCell">
+                @Html.LabelFor(m => m.CharitableModels.DateSubmitted) <br />
+                <span class="userInput">@Model.CharitableModels.DateSubmitted.ToString("MM/dd/yyyy")</span>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+       
+
+        function onSubmitButtonClicked() {
+            window.location.href = "SFN61579Create";
+            alert("Form has successfully been submitted.");
+        }
+
+        function onCancelButtonClicked() {
+            var cancel = confirm("Are you sure you want cancel? Changes made to this page will be lost. Click OK to proceed.");
+            if (cancel) {
+                window.location.href = "SFN61579";
+            }
+        }
+
+
+    </script>
+}
+
+
+

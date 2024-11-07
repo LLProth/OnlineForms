@@ -1,0 +1,112 @@
+﻿@model OnlineForms.ViewModels.SFN61065DisplayViewModel
+
+@{
+    ViewBag.Title = "Stuff";
+}
+
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+</head>
+<div class="row mb-3">
+    @Html.Partial("~/Views/Shared/_FormHeader.cshtml", (Dictionary<string, string>)ViewBag.FormInfo)
+</div>
+<div class="container-fluid">
+    <div class="container-fluid">
+        <div class="row flex-nowrap">
+            @section sideBarNav {
+                @Html.Partial("~/Views/Forms/SFN61065/Sidebar.cshtml")
+            }
+
+            <div class="col-10">
+                <div class="col py-3">
+                    <div class="text-center mb-2">
+                        <div class="col bg-dark text-white fw-bold">
+                            Submitted Forms
+                        </div>
+                    </div>
+                </div>
+
+                <table id="submittedForms" class="table table-striped text-center">
+                    <thead>
+                        <tr>
+                            <th class="col-4" style="cursor: pointer" onclick="sortTable(0)">Date Submitted <i class="bi bi-sort-alpha-down"></i></th>
+                            <th class="col-4" style="cursor: pointer" onclick="sortTable(1)">Name <i class="bi bi-sort-alpha-down"></i></th>
+                            <th class="col-4" style="cursor: pointer" onclick="sortTable(2)">Email <i class="bi bi-sort-alpha-down"></i></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.BusinessCardModel.Count; i++)
+                        {
+                            // If date submitted is less than six years ago, add a row for that form
+                            int days = (DateTime.Today - @Model.BusinessCardModel[@i].DateSubmitted).Days;
+                            if (days < 2191.5)
+                            {
+                                <tr>
+                                    <td>@Model.BusinessCardModel[@i].DateSubmitted.ToString("MM/dd/yyyy")</td>
+                                    <td>@Model.BusinessCardModel[@i].Name</td>
+                                    <td>@Model.BusinessCardInfo[@i].Email</td>
+                                    <td>@Html.ActionLink("View", "View", "SFN61065", new { id = Model.BusinessCardModel[@i].ID }, new { @class = "btn btn-primary" })</td>
+
+                                </tr>
+                            }
+
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+
+                function sortTable(n) {
+                    var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+                    table = document.getElementById("submittedForms");
+                    switching = true;
+
+                    // Sort direction ascending
+                    dir = "asc";
+
+                    while (switching) {
+                        switching = false;
+                        rows = table.rows;
+
+                        for (i = 1; i < (rows.length - 1); i++) {
+                            shouldSwitch = false;
+                            x = rows[i].getElementsByTagName("TD")[n];
+                            y = rows[i + 1].getElementsByTagName("TD")[n];
+
+                            if (dir == "asc") {
+                                if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                                    shouldSwitch = true;
+                                    break;
+                                }
+                            } else if (dir == "desc") {
+                                if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                                    shouldSwitch = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if (shouldSwitch) {
+                            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                            switching = true;
+
+                            switchcount++;
+                        } else {
+                            if (switchcount == 0 && dir == "asc") {
+                                dir = "desc";
+                                switching = true;
+                            }
+                        }
+                    }
+
+                }
+    </script>
+}

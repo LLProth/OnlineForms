@@ -1,0 +1,271 @@
+﻿@model OnlineForms.ViewModels.ESCRFViewModel
+
+
+
+@{
+    ViewBag.FormInfo = new Dictionary<string, string>();
+    ViewBag.FormInfo.Add("FormName", "Employee Status Change Request Form");
+    ViewBag.FormInfo.Add("Division", "Human Resource Division");
+    ViewBag.FormInfo.Add("Info", "Technology Requirments");
+
+}
+
+<div>
+    <div class="row">
+        @section topHeader {
+            @Html.Partial("~/Views/Shared/_ESCRFHeader.cshtml", (Dictionary<string, string>)ViewBag.FormInfo)
+        }
+    </div>
+
+    @section sideBarNav {
+        @Html.Partial("~/Views/Forms/SFN54497/Sidebar.cshtml")
+    }
+
+    @using (Html.BeginForm("UpdateTechnologyRequirements", "ESCRF", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div>
+            <h5>Technology Requirements</h5>
+        </div>
+
+        <div class="row row-cols-2 mb-2 formRow">
+            @if (Model.ChangeListInfo.ChangeType.ToLower() == "change in wsi")
+            {
+                <div class="col form-floating">
+
+
+                    <div class="form-control" radio-button-control>
+
+                        <label class="pe-4">@Html.RadioButtonFor(m => m.TechRequirements.EmployeeMoving, "true", new { @class = "moving", @onchange = "handleChange(this)" }) Yes</label>
+                        <label class="pe-4">@Html.RadioButtonFor(m => m.TechRequirements.EmployeeMoving, "false", new { @class = "moving", @onchange = "handleChange(this)" }) No</label>
+                    </div>
+                    @Html.LabelFor(m => m.TechRequirements.EmployeeMoving, htmlAttributes: new { @for = "moving", @class = "fw-bold", @id = "moving" })
+                    @Html.ValidationMessageFor(m => m.TechRequirements.EmployeeMoving, "", new { @class = "validationText" })
+                    <div id="newLocation" class="col form-floating" hidden>
+                        @Html.EditorFor(m => m.TechRequirements.NewLocation, new { htmlAttributes = new { @name = "EmailGroups", @class = "form-control fw-bold", @id = "reqName", @maxlength = "200" } })
+                        @Html.LabelFor(m => m.TechRequirements.NewLocation, htmlAttributes: new { @for = "reqName", @class = "fw-bold" })
+                    </div>
+                </div>
+            }
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.TechRequirements.EmailGroups, new { htmlAttributes = new { @name = "EmailGroups", @class = "form-control fw-bold", @id = "reqName", @maxlength = "200", @required = "required" } })
+                @Html.LabelFor(m => m.TechRequirements.EmailGroups, htmlAttributes: new { @for = "reqName", @class = "fw-bold" })
+                @Html.ValidationMessageFor(m => m.TechRequirements.EmailGroups, "", new { @class = "validationText" })
+            </div>
+            <div hidden>
+                @Html.EditorFor(m => m.TechRequirements.ID, new { htmlAttributes = new { @name = "EmailGroups", @class = "form-control fw-bold", @id = "reqName", @Value = ViewBag.ID } })
+                @Html.EditorFor(m => m.TaskListItem.TaskListID, new { htmlAttributes = new { @name = "EmailGroups", @class = "form-control fw-bold", @id = "reqName" } })
+                @Html.EditorFor(m => m.TaskListItem.ID, new { htmlAttributes = new { @name = "EmailGroups", @class = "form-control fw-bold", @id = "reqName" } })
+                @Html.EditorFor(m => m.ChangeListInfo.EmployeeName, new { htmlAttributes = new { @name = "EmailGroups", @class = "form-control fw-bold", @id = "reqName" } })
+
+            </div>
+
+        </div>
+        <div class="row row-cols-2 mb-2 formRow">
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.TechRequirements.FieldSecurity, new { htmlAttributes = new { @name = "FieldSecurity", @class = "form-control fw-bold", @id = "reqName", @maxlength = "200", @required = "required" } })
+                @Html.LabelFor(m => m.TechRequirements.FieldSecurity, htmlAttributes: new { @for = "reqName", @class = "fw-bold" })
+                @Html.ValidationMessageFor(m => m.TechRequirements.FieldSecurity, "", new { @class = "validationText" })
+            </div>
+        </div>
+
+            <div class="row row-cols-3 mb-2 formRow">
+                <div class="form-control fw-bold">
+                    Select all of the applications to which employee needs access:
+
+                    <div class="col form-floating">
+                        <div>
+                            @Html.CheckBoxFor(m => m.TechRequirements.NoChange)
+                            @Html.LabelFor(m => m.TechRequirements.NoChange, htmlAttributes: new { @for = "reqName", @class = "fw-bold check" })
+                        </div>
+                        <div>
+                            @Html.CheckBoxFor(m => m.TechRequirements.CMS)
+                            @Html.LabelFor(m => m.TechRequirements.CMS, htmlAttributes: new { @for = "reqName", @class = "fw-bold" })
+                        </div><div>
+                            @Html.CheckBoxFor(m => m.TechRequirements.InfoPath)
+                            @Html.LabelFor(m => m.TechRequirements.InfoPath, htmlAttributes: new { @for = "reqName", @class = "fw-bold" })
+                        </div><div>
+                            @Html.CheckBoxFor(m => m.TechRequirements.MicrosoftReports)
+                            @Html.LabelFor(m => m.TechRequirements.MicrosoftReports, htmlAttributes: new { @for = "reqName", @class = "fw-bold" })
+                        </div><div>
+                            @Html.CheckBoxFor(m => m.TechRequirements.RecManager)
+                            @Html.LabelFor(m => m.TechRequirements.RecManager, htmlAttributes: new { @for = "reqName", @class = "fw-bold" })
+                        </div><div>
+                            @Html.CheckBoxFor(m => m.TechRequirements.GreatPlains)
+                            @Html.LabelFor(m => m.TechRequirements.GreatPlains, htmlAttributes: new { @for = "reqName", @class = "fw-bold" })
+                        </div><div>
+                            @Html.CheckBoxFor(m => m.TechRequirements.AccountingUtility)
+                            @Html.LabelFor(m => m.TechRequirements.AccountingUtility, htmlAttributes: new { @for = "reqName", @class = "fw-bold" })
+                        </div><div>
+                            @Html.CheckBoxFor(m => m.TechRequirements.ITWorks)
+                            @Html.LabelFor(m => m.TechRequirements.ITWorks, htmlAttributes: new { @for = "reqName", @class = "fw-bold" })
+                        </div><div>
+                            @Html.CheckBoxFor(m => m.TechRequirements.FileToFilenet)
+                            @Html.LabelFor(m => m.TechRequirements.FileToFilenet, htmlAttributes: new { @for = "reqName", @class = "fw-bold" })
+                        </div><div>
+                            @Html.CheckBoxFor(m => m.TechRequirements.Indexing)
+                            @Html.LabelFor(m => m.TechRequirements.Indexing, htmlAttributes: new { @for = "reqName", @class = "fw-bold" })
+                        </div><div>
+                            @Html.CheckBoxFor(m => m.TechRequirements.Verifier)
+                            @Html.LabelFor(m => m.TechRequirements.Verifier, htmlAttributes: new { @for = "reqName", @class = "fw-bold" })
+                        </div><div>
+                            @Html.CheckBoxFor(m => m.TechRequirements.SecOfState)
+                            @Html.LabelFor(m => m.TechRequirements.SecOfState, htmlAttributes: new { @for = "reqName", @class = "fw-bold" })
+                        </div><div>
+                            @Html.CheckBoxFor(m => m.TechRequirements.DOT)
+                            @Html.LabelFor(m => m.TechRequirements.DOT, htmlAttributes: new { @for = "reqName", @class = "fw-bold" })
+                        </div><div>
+                            @Html.CheckBoxFor(m => m.TechRequirements.JobService)
+                            @Html.LabelFor(m => m.TechRequirements.JobService, htmlAttributes: new { @for = "reqName", @class = "fw-bold" })
+                        </div><div>
+                            @Html.CheckBoxFor(m => m.TechRequirements.CAPS)
+                            @Html.LabelFor(m => m.TechRequirements.CAPS, htmlAttributes: new { @for = "reqName", @class = "fw-bold" })
+                        </div><div>
+                            @Html.CheckBoxFor(m => m.TechRequirements.Legal)
+                            @Html.LabelFor(m => m.TechRequirements.Legal, htmlAttributes: new { @for = "reqName", @class = "fw-bold" })
+                        </div><div>
+                            @Html.CheckBoxFor(m => m.TechRequirements.MyWsi)
+                            @Html.LabelFor(m => m.TechRequirements.MyWsi, htmlAttributes: new { @for = "reqName", @class = "fw-bold" })
+                        </div><div class="col form-floating">
+                            @Html.EditorFor(m => m.TechRequirements.Other, new { htmlAttributes = new { @name = "Other", @class = "form-control fw-bold", @id = "reqName" } })
+                            @Html.LabelFor(m => m.TechRequirements.Other, htmlAttributes: new { @for = "reqName", @class = "fw-bold" })
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="row row-cols-2 mb-2 formRow">
+                @if (Model.ChangeListInfo.ChangeType.ToLower() == "change in wsi")
+                {
+                    <div class="col form-floating">
+                        @Html.EditorFor(m => m.TechRequirements.WorkQueue, new { htmlAttributes = new { @name = "EmailGroups", @class = "form-control fw-bold Validation", @id = "reqName", @maxlength = "200", @required = "required", @list = "names" } })
+                        @Html.LabelFor(m => m.TechRequirements.WorkQueue, htmlAttributes: new { @for = "reqName", @id = "techLabel", @class = "fw-bold techLabel" })
+                        <p>If this is a claims adjuster please complete the <a href="~/Content/documents/Caseload Request - sfn 60709.dotx">caseload move form</a></p>
+                        @Html.ValidationMessageFor(m => m.TechRequirements.WorkQueue, "", new { @class = "validationText" })
+                    </div>
+                    <datalist id="names">
+                        <option></option>
+                    </datalist>
+
+
+                <div class="col form-floating">
+
+                    <div class="form-control" radio-button-control>
+
+                        <label class="pe-4">@Html.RadioButtonFor(m => m.TechRequirements.CurrentPhone, "true", new { @class = "moving" }) Yes</label>
+                        <label class="pe-4">@Html.RadioButtonFor(m => m.TechRequirements.CurrentPhone, "false", new { @class = "moving" }) No</label>
+                    </div>
+                    @Html.LabelFor(m => m.TechRequirements.CurrentPhone, htmlAttributes: new { @for = "moving", @class = "fw-bold", @id = "moving" })
+                    @Html.ValidationMessageFor(m => m.TechRequirements.CurrentPhone, "", new { @class = "validationText" })
+                </div>
+                }
+            </div>
+
+            <div class="row row-cols-2 mb-2 formRow">
+                <div class="col form-floating">
+                    <div class="form-control" radio-button-control>
+
+                        <label class="pe-4">@Html.RadioButtonFor(m => m.TechRequirements.CallRecording, "true", new { @class = "moving" }) Yes</label>
+                        <label class="pe-4">@Html.RadioButtonFor(m => m.TechRequirements.CallRecording, "false", new { @class = "moving" }) No</label>
+                    </div>
+                    @Html.LabelFor(m => m.TechRequirements.CallRecording, htmlAttributes: new { @for = "moving", @class = "fw-bold techLabel", @id = "moving" })
+                    @Html.ValidationMessageFor(m => m.TechRequirements.CallRecording, "", new { @class = "validationText" })
+                </div>
+
+                <div class="col form-floating">
+
+                    <div class="form-control" radio-button-control>
+
+                        <label class="pe-4">@Html.RadioButtonFor(m => m.TechRequirements.ElectronicSignature, "true", new { @class = "moving", @onchange = "signatureChange(this)" }) Yes</label>
+                        <label class="pe-4">@Html.RadioButtonFor(m => m.TechRequirements.ElectronicSignature, "false", new { @class = "moving", @onchange = "signatureChange(this)" }) No</label>
+                    </div>
+                    @Html.LabelFor(m => m.TechRequirements.ElectronicSignature, htmlAttributes: new { @for = "moving", @class = "fw-bold", @id = "moving" })
+                    @Html.ValidationMessageFor(m => m.TechRequirements.ElectronicSignature, "", new { @class = "validationText" })
+                    <div id="newElecSig" class="col form-floating" hidden>
+                        <datalist id="signatureTypes">
+                            <option>John D</option>
+                            <option>John Doe</option>
+                            <option>John Doe MD (with credentials)</option>
+                        </datalist>
+                        @Html.EditorFor(m => m.TechRequirements.NewSignature, new { htmlAttributes = new { @list = "signatureTypes", @name = "EmailGroups", @class = "form-control fw-bold", @id = "reqName", @maxlength = "200" } })
+                        @Html.LabelFor(m => m.TechRequirements.NewSignature, htmlAttributes: new { @for = "reqName", @class = "fw-bold" })
+                    </div>
+                </div>
+
+            </div>
+            @*<div class="row row-cols-1 mb-2 formRow">
+                <div class="col form-floating">
+                    @Html.EditorFor(m => m.TechRequirements.Comments, new { htmlAttributes = new { @name = "EmailGroups", @class = "form-control fw-bold", @id = "reqName", @maxlength = "100" } })
+                    @Html.LabelFor(m => m.TechRequirements.Comments, htmlAttributes: new { @for = "reqName", @class = "fw-bold" })
+                    @Html.ValidationMessageFor(m => m.TechRequirements.Comments, "", new { @class = "validationText" })
+                </div>
+            </div>*@
+
+            <div class="row formRow">
+                <div class="col-2">
+                    <input id="submitButton" class="w-100" type="button" value="Submit" onclick="onSubmitButtonClicked()" />
+                </div>
+
+            </div>
+            }
+        </div>
+
+        @section Scripts {
+            @Scripts.Render("~/bundles/jqueryval")
+
+            <script type="text/javascript">
+                var names = [];
+                $('.Validation').on("keypress", function () {
+                    $.ajax({
+                        //url: "/api/Validation/?query=" + $('.Validation').val().trim(),
+                        url: '@ViewBag.Validation' + $('.Validation').val().trim(),
+                        method: 'GET',
+                        success: function (data) {
+                            data.forEach(function (name) {
+                                if (!names.includes(name)) {
+                                    names.push(name);
+                                    var option = document.createElement('option')
+                                    option.value = name
+                                    document.getElementById('names').appendChild(option)
+                                }
+                            })
+                        }
+                    })
+                })
+                function onSubmitButtonClicked() {
+
+
+
+                    document.getElementById("submitButton").type = "submit";
+                }
+
+                function handleChange(src) {
+                    if (src.value == "true") {
+                        document.getElementById("newLocation").hidden = false;
+                    } else if (src.value == "false") {
+                        document.getElementById("newLocation").hidden = true;
+                    }
+                }
+
+                function signatureChange(src) {
+                    if (src.value == "true") {
+                        document.getElementById("newElecSig").hidden = false;
+                    } else if (src.value == "false") {
+                        document.getElementById("newElecSig").hidden = true;
+                    }
+                }
+
+                function onCancelButtonClicked() {
+                    var cancel = confirm("All data will be lost if the form is closed. Are you sure that you want to close? Click OK to proceed.");
+                    if (cancel) {
+                        window.location.href = "Index";
+                    }
+                }
+            </script>
+        }

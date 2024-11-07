@@ -1,0 +1,101 @@
+﻿<div class="mt-5">
+    <div class="mb-5">
+        <ul id="nav">
+            <li class="navItem">@Html.ActionLink("Home", "Index", "ESCRF", null, new { @class = "  btn button navLink w-100 active", @id = "button" })</li>
+        </ul>
+    </div>
+
+    @if (Model.ESCRFUI.MinimalUI == false)
+    {
+        if (ViewBag.isAdmin)
+        {
+            <div class="mb-5">
+                <ul id="nav">
+                    @if (Model.ESCRFUI.AllFormsToggle)
+                    {
+
+                        <li class="navItem"> @Html.ActionLink("All Forms", "AllFormsToggled", "ESCRF", null, new { @class = "btn button active w-100", @id = "button" })</li>
+                    }
+                    else
+                    {
+                        <li class="navItem"> @Html.ActionLink("All Forms", "AllFormsToggled", "ESCRF", null, new { @class = "btn button w-100" })</li>
+                    }
+                    @if (Model.ESCRFUI.NewHireToggle)
+                    {
+
+                        <li class="navItem"> @Html.ActionLink("New Hire", "NewHireToggled", "ESCRF", null, new { @class = "btn button active w-100", @id = "button" })</li>
+                    }
+                    else
+                    {
+                        <li class="navItem"> @Html.ActionLink("New Hire", "NewHireToggled", "ESCRF", null, new { @class = "btn button w-100" })</li>
+                    }
+                    @if (Model.ESCRFUI.TerminationToggle)
+                    {
+                        <li class="navItem">@Html.ActionLink("Termination", "TerminationToggled", "ESCRF", null, new { @class = "btn button active w-100", @id = "button" })</li>
+                    }
+                    else
+                    {
+                        <li class="navItem">@Html.ActionLink("Termination", "TerminationToggled", "ESCRF", null, new { @class = "btn button w-100", })</li>
+                    }
+                    @if (Model.ESCRFUI.ChangeToggle)
+                    {
+                        <li class="navItem"> @Html.ActionLink("Change Within WSI", "ChangeToggled", "ESCRF", null, new { @class = "btn button active w-100", @id = "button" })</li>
+                    }
+                    else
+                    {
+                        <li class="navItem"> @Html.ActionLink("Change Within WSI", "ChangeToggled", "ESCRF", null, new { @class = "btn button w-100" })</li>
+                    }
+                    @if (Model.ESCRFUI.NameToggle)
+                    {
+                        <li class="navItem">@Html.ActionLink("Name Change", "NameToggled", "ESCRF", null, new { @class = "btn button active pb-3 w-100", @id = "button" })</li>
+                    }
+                    else
+                    {
+                        <li class="navItem">@Html.ActionLink("Name Change", "NameToggled", "ESCRF", null, new { @class = "btn button pb-3 w-100" })</li>
+                    }
+
+                </ul>
+            </div>
+            @*<div class="">
+                <ul id="nav">
+                    @if (Model.ESCRFUI.AllStatusToggle)
+                    {
+                        <li class="navItem">@Html.ActionLink("All Statuses", "AllStatusToggled", "ESCRF", null, new { @class = "btn button active w-100", @id = "button" })</li>
+                    }
+                    else
+                    {
+                        <li class="navItem">@Html.ActionLink("All Statuses", "AllStatusToggled", "ESCRF", null, new { @class = "btn button w-100" })</li>
+                    }
+
+                    @if (Model.ESCRFUI.NotDeployedToggle)
+                    {
+                        <li class="navItem">@Html.ActionLink("Not Deployed", "NotDeployedToggled", "ESCRF", null, new { @class = "btn button active w-100", @id = "button" })</li>
+                    }
+                    else
+                    {
+                        <li class="navItem">@Html.ActionLink("Not Deployed", "NotDeployedToggled", "ESCRF", null, new { @class = "btn button w-100", })</li>
+                    }
+
+                    @if (Model.ESCRFUI.InProgressToggle)
+                    {
+                        <li class="navItem">@Html.ActionLink("In Progress", "InProgressToggled", "ESCRF", null, new { @class = "btn button active w-100", @id = "button" })</li>
+                    }
+                    else
+                    {
+                        <li class="navItem">@Html.ActionLink("In Progress", "InProgressToggled", "ESCRF", null, new { @class = "btn button w-100" })</li>
+                    }
+
+                    @if (Model.ESCRFUI.CompletedToggle)
+                    {
+                        <li class="navItem">@Html.ActionLink("Completed Forms", "CompletedToggled", "ESCRF", null, new { @class = "btn button active w-100", @id = "button" })</li>
+                    }
+                    else
+                    {
+                        <li class="navItem">@Html.ActionLink("Completed Forms", "CompletedToggled", "ESCRF", null, new { @class = "btn button w-100" })</li>
+                    }
+                </ul>
+            </div>*@
+        }
+    }
+</div>
+

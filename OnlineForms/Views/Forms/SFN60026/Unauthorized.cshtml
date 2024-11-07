@@ -1,0 +1,42 @@
+﻿@model OnlineForms.ViewModels.SFN60026DisplayViewModel
+
+@{
+    ViewBag.Title = "Unauthorized";
+}
+<div class="row mb-3">
+    @section topHeader {
+        @Html.Partial("~/Views/Shared/_FormHeader.cshtml", (Dictionary<string, string>)ViewBag.FormInfo)
+    }
+    @*@Html.Partial("~/Views/Shared/_TestStuff.cshtml", (Dictionary<string, string>)ViewBag.CharitableInfo)*@
+</div>
+
+<div class="container-fluid">
+    <div class="container-fluid">
+        <div class="row flex-nowrap">
+            @section sideBarNav {
+                @Html.Partial("~/Views/Forms/SFN60026/Sidebar.cshtml")
+            }
+
+
+            <div>
+                <div class="row row-cols-1 text-start mb-2">
+                    <div>
+                        <h5 class="display-5">
+                            You are not authorized to view this form.
+                        </h5>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+        var moreButton = false;
+
+    </script>
+}

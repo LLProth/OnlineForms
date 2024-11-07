@@ -1,0 +1,108 @@
+﻿@model OnlineForms.ViewModels.ESCRFViewModel
+@{
+    ViewBag.FormInfo = new Dictionary<string, string>();
+    ViewBag.FormInfo.Add("FormName", "Employee Status Change Request Form");
+    ViewBag.FormInfo.Add("Division", "Human Resource Division");
+    ViewBag.FormInfo.Add("Info", "New Hire Edit");
+    string[] EmploymentTypes = { "FTE", "WSI TEMP", "Temp Staffing Agency", "Contractor" };
+    ViewBag.Employment = EmploymentTypes;
+    string[] Flsa = { "Exempt", "Non-Exempt" };
+    ViewBag.Flsa = Flsa;
+}
+
+@section topHeader {
+    @Html.Partial("~/Views/Shared/_ESCRFHeader.cshtml", (Dictionary<string, string>)ViewBag.FormInfo)
+}
+
+@section sideBarNav {
+    @Html.Partial("~/Views/Forms/ESCRF/_Sidebar.cshtml")
+}
+
+@using (Html.BeginForm("UpdateNewHire", "ESCRF", new { id = Model.NewHire.ID }))
+{
+
+    <div>
+        <div class="row mb-5 ">
+            <div class="form-group col-5 form-floating">
+                @Html.EditorFor(m => m.NewHire.FirstName, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = Html.DisplayNameFor(m => m.NewHire.FirstName)} })
+                @Html.LabelFor(m => m.NewHire.FirstName, htmlAttributes: new { @class = "fw-bold" })
+            </div>
+            <div class="form-group col-5 form-floating">
+                @Html.EditorFor(m => m.NewHire.LastName, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = Html.DisplayNameFor(m => m.NewHire.LastName)} })
+                @Html.LabelFor(m => m.NewHire.LastName, htmlAttributes: new { @class = "fw-bold" })
+            </div>
+            <div class="form-group col-2 form-floating">
+                @Html.EditorFor(m => m.NewHire.MiddleInitial, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = Html.DisplayNameFor(m => m.NewHire.MiddleInitial)} })
+                @Html.LabelFor(m => m.NewHire.MiddleInitial, htmlAttributes: new { @class = "fw-bold" })
+            </div>
+        </div>
+        <div class="row mb-5">
+            <div class="form-group col-4 form-floating">
+                @Html.EditorFor(m => m.NewHire.JobTitle, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = Html.DisplayNameFor(m => m.NewHire.JobTitle), @readonly = "readonly" } })
+                @Html.LabelFor(m => m.NewHire.JobTitle, htmlAttributes: new { @class = "fw-bold" })
+            </div>
+            <div class="form-group col-4 form-floating">
+                @Html.EditorFor(m => m.NewHire.EffectiveDate, new { htmlAttributes = new { @class = "form-control fw-bold", @Value = Model.NewHire.EffectiveDate.ToString("yyyy-MM-dd"), @type = "date" } })
+                @Html.LabelFor(m => m.NewHire.EffectiveDate, htmlAttributes: new { @class = "fw-bold" })
+            </div>
+            <div class="form-group col-4 form-floating">
+                @Html.EditorFor(m => m.NewHire.CurrentSupervisor, new { htmlAttributes = new { @class = "form-control fw-bold w-100", @placeholder = Html.DisplayNameFor(m => m.NewHire.CurrentSupervisor), @readonly = "readonly" } })
+                @Html.LabelFor(m => m.NewHire.CurrentSupervisor, htmlAttributes: new { @class = "fw-bold" })
+            </div>
+        </div>
+        <div class="row mb-5">
+            <div class="form-group col-4 form-floating">
+                @Html.DropDownListFor(m => m.NewHire.EmployeeType, new SelectList(ViewBag.Employment), new { @class = " fw-bold form-control" })
+                @Html.LabelFor(m => m.NewHire.EmployeeType, htmlAttributes: new { @class = "fw-bold" })
+                @Html.ValidationMessageFor(m => m.NewHire.EmployeeType)
+            </div>
+            <div class="form-group col-4 form-floating">
+                @Html.DropDownListFor(m => m.NewHire.FLSAStatus, new SelectList(ViewBag.Flsa), new { @class = "fw-bold form-control" })
+                @Html.LabelFor(m => m.NewHire.FLSAStatus, htmlAttributes: new { @class = "fw-bold" })
+                @Html.ValidationMessageFor(m => m.NewHire.FLSAStatus)
+            </div>
+            <div class="form-group col-4">
+                @Html.CheckBoxFor(m => m.NewHire.TransferringFromAgency, htmlAttributes: new { @disabled = "disabled" })
+                @Html.LabelFor(m => m.NewHire.TransferringFromAgency, htmlAttributes: new { @class = "fw-bold" })
+                @Html.ValidationMessageFor(m => m.NewHire.TransferringFromAgency)
+            </div>
+        </div>
+        <div class="row mb-5">
+            <div class="form-group col-12 form-floating">
+                @Html.EditorFor(m => m.NewHire.Comments, new { htmlAttributes = new { @class = "form-control fw-bold w-100", @placeholder = Html.DisplayNameFor(m => m.NewHire.CurrentSupervisor), @readonly = "readonly" } })
+                @Html.LabelFor(m => m.NewHire.Comments, htmlAttributes: new { @class = "fw-bold" })
+            </div>
+        </div>
+        <div class="row mb-5 formRow">
+            <div class="form-group col-3 form-floating">
+                @Html.EditorFor(m => m.NewHire.ModifiedBy, new { htmlAttributes = new { @class = "form-control fw-bold w-100", @placeholder = Html.DisplayNameFor(m => m.NewHire.ModifiedBy), @readonly = "readonly" } })
+                @Html.LabelFor(m => m.NewHire.ModifiedBy, htmlAttributes: new { @class = "fw-bold" })
+            </div>
+            <div class="form-group col-3 form-floating">
+                @Html.EditorFor(m => m.NewHire.ChangeType, new { htmlAttributes = new { @class = "form-control fw-bold w-100", @placeholder = Html.DisplayNameFor(m => m.NewHire.ChangeType), @readonly = "readonly" } })
+                @Html.LabelFor(m => m.NewHire.ChangeType, htmlAttributes: new { @class = "fw-bold" })
+            </div>
+            <div class="form-group col-3 form-floating">
+                @Html.EditorFor(m => m.NewHire.CreatedDate, new { htmlAttributes = new { @class = "form-control fw-bold", @Value = Model.NewHire.CreatedDate.ToShortDateString(), @readonly = "readonly" } })
+                @Html.LabelFor(m => m.NewHire.CreatedDate, htmlAttributes: new { @class = "fw-bold" })
+            </div>
+           
+        </div>
+    </div>
+    //kEEP THIS IN HERE
+    @Html.HiddenFor(m => m.NewHire.ID);
+<div class="d-flex flex-row">
+
+    <div class="col-2 py-5" style="margin-right: 2rem;">
+        <button id="submitButton" type="submit" class="btn w-100">
+            Save
+        </button>
+    </div>
+    <div class="col-2 py-5">
+        @Html.ActionLink("Cancel", "BackToView", "ESCRF", new { @id = "button", @class = "btn button w-100" })
+    </div>
+</div>
+    @Html.AntiForgeryToken()
+}
+
+

@@ -1,0 +1,102 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1>WSI Forms</h1>
+    <p class="lead">Welcome to the WSI Web Forms</p>
+</div>
+
+<div class="row">
+    <div class="col-md-4" >
+        <button id="homelink" class="btn btn-blue button w-100 fs-2" >
+            Executive
+            <svg class="chevronright" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+        </button>
+        <ul class="home-menu-dropdown">
+            <li>
+                <a href="~/SFN61579">SFN61579 - Request For Charitable Event</a>
+            </li>
+        </ul>
+    </div>
+    <div class="col-md-4">
+        <button id="homelink" class="btn btn-blue button w-100 fs-2">
+            Finance
+            <svg class="chevronright" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+        </button>
+        <ul class="home-menu-dropdown">
+            <li>
+                <a href="~/SFN18795">SFN18795- Requisition Form</a>
+            </li>
+            <li>
+                <a href="~/SFN52712">SFN52712- Authorization for Out of State Travel </a>
+            </li>
+            <li>
+                <a href="~/SFN61065">SFN61065- Business Card Request</a>
+            </li>
+        </ul>
+    </div>
+    <div class="col-md-4">
+        <button id="homelink" class="btn btn-blue button w-100 fs-2">
+            Human Resources
+            <svg class="chevronright" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+        </button>
+        <ul class="home-menu-dropdown">
+            <li>
+                <a href="~/SFN54497">SFN54497- Staff Request</a>
+            </li>
+            <li>
+                <a href="~/ESCRF">Employee Status Change Request Form</a>
+            </li>
+            <li>
+                <a href="~/SFN60026">Performance Bonus Nomination</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <button id="homelink" class="btn btn-blue button w-100 fs-2">
+            Facility Management
+            <svg class="chevronright" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+        </button>
+        <ul class="home-menu-dropdown">
+            <li>
+                <a href="~/MaintenanceRequest">Maintenance Request</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <partial name="_ValidationScriptsPartial" />
+
+    <script type="text/javascript">
+        $(".col-md-4").hover(function () {
+            
+            if ($(this).children("button").siblings("ul").hasClass("open")) {
+                $(this).children("button").css("height", "75%");
+                $(this).children("button").children("svg").css("transform", "rotate(0deg)");
+                $(this).children("button").siblings("ul").css("opacity", "0");
+                $(this).children("button").siblings("ul").css("height", "0%");
+                $(this).children("button").siblings("ul").removeClass("open");
+            } else {
+                $(this).children("button").css("height", "50%");
+                $(this).children("button").children("svg").css("transform", "rotate(90deg)");
+                $(this).children("button").siblings("ul").css("opacity", "100%");
+                $(this).children("button").siblings("ul").css("height", "60%");
+                $(this).children("button").siblings("ul").addClass("open");
+            }
+        })
+    </script>
+}

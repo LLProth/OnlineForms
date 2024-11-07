@@ -1,0 +1,626 @@
+﻿@model  OnlineForms.ViewModels.SFN52712ViewModel
+
+
+@{
+    ViewBag.Title = "Authorization for Out of State Travel";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    @section topHeader {
+        @Html.Partial("~/Views/Shared/_FormHeader.cshtml", (Dictionary<string, string>)ViewBag.FormInfo)
+    }
+    @section sideBarNav {
+        @Html.Partial("~/Views/Forms/SFN52712/Sidebar.cshtml")
+    }
+    @using (Html.BeginForm("Approval/", "SFN52712", new { id = ViewBag.ID }, FormMethod.Post, new { id = "ApprovalForm" }))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div id="wait">
+            <h4>Please wait...</h4>
+            <input id="closeButton" class="w-100" type="button" value="Close" onclick="onClosedButtonClicked()" />
+        </div>
+
+        <div class="row row-cols-2 mb-2">
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.TravelAuthoriztionModel.Name, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.TravelAuthoriztionModel.Name), @id = "travelName", @Value = Model.TravelAuthoriztionModel.Name, @readonly = "readonly" } })
+                @Html.LabelFor(m => m.TravelAuthoriztionModel.Name, htmlAttributes: new { @for = "travelName", @class = "fw-bold" })
+            </div>
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.TravelAuthoriztionModel.Title, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.TravelAuthoriztionModel.Title), @id = "travelTitle", @Value = Model.TravelAuthoriztionModel.Title, @readonly = "readonly" } })
+                @Html.LabelFor(m => m.TravelAuthoriztionModel.Title, htmlAttributes: new { @for = "travelTitle", @class = "fw-bold" })
+            </div>
+        </div>
+
+        <div class="row row-cols-2 mb-2">
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.TravelAuthoriztionModel.DepartmentBudget, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.TravelAuthoriztionModel.DepartmentBudget), @id = "departmentBudget", @Value = Model.TravelAuthoriztionModel.DepartmentBudget, @readonly = "readonly" } })
+                @Html.LabelFor(m => m.TravelAuthoriztionModel.DepartmentBudget, htmlAttributes: new { @for = "departmentBudget", @class = "fw-bold" })
+            </div>
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.TravelAuthoriztionModel.Email, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.TravelAuthoriztionModel.Email), @id = "travelEmail", @Value = Model.TravelAuthoriztionModel.Email, @readonly = "readonly" } })
+                @Html.LabelFor(m => m.TravelAuthoriztionModel.Email, htmlAttributes: new { @for = "travelEmail", @class = "fw-bold" })
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col-12 fw-bold">Destinations(s) (City and State)</div>
+            @for (int i = 0; i < Model.SFN52712Destinations.Count; i++)
+            {
+                var hide = "";
+                if (i > 0)
+                {
+                    hide = "display: block;";
+                }
+                else
+                {
+                    hide = "display: none;";
+                }
+                <div class="row mb-2" destination-item="@(i + 1)">
+                    <div class="col-7 form-floating">
+                        @Html.EditorFor(m => m.SFN52712Destination.City, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.SFN52712Destinations[@i].City), @id = "travelCity", @Value = Model.SFN52712Destinations[@i].City, @readonly = "readonly" } })
+                        @Html.LabelFor(m => m.SFN52712Destination.City, htmlAttributes: new { @for = "travelCity", @class = "fw-bold" })
+                    </div>
+                    <div class="col-4 form-floating">
+                        @Html.EditorFor(m => m.SFN52712Destination.State, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.SFN52712Destinations[@i].State), @id = "State", @Value = Model.SFN52712Destinations[@i].State, @readonly = "readonly" } })
+                        @Html.LabelFor(m => m.SFN52712Destination.State, htmlAttributes: new { @for = "travelState", @class = "fw-bold" })
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="row row-cols-6 mb-2">
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.TravelAuthoriztionModel.PreferredDepartureDate, new { htmlAttributes = new { @class = "form-control fw-bold", @id = "preferredDepartureDate", @Value = Model.TravelAuthoriztionModel.PreferredDepartureDate.ToString("yyyy-MM-dd"), @type = "date", @readonly = "readonly" } })
+                @Html.LabelFor(m => m.TravelAuthoriztionModel.PreferredDepartureDate, htmlAttributes: new { @for = "PreferredDepartureDate", @class = "fw-bold" })
+            </div>
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.TravelAuthoriztionModel.EventStartDate, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.TravelAuthoriztionModel.EventStartDate), @id = "EventStartDate", @Value = Model.TravelAuthoriztionModel.EventStartDate.ToString("yyyy-MM-dd"), @type = "date", @readonly = "readonly" } })
+                @Html.LabelFor(m => m.TravelAuthoriztionModel.EventStartDate, htmlAttributes: new { @for = "EventStartDate", @class = "fw-bold" })
+            </div>
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.TravelAuthoriztionModel.EventStartTime, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.TravelAuthoriztionModel.EventStartTime), @id = "EventStartTime", @type = "time", @readonly = "readonly" } })
+                @Html.LabelFor(m => m.TravelAuthoriztionModel.EventStartTime, htmlAttributes: new { @for = "EventStartTime", @class = "fw-bold" })
+            </div>
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.TravelAuthoriztionModel.EventEndDate, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.TravelAuthoriztionModel.EventEndDate), @id = "EventEndDate", @Value = Model.TravelAuthoriztionModel.EventEndDate.ToString("yyyy-MM-dd"), @type = "date", @readonly = "readonly" } })
+                @Html.LabelFor(m => m.TravelAuthoriztionModel.EventEndDate, htmlAttributes: new { @for = "EventEndDate", @class = "fw-bold" })
+            </div>
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.TravelAuthoriztionModel.EventEndTime, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.TravelAuthoriztionModel.EventEndTime), @id = "EventEndTime", @type = "time", @readonly = "readonly" } })
+                @Html.LabelFor(m => m.TravelAuthoriztionModel.EventEndTime, htmlAttributes: new { @for = "EventEndTime", @class = "fw-bold" })
+            </div>
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.TravelAuthoriztionModel.PreferredReturnDate, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.TravelAuthoriztionModel.PreferredReturnDate), @id = "PreferredReturnDate", @Value = Model.TravelAuthoriztionModel.PreferredReturnDate.ToString("yyyy-MM-dd"), @type = "date", @readonly = "readonly" } })
+                @Html.LabelFor(m => m.TravelAuthoriztionModel.PreferredReturnDate, htmlAttributes: new { @for = "PreferredReturnDate", @class = "fw-bold" })
+            </div>
+        </div>
+
+        <div class="row row-cols-2 mb-2">
+            <div class="col form-floating">
+                <div class="form-control" radio-button-control>
+                    <label class="pe-4">@Html.RadioButtonFor(m => m.TravelAuthoriztionModel.IncludeVacationDays, "true", new { @readonly = "readonly" }) Yes</label>
+                    <label>@Html.RadioButtonFor(m => m.TravelAuthoriztionModel.IncludeVacationDays, "false", new { @readonly = "readonly" }) No</label>
+                </div>
+                @Html.LabelFor(m => m.TravelAuthoriztionModel.IncludeVacationDays, htmlAttributes: new { @for = "", @class = "fw-bold req-form-long-label" })
+            </div>
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.TravelAuthoriztionModel.MethodOfTravel, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.TravelAuthoriztionModel.MethodOfTravel), @id = "travelMethod", @Value = Model.TravelAuthoriztionModel.MethodOfTravel, @onChange = "otherMethod()", @readonly = "readonly" } })
+                @Html.LabelFor(m => m.TravelAuthoriztionModel.MethodOfTravel, htmlAttributes: new { @for = "travelMethod", @class = "fw-bold" })
+            </div>
+        </div>
+
+        <div id="othersection" class="row row-cols-1 mb-2">
+            <div class="col form-floating">
+                @Html.TextArea("OtherTravel", new { @class = "form-control fw-bold", @style = "height: 250px", @id = "otherTravelMethod", @readonly = "readonly" })
+                @Html.Label("Other Explain", htmlAttributes: new { @for = "otherTravelMethod", @class = "fw-bold" })
+            </div>
+        </div>
+
+        string dob;
+        if (ViewBag.FlightExist == true)
+        {
+            dob = Model.FlightInfo.DateofBirth.ToString("yyyy-MM-dd");
+        }
+        else
+        {
+            dob = "";
+        }
+
+        <div id="flightsection" class="row row-cols-1 mb-2 p-4">
+            <div class="col form-control">
+                <div class="form-control mb-1" radio-button-control>
+                    @Html.LabelFor(m => m.FlightInfo.EmpBookFlight, htmlAttributes: new { @for = "", @class = "fw-bold" })
+                    <label class="pe-4">@Html.RadioButtonFor(m => m.FlightInfo.EmpBookFlight, "true") Yes</label>
+                    <label>@Html.RadioButtonFor(m => m.FlightInfo.EmpBookFlight, "false") No</label>
+                </div>
+                <div class="col form-floating mb-1">
+                    @Html.EditorFor(m => m.FlightInfo.FreqFlierNumber, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.FlightInfo.FreqFlierNumber), @id = "FreqFlierNumber", @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.FlightInfo.FreqFlierNumber, htmlAttributes: new { @for = "", @class = "fw-bold" })
+                </div>
+                <div class="col form-floating mb-1">
+                    @Html.EditorFor(m => m.FlightInfo.GovernemtIdName, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.FlightInfo.GovernemtIdName), @id = "GovernemtIdName", @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.FlightInfo.GovernemtIdName, htmlAttributes: new { @for = "", @class = "fw-bold" })
+                </div>
+                <div class="col form-floating mb-1">
+                    @Html.EditorFor(m => m.FlightInfo.DateofBirth, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.FlightInfo.DateofBirth), @id = "DateofBirth", @Value = dob, @type = "date", @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.FlightInfo.DateofBirth, htmlAttributes: new { @for = "", @class = "fw-bold" })
+                </div>
+                <div class="col form-floating mb-1">
+                    @Html.EditorFor(m => m.FlightInfo.TravelContactNumber, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.FlightInfo.TravelContactNumber), @id = "TravelContactNumber", @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.FlightInfo.TravelContactNumber, htmlAttributes: new { @for = "", @class = "fw-bold" })
+                </div>
+                <div class="col form-floating mb-1">
+                    @Html.EditorFor(m => m.FlightInfo.SeatPreference, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.FlightInfo.SeatPreference), @id = "SeatPreference", @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.FlightInfo.SeatPreference, htmlAttributes: new { @for = "", @class = "fw-bold" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row row-cols-1 mb-2">
+            <div class="col form-floating">
+                @Html.TextAreaFor(m => m.TravelAuthoriztionModel.PurposeOfTrip, new { @class = "form-control fw-bold", @style = "height: 250px", @placeholder = @Html.DisplayNameFor(m => m.TravelAuthoriztionModel.PurposeOfTrip), @id = "PurposeOfTrip", @maxlength = "1000", @readonly = "readonly" })
+                @Html.LabelFor(m => m.TravelAuthoriztionModel.PurposeOfTrip, htmlAttributes: new { @for = "PurposeOfTrip", @class = "fw-bold" })
+            </div>
+        </div>
+
+        <div class="row row-cols-1 mb-2">
+            <div class="col form-floating">
+                @Html.TextAreaFor(m => m.TravelAuthoriztionModel.NumberOfPersons, new { @class = "form-control fw-bold", @style = "height: 100px", @placeholder = @Html.DisplayNameFor(m => m.TravelAuthoriztionModel.NumberOfPersons), @id = "NumberOfPersons", @maxlength = "2000", @readonly = "readonly" })
+                @Html.LabelFor(m => m.TravelAuthoriztionModel.NumberOfPersons, htmlAttributes: new { @for = "NumberOfPersons", @class = "fw-bold" })
+            </div>
+        </div>
+
+        <div class="row row-cols-6 mb-1">
+            <div class="col-2 text-center fw-bold req-item-form-header">
+                Transportation
+            </div>
+            <div class="col-2 text-center fw-bold req-item-form-header">
+                Per Diem
+            </div>
+            <div class="col-2 text-center fw-bold req-item-form-header">
+                Lodging
+            </div>
+            <div class="col-2 text-center fw-bold req-item-form-header">
+                Registration
+            </div>
+            <div class="col-2 text-center fw-bold req-item-form-header">
+                Rental Car/Taxi
+            </div>
+            <div class="col-2 text-center fw-bold req-item-form-header">
+                Estimated Total Cost
+            </div>
+        </div>
+
+        <div class="row row-cols-6 mb-2">
+            <div class="col">
+                <span class="prefix fw-bold">$</span>
+                @Html.EditorFor(m => m.TravelAuthoriztionModel.Transportation, new { htmlAttributes = new { @class = "form-control fw-bold text-end", @currencymask = "true", @onkeyup = "calculateTotalCost(event); return false;", @placeholder = "0.00", @id = "Transportation", @readonly = "readonly" } })
+            </div>
+            <div class="col">
+                <span class="prefix fw-bold">$</span>
+                @Html.EditorFor(m => m.TravelAuthoriztionModel.PerDiem, new { htmlAttributes = new { @class = "form-control fw-bold text-end", @currencymask = "true", @onkeyup = "calculateTotalCost(event); return false;", @placeholder = "0.00", @id = "PerDiem", @readonly = "readonly" } })
+            </div>
+            <div class="col">
+                <span class="prefix fw-bold">$</span>
+                @Html.EditorFor(m => m.TravelAuthoriztionModel.Lodging, new { htmlAttributes = new { @class = "form-control fw-bold text-end", @currencymask = "true", @onkeyup = "calculateTotalCost(event); return false;", @placeholder = "0.00", @id = "Lodging", @readonly = "readonly" } })
+            </div>
+            <div class="col ">
+                <span class="prefix fw-bold">$</span>
+                @Html.EditorFor(m => m.TravelAuthoriztionModel.Registration, new { htmlAttributes = new { @class = "form-control fw-bold text-end", @currencymask = "true", @onkeyup = "calculateTotalCost(event); return false;", @placeholder = "0.00", @id = "Registration", @readonly = "readonly" } })
+            </div>
+            <div class="col">
+                <span class="prefix fw-bold">$</span>
+                @Html.EditorFor(m => m.TravelAuthoriztionModel.RentalCarTaxi, new { htmlAttributes = new { @class = "form-control fw-bold text-end", @currencymask = "true", @onkeyup = "calculateTotalCost(event); return false;", @placeholder = "0.00", @id = "RentalCarTaxi", @readonly = "readonly" } })
+            </div>
+            <div class="col">
+                <span class="prefix fw-bold">$</span>
+                @Html.EditorFor(m => m.TravelAuthoriztionModel.EstimatedTotalCost, new { htmlAttributes = new { @class = "form-control fw-bold text-end", @currencymask = "true", @placeholder = "0.00", @id = "EstimatedTotalCost", @readonly = "readonly" } })
+            </div>
+        </div>
+        if ((ViewBag.JobTitle == "Executive Assistant" || ViewBag.JobTitle == "HR Director" || ViewBag.JobTitle == "Procurement Officer") && Model.TravelAuthoriztionModel.FormCompleted == false)
+        {
+            <div class="row row-cols-1 mb-2">
+                <div class="col form-floating">
+                    @Html.TextAreaFor(m => m.TravelAuthoriztionModel.Comments, new { @class = "form-control fw-bold", @style = "height: 250px", @placeholder = @Html.DisplayNameFor(m => m.TravelAuthoriztionModel.Comments), @id = "Comments", @maxlength = "2000" })
+                    @Html.LabelFor(m => m.TravelAuthoriztionModel.Comments, htmlAttributes: new { @for = "Comments", @class = "fw-bold" })
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="row row-cols-1 mb-2">
+                <div class="col form-floating">
+                    @Html.TextAreaFor(m => m.TravelAuthoriztionModel.Comments, new { @class = "form-control fw-bold", @style = "height: 250px", @placeholder = @Html.DisplayNameFor(m => m.TravelAuthoriztionModel.Comments), @id = "Comments", @maxlength = "2000", @readonly = "readonly" })
+                    @Html.LabelFor(m => m.TravelAuthoriztionModel.Comments, htmlAttributes: new { @for = "Comments", @class = "fw-bold" })
+                </div>
+            </div>
+        }
+
+
+        string Username = ViewBag.Username;
+        <div class="row mb-1">
+            <div class="col-8 form-floating">
+                @Html.EditorFor(m => m.SFN52712Approvals.PersonTravelingSignature, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @placeholder = @Html.DisplayNameFor(m => m.SFN52712Approvals.PersonTravelingSignature), @id = "PersonTravelingSignature", @readonly = "readonly" } })
+                @Html.LabelFor(m => m.SFN52712Approvals.PersonTravelingSignature, htmlAttributes: new { @for = "itSignature", @class = "fw-bold req-form-long-label" })
+            </div>
+            <div class="col-4 form-floating">
+                @Html.EditorFor(m => m.SFN52712Approvals.PersonTravelingSignatureDate, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @placeholder = @Html.DisplayNameFor(m => m.SFN52712Approvals.PersonTravelingSignatureDate), @id = "PersonTravelingSignature", @type = "date", @Value = @Model.SFN52712Approvals.PersonTravelingSignatureDate.ToString("yyyy-MM-dd"), @readonly = "readonly" } })
+                @Html.LabelFor(m => m.SFN52712Approvals.PersonTravelingSignatureDate, htmlAttributes: new { @for = "itSignatureDate", @class = "fw-bold" })
+            </div>
+        </div>
+        <input class="visually-hidden" type="text" name="command" value="Submit" />
+        if (Model.TravelAuthoriztionModel.FormSubmitted == true)
+        {
+            if (!Model.SFN52712Approvals.PersonTravelingSignature.IsEmpty() && ViewBag.isSupervisor == true && Model.SFN52712Approvals.SupervisorSignature.IsEmpty())
+            {
+                <input class="visually-hidden" type="text" name="approver" value="supervisor" />
+                @Html.TextBoxFor(m => m.SFN52712Approvals.SupervisorSignature, Username, new { @class = "visually-hidden" })
+                <input class="visually-hidden" type="text" name="approver" value="supervisor" />
+                <div class="row mb-1">
+                    <div class="col-8 form-floating">
+                        <div class="form-control h-100" radio-button-control>
+                            <button class="btn btn-blue button w-25 col-3" onclick="approve = $(this).attr('value'); approveDeny(approve); " id="supervisorSubmit" type="button" value="@Username">Approve</button>
+                            <button class="btn btn-blue button w-25 col-3" onclick="deny = $(this).attr('value'); user = 'supervisor'; approveDeny(deny, user); " id="supervisorSubmit" type="button" value="Denied">Deny</button>
+                        </div>
+                        @Html.LabelFor(m => m.SFN52712Approvals.SupervisorSignature, htmlAttributes: new { @for = "itsignature", @class = "fw-bold req-form-long-label" })
+                    </div>
+                    <div class="col-4 form-floating">
+                        @Html.EditorFor(m => m.SFN52712Approvals.SupervisorSignatureDate, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @placeholder = @Html.DisplayNameFor(m => m.SFN52712Approvals.SupervisorSignatureDate), @id = "SupervisorSignatureDate", @type = "date", @Value = DateTime.Today.ToString("yyyy-MM-dd") } })
+                        @Html.LabelFor(m => m.SFN52712Approvals.SupervisorSignatureDate, htmlAttributes: new { @for = "SupervisorSignatureDate", @class = "fw-bold" })
+                    </div>
+                </div>
+            }
+            else if (!Model.SFN52712Approvals.PersonTravelingSignature.IsEmpty() && !Model.SFN52712Approvals.SupervisorSignature.IsEmpty())
+            {
+                <div class="row mb-1">
+                    <div class="col-8 form-floating">
+                        @Html.EditorFor(m => m.SFN52712Approvals.SupervisorSignature, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @placeholder = @Html.DisplayNameFor(m => m.SFN52712Approvals.SupervisorSignature), @id = "SupervisorSignature", @readonly = "readonly" } })
+                        @Html.LabelFor(m => m.SFN52712Approvals.SupervisorSignature, htmlAttributes: new { @for = "itSignature", @class = "fw-bold req-form-long-label" })
+                    </div>
+                    <div class="col-4 form-floating">
+                        @Html.EditorFor(m => m.SFN52712Approvals.SupervisorSignatureDate, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @placeholder = @Html.DisplayNameFor(m => m.SFN52712Approvals.SupervisorSignatureDate), @id = "SupervisorSignatureDate", @Value = Model.SFN52712Approvals.SupervisorSignatureDate.ToString("yyyy-MM-dd"), @type = "date", @readonly = "readonly" } })
+                        @Html.LabelFor(m => m.SFN52712Approvals.SupervisorSignatureDate, htmlAttributes: new { @for = "itSignatureDate", @class = "fw-bold" })
+                    </div>
+                </div>
+            }
+            if (Model.SFN52712Approvals.DepartmentBudgetManagerSignature.IsEmpty() && ViewBag.isDepartment == true && Model.SFN52712Approvals.DepartmentBudgetManagerSignature.IsEmpty())
+            {
+                <input class="visually-hidden" type="text" name="approver" value="department" />
+                @Html.TextBoxFor(m => m.SFN52712Approvals.DepartmentBudgetManagerSignature, Username, new { @class = "visually-hidden" })
+                <input class="visually-hidden" type="text" name="approver" value="department" />
+                <div class="row mb-1">
+                    <div class="col-8 form-floating">
+                        <div class="form-control h-100" radio-button-control>
+                            <button class="btn btn-blue button w-25 col-3" onclick="approve = $(this).attr('value'); approveDeny(approve); " id="deparmentSubmit" type="button" value="@Username">Approve</button>
+                            <button class="btn btn-blue button w-25 col-3" onclick="deny = $(this).attr('value'); user = 'department'; approveDeny(deny, user); " id="deparmentSubmit" type="button" value="Denied">Deny</button>
+                        </div>
+                        @Html.LabelFor(m => m.SFN52712Approvals.DepartmentBudgetManagerSignature, htmlAttributes: new { @for = "DepartmentBudgetManagerSignature", @class = "fw-bold req-form-long-label" })
+                    </div>
+                    <div class="col-4 form-floating">
+                        @Html.EditorFor(m => m.SFN52712Approvals.DepartmentBudgetManagerSignatureDate, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @placeholder = @Html.DisplayNameFor(m => m.SFN52712Approvals.SupervisorSignatureDate), @id = "DepartmentBudgetManagerSignatureDate", @type = "date", @Value = DateTime.Today.ToString("yyyy-MM-dd") } })
+                        @Html.LabelFor(m => m.SFN52712Approvals.DepartmentBudgetManagerSignatureDate, htmlAttributes: new { @for = "DepartmentBudgetManagerSignatureDate", @class = "fw-bold" })
+                    </div>
+                </div>
+            }
+            else if (!Model.SFN52712Approvals.PersonTravelingSignature.IsEmpty() && !Model.SFN52712Approvals.DepartmentBudgetManagerSignature.IsEmpty())
+            {
+                <div class="row mb-1">
+                    <div class="col-8 form-floating">
+                        @Html.EditorFor(m => m.SFN52712Approvals.DepartmentBudgetManagerSignature, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @placeholder = @Html.DisplayNameFor(m => m.SFN52712Approvals.DepartmentBudgetManagerSignature), @id = "DepartmentBudgetManagerSignature", @readonly = "readonly" } })
+                        @Html.LabelFor(m => m.SFN52712Approvals.DepartmentBudgetManagerSignature, htmlAttributes: new { @for = "DepartmentBudgetManagerSignature", @class = "fw-bold req-form-long-label" })
+                    </div>
+                    <div class="col-4 form-floating">
+                        @Html.EditorFor(m => m.SFN52712Approvals.DepartmentBudgetManagerSignatureDate, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @placeholder = @Html.DisplayNameFor(m => m.SFN52712Approvals.DepartmentBudgetManagerSignatureDate), @id = "DepartmentBudgetManagerSignatureDate", @type = "date", @Value = Model.SFN52712Approvals.DepartmentBudgetManagerSignatureDate.ToString("yyyy-MM-dd"), @readonly = "readonly" } })
+                        @Html.LabelFor(m => m.SFN52712Approvals.DepartmentBudgetManagerSignatureDate, htmlAttributes: new { @for = "DepartmentBudgetManagerSignatureDate", @class = "fw-bold" })
+                    </div>
+                </div>
+            }
+
+            if (Model.SFN52712Approvals.DivisionChiefSignature.IsEmpty() && ViewBag.isChief == true && Model.SFN52712Approvals.DivisionChiefSignature.IsEmpty())
+            {
+                <input class="visually-hidden" type="text" name="approver" value="chief" />
+                @Html.TextBoxFor(m => m.SFN52712Approvals.DivisionChiefSignature, Username, new { @class = "visually-hidden" })
+                <input class="visually-hidden" type="text" name="approver" value="chief" />
+                <div class="row mb-1">
+                    <div class="col-8 form-floating">
+                        <div class="form-control h-100" radio-button-control>
+                            <button class="btn btn-blue button w-25 col-3" onclick="approve = $(this).attr('value'); approveDeny(approve); " id="chiefSubmit" type="button" value="@Username">Approve</button>
+                            <button class="btn btn-blue button w-25 col-3" onclick="deny = $(this).attr('value'); user = 'chief'; approveDeny(deny, user); " id="chiefSubmit" type="button" value="Denied">Deny</button>
+                        </div>
+                        @Html.LabelFor(m => m.SFN52712Approvals.DivisionChiefSignature, htmlAttributes: new { @for = "DivisionChiefSignature", @class = "fw-bold req-form-long-label" })
+                    </div>
+                    <div class="col-4 form-floating">
+                        @Html.EditorFor(m => m.SFN52712Approvals.DivisionChiefSignatureDate, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @placeholder = @Html.DisplayNameFor(m => m.SFN52712Approvals.DivisionChiefSignatureDate), @id = "DivisionChiefSignatureDate", @type = "date", @Value = DateTime.Today.ToString("yyyy-MM-dd") } })
+                        @Html.LabelFor(m => m.SFN52712Approvals.DivisionChiefSignatureDate, htmlAttributes: new { @for = "DivisionChiefSignatureDate", @class = "fw-bold" })
+                    </div>
+                </div>
+            }
+            else if (!Model.SFN52712Approvals.PersonTravelingSignature.IsEmpty() && !Model.SFN52712Approvals.DivisionChiefSignature.IsEmpty())
+            {
+                <div class="row mb-1">
+                    <div class="col-8 form-floating">
+                        @Html.EditorFor(m => m.SFN52712Approvals.DivisionChiefSignature, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @placeholder = @Html.DisplayNameFor(m => m.SFN52712Approvals.DivisionChiefSignature), @id = "DivisionChiefSignature", @readonly = "readonly" } })
+                        @Html.LabelFor(m => m.SFN52712Approvals.DivisionChiefSignature, htmlAttributes: new { @for = "DivisionChiefSignature", @class = "fw-bold req-form-long-label" })
+                    </div>
+                    <div class="col-4 form-floating">
+                        @Html.EditorFor(m => m.SFN52712Approvals.DivisionChiefSignatureDate, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @placeholder = @Html.DisplayNameFor(m => m.SFN52712Approvals.DivisionChiefSignatureDate), @id = "DivisionChiefSignatureDate", @type = "date", @Value = Model.SFN52712Approvals.DivisionChiefSignatureDate.ToString("yyyy-MM-dd"), @readonly = "readonly" } })
+                        @Html.LabelFor(m => m.SFN52712Approvals.DivisionChiefSignatureDate, htmlAttributes: new { @for = "DivisionChiefSignatureDate", @class = "fw-bold" })
+                    </div>
+                </div>
+            }
+
+
+
+            if (Model.SFN52712Approvals.DirectorofFinanceSignature.IsEmpty() && ViewBag.isFinanceDirector == true && Model.SFN52712Approvals.DirectorofFinanceSignature.IsEmpty())
+            {
+                <input class="visually-hidden" type="text" name="approver" value="financedirector" />
+                @Html.TextBoxFor(m => m.SFN52712Approvals.DirectorofFinanceSignature, Username, new { @class = "visually-hidden" })
+                <input class="visually-hidden" type="text" name="approver" value="financedirector" />
+                <div class="row mb-1">
+                    <div class="col-8 form-floating">
+                        <div class="form-control h-100" radio-button-control>
+                            <button class="btn btn-blue button w-25 col-3" onclick="approve = $(this).attr('value'); approveDeny(approve); " id="financedirectorSubmit" type="button" value="@Username">Approve</button>
+                            <button class="btn btn-blue button w-25 col-3" onclick="deny = $(this).attr('value'); user = 'financedirector'; approveDeny(deny, user); " id="financedirectorSubmit" type="button" value="Denied">Deny</button>
+                        </div>
+                        @Html.LabelFor(m => m.SFN52712Approvals.DirectorofFinanceSignature, htmlAttributes: new { @for = "DirectorofFinanceSignature", @class = "fw-bold req-form-long-label" })
+                    </div>
+                    <div class="col-4 form-floating">
+                        @Html.EditorFor(m => m.SFN52712Approvals.DirectorofFinanceSignatureDate, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @placeholder = @Html.DisplayNameFor(m => m.SFN52712Approvals.DirectorofFinanceSignatureDate), @id = "DirectorofFinanceSignatureDate", @type = "date", @Value = DateTime.Today.ToString("yyyy-MM-dd") } })
+                        @Html.LabelFor(m => m.SFN52712Approvals.DirectorofFinanceSignatureDate, htmlAttributes: new { @for = "DirectorofFinanceSignatureDate", @class = "fw-bold" })
+                    </div>
+                </div>
+            }
+            else if (!Model.SFN52712Approvals.PersonTravelingSignature.IsEmpty() && !Model.SFN52712Approvals.DirectorofFinanceSignature.IsEmpty())
+            {
+                <div class="row mb-1">
+                    <div class="col-8 form-floating">
+                        @Html.EditorFor(m => m.SFN52712Approvals.DirectorofFinanceSignature, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @placeholder = @Html.DisplayNameFor(m => m.SFN52712Approvals.DirectorofFinanceSignature), @id = "DirectorofFinanceSignature", @readonly = "readonly" } })
+                        @Html.LabelFor(m => m.SFN52712Approvals.DirectorofFinanceSignature, htmlAttributes: new { @for = "DirectorofFinanceSignature", @class = "fw-bold req-form-long-label" })
+                    </div>
+                    <div class="col-4 form-floating">
+                        @Html.EditorFor(m => m.SFN52712Approvals.DirectorofFinanceSignatureDate, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @placeholder = @Html.DisplayNameFor(m => m.SFN52712Approvals.DirectorofFinanceSignatureDate), @id = "DirectorofFinanceSignatureDate", @type = "date", @Value = Model.SFN52712Approvals.DirectorofFinanceSignatureDate.ToString("yyyy-MM-dd"), @readonly = "readonly" } })
+                        @Html.LabelFor(m => m.SFN52712Approvals.DirectorofFinanceSignatureDate, htmlAttributes: new { @for = "DirectorofFinanceSignatureDate", @class = "fw-bold" })
+                    </div>
+                </div>
+            }
+
+            if (Model.SFN52712Approvals.DirectorSignature.IsEmpty() && ViewBag.isDirector == true && Model.SFN52712Approvals.DirectorSignature.IsEmpty())
+            {
+                <input class="visually-hidden" type="text" name="approver" value="director" />
+                @Html.TextBoxFor(m => m.SFN52712Approvals.DirectorSignature, Username, new { @class = "visually-hidden" })
+                <input class="visually-hidden" type="text" name="approver" value="director" />
+                <div class="row mb-1">
+                    <div class="col-8 form-floating">
+                        <div class="form-control h-100" radio-button-control>
+                            <button class="btn btn-blue button w-25 col-3" onclick="approve = $(this).attr('value'); approveDeny(approve); " id="directorSubmit" type="button" value="@Username">Approve</button>
+                            <button class="btn btn-blue button w-25 col-3" onclick="deny = $(this).attr('value'); user = 'director'; approveDeny(deny, user); " id="directorSubmit" type="button" value="Denied">Deny</button>
+                        </div>
+                        @Html.LabelFor(m => m.SFN52712Approvals.DirectorSignature, htmlAttributes: new { @for = "DirectorSignature", @class = "fw-bold req-form-long-label" })
+                    </div>
+                    <div class="col-4 form-floating">
+                        @Html.EditorFor(m => m.SFN52712Approvals.DirectorSignatureDate, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @placeholder = @Html.DisplayNameFor(m => m.SFN52712Approvals.DirectorSignatureDate), @id = "DirectorSignatureDate", @type = "date", @Value = DateTime.Today.ToString("yyyy-MM-dd") } })
+                        @Html.LabelFor(m => m.SFN52712Approvals.DirectorSignatureDate, htmlAttributes: new { @for = "DirectorSignatureDate", @class = "fw-bold" })
+                    </div>
+                </div>
+            }
+            else if (!Model.SFN52712Approvals.PersonTravelingSignature.IsEmpty() && !Model.SFN52712Approvals.DirectorSignature.IsEmpty())
+            {
+                <div class="row mb-1">
+                    <div class="col-8 form-floating">
+                        @Html.EditorFor(m => m.SFN52712Approvals.DirectorSignature, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @placeholder = @Html.DisplayNameFor(m => m.SFN52712Approvals.DirectorSignature), @id = "DirectorSignature", @readonly = "readonly" } })
+                        @Html.LabelFor(m => m.SFN52712Approvals.DirectorSignature, htmlAttributes: new { @for = "DirectorSignature", @class = "fw-bold req-form-long-label" })
+                    </div>
+                    <div class="col-4 form-floating">
+                        @Html.EditorFor(m => m.SFN52712Approvals.DirectorSignatureDate, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @placeholder = @Html.DisplayNameFor(m => m.SFN52712Approvals.DirectorSignatureDate), @id = "DirectorSignatureDate", @type = "date", @Value = Model.SFN52712Approvals.DirectorSignatureDate.ToString("yyyy-MM-dd"), @readonly = "readonly" } })
+                        @Html.LabelFor(m => m.SFN52712Approvals.DirectorSignatureDate, htmlAttributes: new { @for = "DirectorSignatureDate", @class = "fw-bold" })
+                    </div>
+                </div>
+            }
+            if (Model.TravelAuthoriztionModel.Name == ViewBag.UserName || ViewBag.JobTitle == "Procurement Officer")
+            {
+
+                if (!Model.TravelAuthoriztionModel.WaitingApproval.IsEmpty() && !Model.TravelAuthoriztionModel.FormDenied && Model.SFN52712Approvals.DirectorSignature.IsEmpty())
+                {
+                    <div class="row mb-1">
+                        <div class="col-9 form-floating">
+                            @Html.EditorFor(m => m.TravelAuthoriztionModel.WaitingApproval, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @Value = Model.TravelAuthoriztionModel.WaitingApproval, @id = "waitingapproval", @readonly = "readonly" } })
+                            @Html.LabelFor(m => m.TravelAuthoriztionModel.WaitingApproval, htmlAttributes: new { @for = "WaitingAprroval", @class = "fw-bold" })
+                        </div>
+                    </div>
+                }
+            }
+
+            <input class="visually-hidden" type="text" name="ProcurementProcessing" value="false" />
+            if ((!Model.SFN52712Approvals.DirectorSignature.IsEmpty() || !Model.SFN52712Approvals.DirectorofFinanceSignature.IsEmpty()) && (ViewBag.JobTitle == "Executive Assistant" || ViewBag.JobTitle == "Procurement Officer" || ViewBag.jobtitle == "HR Director"))
+            {
+                if (Model.TravelAuthoriztionModel.FormCompleted != true)
+                {
+                    <div>
+                        <h5>Administration Section</h5>
+                        <div class="row mb-3">
+                            <div class="col-8 form-floating">
+                                <button class="btn btn-blue button w-25 col-3" onclick="buttonVal = $(this).attr('value'); user = 'procurement'; approveDeny(buttonVal, user); " id="procurementSubmit" type="button" value="Save">Save</button>
+                                <button class="btn btn-blue button w-25 col-3" onclick="buttonVal = $(this).attr('value'); user = 'procurement'; approveDeny(buttonVal, user);  " id="procurementSubmit" type="button" value="Cancel">Cancel</button>
+                                <button class="btn btn-blue button w-25 col-3" onclick="buttonVal = $(this).attr('value'); user = 'procurement'; approveDeny(buttonVal, user);  " id="procurementSubmit" type="button" value="Complete">Complete</button>
+                            </div>
+                            <div class="col-4 form-floating">
+                                @Html.EditorFor(m => m.TravelAuthoriztionModel.ProcurementProcessedDate, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "ProcurementProcessedDate", @type = "date", @Value = DateTime.Today.ToString("yyyy-MM-dd") } })
+                                @Html.LabelFor(m => m.TravelAuthoriztionModel.ProcurementProcessedDate, htmlAttributes: new { @for = "ProcurementOfficerSignatureDate", @class = "fw-bold" })
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div>
+                        <h5>Administration Section</h5>
+                        <div class="row mb-3">
+                            <div class="col-9 form-floating border ">
+                                <br />
+                                @Html.RadioButtonFor(m => m.TravelAuthoriztionModel.ProcurementProcessing, "true", new { htmlAttributes = new { @readonly = "readonly" } })
+                                Form is being processed by Procurement
+                            </div>
+                            <div class="col-3 form-floating">
+                                @Html.EditorFor(m => m.TravelAuthoriztionModel.ProcurementProcessedDate, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "ProcurementProcessedDate", @type = "date", @Value = DateTime.Today.ToString("yyyy-MM-dd"), @readonly = "readonly" } })
+                                @Html.LabelFor(m => m.TravelAuthoriztionModel.ProcurementProcessedDate, htmlAttributes: new { @for = "ProcurementOfficerSignatureDate", @class = "fw-bold" })
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            }
+        }
+
+        if (ViewBag.JobTitle == "HR Director")
+        {
+            <input class="visually-hidden" type="text" name="ProcurementProcessing" value="false" />
+            <div class="row mb-1">
+                <div class="col-9 form-floating">
+                    @if (ViewBag.JobTitle == "Executive Assistant" || ViewBag.JobTitle == "Procurement Officer")
+                    {
+                        <button class="btn btn-blue button w-25 col-3" onclick="buttonVal = $(this).attr('value'); user = 'procurement'; approveDeny(buttonVal, user); " id="procurementSubmit" type="button" value="Save">Save</button>
+                        <button class="btn btn-blue button w-25 col-3" onclick="buttonVal = $(this).attr('value'); user = 'procurement'; approveDeny(buttonVal, user);  " id="procurementSubmit" type="button" value="Complete">Complete</button>
+                    }
+                    <button class="btn btn-blue button w-25 col-3" onclick="buttonVal = $(this).attr('value'); user = 'procurement'; approveDeny(buttonVal, user);  " id="procurementSubmit" type="button" value="Close">Close</button>
+                </div>
+            </div>
+        }
+
+        <div class="modal" id="deniedModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Denial Reason</h5>
+                    </div>
+                    <div class="modal-body">
+                        <p>Please describe the reason for denial of the request</p>
+                        @Html.TextArea("denied", new { @style = "height: 200px; width: 100%;" })
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" onclick="$('#wait').show(); $('.button').hide(); $('#deniedModal').toggle(); this.form.submited=this.value;" formnovalidate id="cancel" name="command" value="Submit" class="btn btn-primary">Yes</button>
+                        <button type="button" onclick=" $('#deniedModal').toggle();" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" id="cancelModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <p>Form has not been saved. Any changes will be lost. Are you sure that you want to close?”</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" onclick="this.form.submited=this.value;" formnovalidate id="cancel" name="command" value="Cancel" class="btn btn-primary">Yes</button>
+                        <button type="button" onclick="togggleModal()" class="btn btn-secondary" data-dismiss="modal">No</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <partial name="_ValidationScriptsPartial" />
+
+    <script type="text/javascript">
+        var approvedeny
+
+        $(function () {
+            $("[currencymask]").inputmask({ alias: "currency", groupSeparator: "," });
+        });
+
+        window.onload = function () {
+            otherMethod();
+        };
+
+        $("#otherTravelMethod").html("@ViewBag.OtherMethodofTravel");
+
+        function otherMethod() {
+            console.log("changed" + $('#travelMethod').val());
+            if ($('#travelMethod').val() == "Other (Explain)") {
+                $('#othersection').show();
+            } else {
+                $('#othersection').hide();
+            }
+
+            if ($('#travelMethod').val() == "Commercial Air") {
+                $('#flightsection').show();
+            } else {
+                $('#flightsection').hide();
+            }
+            console.log($('#otherTravelMethod').val());
+            console.log($('#otherTravelMethod').val());
+        }
+
+        function approveDeny(approvedeny, user) {
+            console.log(approvedeny);
+            if (approvedeny == "Denied") {
+                if (user == "supervisor") {
+                    $("#SFN52712Approvals_SupervisorSignature").val("Denied")
+                }
+                if (user == "department") {
+                    $("#SFN52712Approvals_DepartmentBudgetManagerSignature").val("Denied")
+                }
+                if (user == "chief") {
+                    $("#SFN52712Approvals_DivisionChiefSignature").val("Denied")
+                }
+                if (user == "financedirector") {
+                    $("#SFN52712Approvals_DirectorofFinanceSignature").val("Denied")
+                }
+                if (user == "director") {
+                    $("#SFN52712Approvals_DirectorSignature").val("Denied")
+                }
+                if (user == "procurement") {
+                    $("#SFN52712Approvals_ProcurementOfficerSignature").val("Denied")
+                }
+                $('#deniedModal').toggle();
+            } else if (approvedeny == "Save") {
+                $("input[name='command']").val("Save");
+                document.getElementById("ApprovalForm").requestSubmit();
+            } else if (approvedeny == "Process") {
+                $("input[name='command']").val("Process");
+                document.getElementById("ApprovalForm").requestSubmit();
+            } else if (approvedeny == "Cancel") {
+                $('#cancelModal').toggle();
+                $("input[name='command']").val("Cancel");
+                document.getElementById("ApprovalForm").requestSubmit();
+            } else if (approvedeny == "Complete") {
+                $("input[name='command']").val("Complete");
+                document.getElementById("ApprovalForm").requestSubmit();
+            }
+            else {
+                $('#wait').show();
+                $('.button').hide();
+                $("#SFN52712Approvals_SupervisorSignature").val(approvedeny)
+                $("#SFN52712Approvals_DepartmentBudgetManagerSignature").val(approvedeny)
+                $("#SFN52712Approvals_DivisionChiefSignature").val(approvedeny)
+                $("#SFN52712Approvals_DirectorofFinanceSignature").val(approvedeny)
+                $("#SFN52712Approvals_DirectorSignature").val(approvedeny)
+                $("#SFN52712Approvals_ProcurementOfficerSignature").val(approvedeny)
+
+                $("input[name='command']").val("Submit");
+                document.getElementsByName("command").value = "Submit";
+                document.getElementById("ApprovalForm").requestSubmit();
+            }
+        }
+
+        function onClosedButtonClicked() {
+            $("#wait").hide();
+            $(".button").show();
+
+            if ($("form").valid() == true) {
+                $(".button").prop('disabled', true);
+            }
+        }
+    </script>
+    <style>
+        #flightsection, #othersection {
+            display: none;
+        }
+    </style>
+}

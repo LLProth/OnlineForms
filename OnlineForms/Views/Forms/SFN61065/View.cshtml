@@ -1,0 +1,624 @@
+﻿@model OnlineForms.ViewModels.SFN61065DisplayViewModel
+
+@{
+    ViewBag.Title = "Business Card Request";
+}
+@section topHeader {
+    @Html.Partial("~/Views/Shared/_FormHeader.cshtml", (Dictionary<string, string>)ViewBag.FormInfo)
+}
+
+<div id="notPrint" class="container-fluid">
+    <div class="container-fluid">
+        <div class="row flex-nowrap">
+            @section sideBarNav {
+                @Html.Partial("~/Views/Forms/SFN61065/Sidebar.cshtml")
+            }
+
+        </div>
+    </div>
+
+    @using (Html.BeginForm("Approval", "SFN61065", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div id="wait">
+            <h4>Please wait...</h4>
+            <input id="closeButton" class="w-100" type="button" value="Close" onclick="onClosedButtonClicked()" />
+        </div>
+
+        <div id="proofDenialBox">
+            @Html.LabelFor(m => m.Approvals.ProofComments, htmlAttributes: new { @for = "reqProofComments", @class = "fw-bold label" })
+            @Html.EditorFor(m => m.Approvals.ProofComments, new { htmlAttributes = new { @id = "proofComments", @name = "ProofComments", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.Approvals.ProofComments) } })
+            <div class="row formRow">
+                <div class="col-6">
+                    <input id="submitDenyButton" class="w-100 button" type="button" name="Command" value="Confirm" onclick="onDenyConfirmation()" disabled />
+                </div>
+                <div class="col-6">
+                    <input id="cancelDenyButton" class="w-100 button" type="button" value="Cancel" onclick="onCancelDeny()" />
+                    </div>
+                </div>
+            </div>
+
+        <div>
+            <h5>Section 1 - Requestor Information</h5>
+        </div>
+
+        <div class="row row-cols-3 mb-2 formRow">
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.BusinessCardModels.Name, new { htmlAttributes = new { @name = "Name", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.BusinessCardModels.Name), @id = "reqName", @Value = Model.BusinessCardModels.Name, @readonly = "readonly" } })
+                @Html.LabelFor(m => m.BusinessCardModels.Name, htmlAttributes: new { @for = "reqName", @class = "fw-bold label" })
+            </div>
+
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.BusinessCardModels.DateSubmitted, new { htmlAttributes = new { @name = "DateSubmitted", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.BusinessCardModels.DateSubmitted), @id = "reqDate", @Value = Model.BusinessCardModels.DateSubmitted.ToString("MM/dd/yyyy"), @readonly = "readonly" } })
+                @Html.LabelFor(m => m.BusinessCardModels.DateSubmitted, htmlAttributes: new { @for = "reqDate", @class = "fw-bold label" })
+            </div>
+
+            <div class="col-4 form-floating">
+                @Html.EditorFor(m => m.BusinessCardModels.Department, new { htmlAttributes = new { @name = "Department", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.BusinessCardModels.Department), @id = "reqDepartment", @Value = Model.BusinessCardModels.Department, @readonly = "readonly" } })
+                @Html.LabelFor(m => m.BusinessCardModels.Department, htmlAttributes: new { @for = "reqDepartment", @class = "fw-bold label" })
+            </div>
+        </div>
+
+        <div class="row row-cols-3 mb-4 formRow">
+            <div class="col-4 form-floating">
+                @Html.EditorFor(m => m.BusinessCardModels.Phone, new { htmlAttributes = new { @name = "Phone", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.BusinessCardModels.Phone), @id = "reqDepartment", @Value = Model.BusinessCardModels.Phone, @readonly = "readonly", @required = "required" } })
+                @Html.LabelFor(m => m.BusinessCardModels.Phone, htmlAttributes: new { @for = "reqPhone", @class = "fw-bold label" })
+            </div>
+        </div>
+
+        <div>
+            <h5>Section 2 - Business Card Order Information</h5>
+        </div>
+
+        <div class="row row-cols-3 mb-4 formRow">
+            <div class="col-7 form-floating">
+                @Html.EditorFor(m => m.BusinessCardModels.RequestType, new { htmlAttributes = new { @name = "RequestType", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.BusinessCardModels.RequestType), @id = "reqRequestType", @Value = Model.BusinessCardModels.RequestType, @readonly = "readonly" } })
+                @Html.LabelFor(m => m.BusinessCardModels.RequestType, htmlAttributes: new { @for = "reqRequestType", @class = "fw-bold label" })
+            </div>
+
+            <div class="col-5 form-floating">
+
+                @Html.EditorFor(m => m.BusinessCardModels.NumOfCards, new { htmlAttributes = new { @name = "NumOfCards", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.BusinessCardModels.NumOfCards), @id = "reqNumOfCards", @Value = Model.BusinessCardModels.NumOfCards, @readonly = "readonly" } })
+                @Html.LabelFor(m => m.BusinessCardModels.NumOfCards, htmlAttributes: new { @for = "reqNumOfCards", @class = "fw-bold label" })
+            </div>
+        </div>
+
+        <h5>Section 3 - Business Card Information</h5>
+
+        <div class="row row-cols-3 mb-2 formRow">
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.BusinessCardInfos.FirstName, new { htmlAttributes = new { @name = "FirstName", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.BusinessCardInfos.FirstName), @id = "reqFirstName", @maxlength = "100", @Value = Model.BusinessCardInfos.FirstName, @readonly = "readonly" } })
+                @Html.LabelFor(m => m.BusinessCardInfos.FirstName, htmlAttributes: new { @for = "reqFirstName", @class = "fw-bold label" })
+            </div>
+
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.BusinessCardInfos.LastName, new { htmlAttributes = new { @name = "LastName", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.BusinessCardInfos.LastName), @id = "reqLastName", @maxlength = "100", @readonly = "readonly" } })
+                @Html.LabelFor(m => m.BusinessCardInfos.LastName, htmlAttributes: new { @for = "reqLastName", @class = "fw-bold label" })
+            </div>
+
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.BusinessCardInfos.Credentials, new { htmlAttributes = new { @name = "Credentails", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.BusinessCardInfos.Credentials), @id = "reqCredentials", @maxlength = "100", @Value = Model.BusinessCardInfos.Credentials, @readonly = "readonly" } })
+                @Html.LabelFor(m => m.BusinessCardInfos.Credentials, htmlAttributes: new { @for = "reqCredentials", @class = "fw-bold label" })
+            </div>
+        </div>
+
+        <div class="row row-cols-3 mb-2 formRow">
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.BusinessCardInfos.Title, new { htmlAttributes = new { @name = "Title", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.BusinessCardInfos.Title), @id = "reqTitle", @maxlength = "100", @Value = Model.BusinessCardInfos.Title, @readonly = "readonly" } })
+                @Html.LabelFor(m => m.BusinessCardInfos.Title, htmlAttributes: new { @for = "reqTitle", @class = "fw-bold label" })
+            </div>
+
+            <div class="col-4 form-floating">
+                @Html.EditorFor(m => m.BusinessCardInfos.Email, new { htmlAttributes = new { @name = "Email", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.BusinessCardInfos.Email), @id = "reqEmail", @required = "required", @maxlength = "100", @Value = Model.BusinessCardInfos.Email, @readonly = "readonly" } })
+                @Html.LabelFor(m => m.BusinessCardInfos.Email, htmlAttributes: new { @for = "reqEmail", @class = "fw-bold label" })
+            </div>
+
+            <div class="col-4 form-floating" hidden>
+                @Html.EditorFor(m => m.BusinessCardModels.ID, new { htmlAttributes = new { @name = "Email", @class = "form-control fw-bold", @value = Model.BusinessCardModels.ID, @id = "reqID", @readonly = "readonly" } })
+                @Html.LabelFor(m => m.BusinessCardModels.ID, htmlAttributes: new { @for = "reqID", @class = "fw-bold label" })
+            </div>
+            <div class="col-4 form-floating">
+                @Html.EditorFor(m => m.BusinessCardModels.WaitingApproval, new { htmlAttributes = new { @name = "Email", @class = "form-control fw-bold", @id = "reqID", @readonly = "readonly" } })
+                @Html.LabelFor(m => m.BusinessCardModels.WaitingApproval, htmlAttributes: new { @for = "reqID", @class = "fw-bold label" })
+            </div>
+        </div>
+
+        <div class="row row-cols-3 mb-4 formRow">
+            <div class="col-4 form-floating">
+                @Html.EditorFor(m => m.BusinessCardInfos.TelephoneNum, new { htmlAttributes = new { @name = "TelephoneNum", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.BusinessCardInfos.TelephoneNum), @id = "reqTelephoneNum", @Value = Model.BusinessCardInfos.TelephoneNum, @readonly = "readonly" } })
+                @Html.LabelFor(m => m.BusinessCardInfos.TelephoneNum, htmlAttributes: new { @for = "reqTelephoneNum", @class = "fw-bold label" })
+            </div>
+
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.BusinessCardInfos.CellNum, new { htmlAttributes = new { @name = "CellNum", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.BusinessCardInfos.CellNum), @id = "reqCellNum", @Value = Model.BusinessCardInfos.CellNum, @readonly = "readonly" } })
+                @Html.LabelFor(m => m.BusinessCardInfos.CellNum, htmlAttributes: new { @for = "reqCellNum", @class = "fw-bold label" })
+            </div>
+
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.BusinessCardInfos.FaxNum, new { htmlAttributes = new { @name = "FaxNum", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.BusinessCardInfos.FaxNum), @id = "reqFaxNum", @Value = Model.BusinessCardInfos.FaxNum, @readonly = "readonly" } })
+                @Html.LabelFor(m => m.BusinessCardInfos.FaxNum, htmlAttributes: new { @for = "reqFaxNum", @class = "fw-bold label" })
+            </div>
+        </div>
+
+        <h5>Section 4 - Additonal Comments</h5>
+
+        <div class="row row-cols-3 mb-4 formRow">
+            <div class="col-12 form-floating">
+                @Html.EditorFor(m => m.BusinessCardModels.AdditionalComments, new { htmlAttributes = new { @name = "AdditionalComments", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.BusinessCardModels.AdditionalComments), @id = "reqAdditionalComments", @Value = Model.BusinessCardModels.AdditionalComments, @readonly = "readonly", @maxlength = "1000" } })
+                @Html.LabelFor(m => m.BusinessCardModels.AdditionalComments, htmlAttributes: new { @for = "reqAdditionalComments", @class = "fw-bold label" })
+            </div>
+        </div>
+
+        <h5>Section 5 - Signatures</h5>
+
+        <div class="row row-cols-3 mb-2 formRow">
+            <div class="col-4 form-floating">
+                @Html.EditorFor(m => m.BusinessCardModels.SubmittedBy, new { htmlAttributes = new { @name = "SubmittedBy", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.BusinessCardModels.SubmittedBy), @id = "reqSubmittedBy", @Value = Model.BusinessCardModels.SubmittedBy, @required = "required", @readonly = "readonly" } })
+                @Html.LabelFor(m => m.BusinessCardModels.SubmittedBy, htmlAttributes: new { @for = "reqSubmittedBy", @class = "fw-bold label" })
+            </div>
+
+            <div class="col-4 form-floating">
+                @Html.EditorFor(m => m.BusinessCardModels.SubmittedDate, new { htmlAttributes = new { @name = "SubmittedDate", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.BusinessCardModels.SubmittedDate), @id = "reqSubmittedDate", @Value = Model.BusinessCardModels.SubmittedDate.ToString("MM/dd/yyyy"), @required = "required", @readonly = "readonly" } })
+                @Html.LabelFor(m => m.BusinessCardModels.SubmittedDate, htmlAttributes: new { @for = "reqSubmittedDate", @class = "fw-bold label" })
+            </div>
+        </div>
+
+        <div class="row row-cols-2 mb-2 formRow">
+            @if (ViewBag.Username == Model.BusinessCardModels.WaitingApproval && Model.Approvals.SupervisorApproval == "")
+            {
+                <div class="col-4 form-floating">
+                    @Html.EditorFor(m => m.Approvals.SupervisorApproval, new { htmlAttributes = new { @name = "SupervisorApproval", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.Approvals.SupervisorApproval), @id = "reqSupervisorApproval", @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.Approvals.SupervisorApproval, htmlAttributes: new { @for = "reqSupervisorApproval", @class = "fw-bold label" })
+                </div>
+
+                <div class="col-4 form-floating">
+                    @Html.EditorFor(m => m.Approvals.SupervisorApprovalDate, new { htmlAttributes = new { @name = "SubmittedDate", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.Approvals.SupervisorApprovalDate), @id = "reqSupervisorApprovalDate", @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.Approvals.SupervisorApprovalDate, htmlAttributes: new { @for = "reqSupervisorApprovalDate", @class = "fw-bold label" })
+                </div>
+
+                <div class="col-2">
+                    <input id="submitButton" class="w-100 button" type="submit" name="Command" value="Approve" onclick="onSubmitButtonClicked()" />
+                </div>
+
+                <div class="col-2">
+                    <input id="submitButton" class="w-100 button" type="submit" name="Command" value="Deny" onclick="onSubmitButtonClicked()" />
+                </div>
+            }
+
+            else
+            {
+                string supervisorDate = "";
+                if (Model.Approvals.SupervisorApprovalDate != "")
+                {
+                    supervisorDate = DateTime.Parse(Model.Approvals.SupervisorApprovalDate).ToString("MM/dd/yyyy");
+                }
+
+                <div class="col-4 form-floating">
+                    @Html.EditorFor(m => m.Approvals.SupervisorApproval, new { htmlAttributes = new { @name = "SupervisorApproval", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.Approvals.SupervisorApproval), @id = "reqSupervisorApproval", @Value = Model.Approvals.SupervisorApproval, @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.Approvals.SupervisorApproval, htmlAttributes: new { @for = "reqSupervisorApproval", @class = "fw-bold label" })
+                </div>
+
+                <div class="col-4 form-floating">
+                    @Html.EditorFor(m => m.Approvals.SupervisorApprovalDate, new { htmlAttributes = new { @name = "SubmittedDate", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.Approvals.SupervisorApprovalDate), @id = "reqSupervisorApprovalDate", @Value = supervisorDate, @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.Approvals.SupervisorApprovalDate, htmlAttributes: new { @for = "reqSupervisorApprovalDate", @class = "fw-bold label" })
+                </div>
+            }
+        </div>
+
+        <div class="row row-cols-3 mb-2 formRow">
+            @if (ViewBag.IsCommunications == true && Model.Approvals.CommunicationsApproval == "" && Model.Approvals.RequestingEmployeeApproved == true)
+            {
+                <div class="col-4 form-floating">
+                    @Html.EditorFor(m => m.Approvals.CommunicationsApproval, new { htmlAttributes = new { @name = "CommunicationsApproval", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.Approvals.CommunicationsApproval), @id = "reqCommunicationsApproval", @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.Approvals.CommunicationsApproval, htmlAttributes: new { @for = "reqCommunicationsApproval", @class = "fw-bold label" })
+                </div>
+
+                <div class="col-4 form-floating">
+                    @Html.EditorFor(m => m.Approvals.CommunicationsApprovalDate, new { htmlAttributes = new { @name = "SubmittedDate", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.Approvals.CommunicationsApprovalDate), @id = "reqCommunicationsApprovalDate", @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.Approvals.CommunicationsApprovalDate, htmlAttributes: new { @for = "reqCommunicationsApprovalDate", @class = "fw-bold label" })
+                </div>
+
+                <div class="col-2">
+                    <input id="submitButton" class="w-100 button" type="submit" name="Command" value="Completed" onclick="onSubmitButtonClicked()" action="@Url.Action("Index", "SFN61065")" />
+                </div>
+            }
+
+            else
+            {
+                string communicationsDate = "";
+                if (Model.Approvals.CommunicationsApprovalDate != "")
+                {
+                    communicationsDate = DateTime.Parse(Model.Approvals.CommunicationsApprovalDate).ToString("MM/dd/yyyy");
+                }
+
+                <div class="col-4 form-floating">
+                    @Html.EditorFor(m => m.Approvals.CommunicationsApproval, new { htmlAttributes = new { @name = "CommunicationsApproval", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.Approvals.CommunicationsApproval), @id = "reqCommunicationsApproval", @Value = Model.Approvals.CommunicationsApproval, @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.Approvals.CommunicationsApproval, htmlAttributes: new { @for = "reqCommunicationsApproval", @class = "fw-bold label" })
+                </div>
+
+                <div class="col-4 form-floating">
+                    @Html.EditorFor(m => m.Approvals.CommunicationsApprovalDate, new { htmlAttributes = new { @name = "CommunicationsApprovalDate", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.Approvals.CommunicationsApprovalDate), @id = "reqCommunicationsApproval", @Value = communicationsDate, @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.Approvals.CommunicationsApprovalDate, htmlAttributes: new { @for = "reqCommunicationsApprovalDate", @class = "fw-bold label" })
+                </div>
+            }
+        </div>
+
+        if (ViewBag.Username == Model.BusinessCardModels.Name && Model.Approvals.RequestingEmployeeApproved == false && Model.Approvals.ProofUploaded == true)
+        {
+            <div class="row row-cols-3 mb-2 formRow">
+                <div class="col-4 form-floating">
+                    @Html.EditorFor(m => m.Approvals.RequestingEmployeeApproval, new { htmlAttributes = new { @name = "RequestingEmployeeApproval", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.Approvals.RequestingEmployeeApproval), @id = "reqRequestingEmployeeApproval", @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.Approvals.RequestingEmployeeApproval, htmlAttributes: new { @for = "reqRequestingEmployeeApproval", @class = "fw-bold label" })
+                </div>
+
+                <div class="col-4 form-floating">
+                    @Html.EditorFor(m => m.Approvals.RequestingEmployeeApprovalDate, new { htmlAttributes = new { @name = "CommunicationsApprovalDate", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.Approvals.RequestingEmployeeApprovalDate), @id = "reqRequestingEmployeeApproval", @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.Approvals.RequestingEmployeeApprovalDate, htmlAttributes: new { @for = "reqCommunicationsApprovalDate", @class = "fw-bold label" })
+                </div>
+
+                <div class="col-2">
+                    <input id="submitButton" class="w-100 button" type="submit" name="Command" value="Approve" onclick="onSubmitButtonClicked()" />
+                </div>
+
+                <div class="col-2">
+                    <input id="submitButton" class="w-100 button" type="button" value="Deny" onclick="onDenyButtonClicked()" />
+                </div>
+            </div>
+        }
+
+        else
+        {
+            string requestorDate = "";
+
+            if (Model.Approvals.RequestingEmployeeApprovalDate != "")
+            {
+                requestorDate = DateTime.Parse(Model.Approvals.RequestingEmployeeApprovalDate).ToString("MM/dd/yyyy");
+            }
+
+            <div class="row row-cols-3 mb-2 formRow">
+                <div class="col-4 form-floating">
+                    @Html.EditorFor(m => m.Approvals.RequestingEmployeeApproval, new { htmlAttributes = new { @name = "RequestingEmployeeApproval", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.Approvals.RequestingEmployeeApproval), @id = "reqRequestingEmployeeApproval", @Value = Model.Approvals.RequestingEmployeeApproval, @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.Approvals.RequestingEmployeeApproval, htmlAttributes: new { @for = "reqRequestingEmployeeApproval", @class = "fw-bold label" })
+                </div>
+
+                <div class="col-4 form-floating">
+                    @Html.EditorFor(m => m.Approvals.RequestingEmployeeApprovalDate, new { htmlAttributes = new { @name = "RequestingEmployeeApprovalDate", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.Approvals.RequestingEmployeeApprovalDate), @id = "reqRequestingEmployeeApproval", @Value = requestorDate, @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.Approvals.RequestingEmployeeApprovalDate, htmlAttributes: new { @for = "reqRequestingEmployeeApprovalDate", @class = "fw-bold label" })
+                </div>
+            </div>
+
+            if (ViewBag.IsCommunications == true)
+            {
+                <div class="row row-cols-3 mb-2 formRow">
+                    <div id="proofComments" class="col-8 form-floating">
+                        @Html.EditorFor(m => m.Approvals.ProofComments, new { htmlAttributes = new { @name = "ProofComments", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.Approvals.ProofComments), @Value = Model.Approvals.ProofComments, @readonly = "readonly" } })
+                        @Html.LabelFor(m => m.Approvals.ProofComments, htmlAttributes: new { @for = "reqProofComments", @class = "fw-bold label" })
+                    </div>
+                </div>
+            }
+        }
+
+        @*<div class="row row-cols-3 mb-2 formRow">
+                @if (ViewBag.IsProcurement == true && Model.Approvals.FinanceApproval == "")
+                {
+                    <div class="col-4 form-floating">
+                        @Html.EditorFor(m => m.Approvals.FinanceApproval, new { htmlAttributes = new { @name = "FinanceApproval", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.Approvals.FinanceApproval), @id = "reqFinanceApproval", @Value = ViewBag.Username, @readonly = "readonly" } })
+                        @Html.LabelFor(m => m.Approvals.FinanceApproval, htmlAttributes: new { @for = "reqFinanceApproval", @class = "fw-bold label" })
+                    </div>
+
+                    <div class="col-4 form-floating">
+                        @Html.EditorFor(m => m.Approvals.FinanceApprovalDate, new { htmlAttributes = new { @name = "FinanceApprovalDate", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.Approvals.FinanceApprovalDate), @id = "reqFinanceApprovalDate", @Value = DateTime.Today.ToString("MM/dd/yyyy"), @readonly = "readonly" } })
+                        @Html.LabelFor(m => m.Approvals.FinanceApprovalDate, htmlAttributes: new { @for = "reqFinanceApprovalDate", @class = "fw-bold label" })
+                    </div>
+
+                    <div class="col-2">
+                        <input id="submitButton" class="w-100" type="submit" name="Command" value="Approve" action="@Url.Action("Index", "SFN61065")" />
+                    </div>
+                }
+
+                else
+                {
+                    <div class="col-4 form-floating">
+                        @Html.EditorFor(m => m.Approvals.FinanceApproval, new { htmlAttributes = new { @name = "FinanceApproval", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.BusinessCardModels.FinanceApproval), @id = "reqFinanceApproval", @Value = Model.Approvals.FinanceApproval, @readonly = "readonly" } })
+                        @Html.LabelFor(m => m.Approvals.FinanceApproval, htmlAttributes: new { @for = "reqFinanceApproval", @class = "fw-bold label" })
+                    </div>
+
+                    <div class="col-4 form-floating">
+                        @Html.EditorFor(m => m.Approvals.FinanceApprovalDate, new { htmlAttributes = new { @name = "FinanceApprovalDate", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.BusinessCardModels.FinanceApprovalDate), @id = "reqFinanceApprovalDate", @Value = Model.Approvals.FinanceApprovalDate.ToString(), @readonly = "readonly" } })
+                        @Html.LabelFor(m => m.Approvals.FinanceApprovalDate, htmlAttributes: new { @for = "reqFinanceApprovalDate", @class = "fw-bold label" })
+                    </div>
+                }
+            </div>*@
+    }
+
+    @if (Model.Approvals.ProofUploaded == true)
+    {
+        <div class="row formRow mb-4">
+            <div class="col-3">
+                @Html.ActionLink("View Business Card Proof", "Open", "SFN61065", new { id = Model.BusinessCardModels.ID }, new { @id = "submitButton", @class = "btn btn-primary", @target = "_blank" })
+            </div>
+
+        </div>
+    }
+
+    @if (ViewBag.IsCommunications == true)
+    {
+        using (Html.BeginForm("Upload", "SFN61065", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <div>
+                @Html.AntiForgeryToken()
+
+                <h5>Upload New Business Card Proof</h5>
+
+                <div class="row formRow">
+                    @if (Model.BusinessCardModels.RequestingEmployeeApproved)
+                    {
+                        <div class="col-4">
+                            @Html.TextBox("postedFile", "", new { type = "file", accept = ".esp" })
+
+                        </div>
+                    }
+
+                    else
+                    {
+                        <div class="col-4">
+                            @Html.TextBox("postedFile", "", new { type = "file", accept = "application/pdf" })
+
+                        </div>
+                    }
+
+                    <div class="col-4 form-floating" hidden>
+                        @Html.EditorFor(m => m.BusinessCardModels.ID, new { htmlAttributes = new { @name = "Email", @class = "form-control fw-bold", @value = Model.BusinessCardModels.ID, @id = "reqID", @readonly = "readonly" } })
+                        @Html.LabelFor(m => m.BusinessCardModels.ID, htmlAttributes: new { @for = "reqID", @class = "fw-bold label" })
+                    </div>
+
+                    <div class="col-4 form-floating" hidden>
+                        @Html.EditorFor(m => m.BusinessCardModels.RequestingEmployeeApproved, new { htmlAttributes = new { @name = "CommunicationsApprovalDate", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.BusinessCardModels.RequestingEmployeeApproved), @id = "reqRequestingEmployeeApproved", @Value = Model.BusinessCardModels.RequestingEmployeeApproved, @readonly = "readonly" } })
+                        @Html.LabelFor(m => m.BusinessCardModels.RequestingEmployeeApproved, htmlAttributes: new { @for = "reqCommunicationsApprovalDate", @class = "fw-bold label" })
+                    </div>
+                </div>
+
+                @if (Model.BusinessCardModels.RequestingEmployeeApproved)
+                {
+                    <div class="row formRow">
+                        <div class="col-3">
+                            <input id="submitButton" class="w-100" type="submit" value="Upload Final Proof" action="@Url.Action("Index", "SFN61065")" />
+                        </div>
+                    </div>
+                }
+
+                else
+                {
+                    <div class="row formRow">
+                        <div class="col-3">
+                            <input id="submitButton" class="w-100 button" type="submit" value="Submit for Employee Review" action="@Url.Action("Index", "SFN61065")" />
+                        </div>
+                    </div>
+                }
+            </div>
+
+        }
+    }
+    <div class="row formRow">
+        <div class="col-3">
+            <input id="submitButton" class="w-100" type="button" value="Print" onclick="window.print()" />
+        </div>
+    </div>
+</div>
+        
+
+<table id="printTable">
+    <thead>
+        <tr class="printHeading">
+            <th colspan="12">SECTION 1 &#8212; <span class="sectionName">Contact information</span></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr class="printRow">
+            <td class="printCell" colspan="6">
+                @Html.LabelFor(m => m.BusinessCardModels.Name) <br />
+                <span class="userInput">@Html.DisplayFor(m => m.BusinessCardModels.Name)</span>
+            </td>
+            <td class="printCell" colspan="6">
+                @Html.LabelFor(m => m.BusinessCardModels.DateSubmitted) <br />
+                <span class="userInput">@Model.BusinessCardModels.DateSubmitted.ToString("MM/dd/yyyy")</span>
+            </td>
+        </tr>
+        <tr class="printRow">
+            <td class="printCell" colspan="6">
+                @Html.LabelFor(m => m.BusinessCardModels.Department) <br />
+                <span class="userInput">@Html.DisplayFor(m => m.BusinessCardModels.Department)</span>
+            </td>
+            <td class="printCell" colspan="6">
+                @Html.LabelFor(m => m.BusinessCardModels.Phone) <br />
+                <span class="userInput">@Html.DisplayFor(m => m.BusinessCardModels.Phone)</span>
+            </td>
+        </tr>
+        <tr class="printHeading">
+            <th colspan="12">SECTION 2 &#8212 <span class="sectionName">Business card order information</span></th>
+        </tr>
+        <tr class="printRow">
+            <td class="printCell" colspan="12">
+                @Html.LabelFor(m => m.BusinessCardModels.RequestType) <br />
+                <span class="userInput">@Html.DisplayFor(m => m.BusinessCardModels.RequestType)</span>
+            </td>
+        </tr>
+        <tr class="printRow">
+            <td class="printCell" colspan="12">
+                @Html.LabelFor(m => m.BusinessCardModels.NumOfCards) <br />
+                <span class="userInput">@Html.DisplayFor(m => m.BusinessCardModels.NumOfCards)</span>
+            </td>
+        </tr>
+        <tr class="printHeading">
+            <th colspan="12">Section 3 &#8212 <span class="sectionName">Business card information</span></th>
+        </tr>
+        <tr class="printRow">
+            <td class="printCell" colspan="4">
+                @Html.LabelFor(m => m.BusinessCardInfos.FirstName) <br />
+                <span class="userInput">@Html.DisplayFor(m => m.BusinessCardInfos.FirstName)</span>
+            </td>
+            <td class="printCell" colspan="4">
+                @Html.LabelFor(m => m.BusinessCardInfos.LastName) <br />
+                <span class="userInput">@Html.DisplayFor(m => m.BusinessCardInfos.LastName)</span>
+            </td>
+            <td class="printCell" colspan="4">
+                @Html.LabelFor(m => m.BusinessCardInfos.Credentials) <br />
+                <span class="userInput">@Html.DisplayFor(m => m.BusinessCardInfos.Credentials)</span>
+            </td>
+        </tr>
+        <tr class="printRow">
+            <td class="printCell" colspan="6">
+                @Html.LabelFor(m => m.BusinessCardInfos.Title) <br />
+                <span class="userInput">@Html.DisplayFor(m => m.BusinessCardInfos.Title)</span>
+            </td>
+            <td class="printCell" colspan="6">
+                @Html.LabelFor(m => m.BusinessCardInfos.Email) <br />
+                <span class="userInput">@Html.DisplayFor(m => m.BusinessCardInfos.Email)</span>
+            </td>
+        </tr>
+        <tr class="printRow">
+            <td class="printCell" colspan="6">
+                @Html.LabelFor(m => m.BusinessCardInfos.TelephoneNum) <br />
+                <span class="userInput">@Html.DisplayFor(m => m.BusinessCardInfos.TelephoneNum)</span>
+            </td>
+            <td class="printCell" colspan="6">
+                @Html.LabelFor(m => m.BusinessCardInfos.CellNum) <br />
+                <span class="userInput">@Html.DisplayFor(m => m.BusinessCardInfos.CellNum)</span>
+            </td>
+        </tr>
+        <tr class="printRow">
+            <td class="printCell" colspan="12">
+                @Html.LabelFor(m => m.BusinessCardInfos.FaxNum) <br />
+                <span class="userInput">@Html.DisplayFor(m => m.BusinessCardInfos.FaxNum)</span>
+            </td>
+        </tr>
+        <tr class="printHeading">
+            <th colspan="12">SECTION 4 &#8212 <span class="sectionName">Additional comments</span></th>
+        </tr>
+        <tr class="printRow">
+            <td class="printCell" colspan="12">
+                @Html.LabelFor(m => m.BusinessCardModels.AdditionalComments) <br />
+                <span class="userInput">@Html.DisplayFor(m => m.BusinessCardModels.AdditionalComments)</span>
+            </td>
+        </tr>
+        <tr class="printHeading">
+            <th colspan="12">SECTION 5 &#8212 <span class="sectionName">Signatures</span></th>
+        </tr>
+        <tr class="printRow">
+            <td class="printCell" colspan="9">
+                @Html.LabelFor(m => m.BusinessCardModels.SubmittedBy) <br />
+                <span class="userInput">@Html.DisplayFor(m => m.BusinessCardModels.SubmittedBy)</span>
+            </td>
+            <td class="printCell" colspan="3">
+                @Html.LabelFor(m => m.BusinessCardModels.SubmittedDate) <br />
+                <span class="userInput">@Model.BusinessCardModels.SubmittedDate.ToString("MM/dd/yyyy")</span>
+            </td>
+        </tr>
+        <tr class="printRow">
+            <td class="printCell" colspan="9">
+                @Html.LabelFor(m => m.Approvals.SupervisorApproval) <br />
+                <span class="userInput">@Html.DisplayFor(m => m.Approvals.SupervisorApproval)</span>
+            </td>
+            <td class="printCell" colspan="3">
+                @Html.LabelFor(m => m.Approvals.SupervisorApprovalDate) <br />
+                @if (Model.Approvals.SupervisorApprovalDate != "")
+                {
+                    <span class="userInput">@DateTime.Parse(Model.Approvals.SupervisorApprovalDate).ToString("MM/dd/yyyy")</span>
+                }
+
+            </td>
+        </tr>
+        <tr class="printRow">
+            <td class="printCell" colspan="9">
+                @Html.LabelFor(m => m.Approvals.CommunicationsApproval) <br />
+                <span class="userInput">@Html.DisplayFor(m => m.Approvals.CommunicationsApproval)</span>
+            </td>
+            <td class="printCell" colspan="3">
+                @Html.LabelFor(m => m.Approvals.CommunicationsApprovalDate) <br />
+                @if (Model.Approvals.CommunicationsApprovalDate != "")
+                {
+                    <span class="userInput">@DateTime.Parse(Model.Approvals.CommunicationsApprovalDate).ToString("MM/dd/yyyy")</span>
+                }
+
+            </td>
+        </tr>
+        <tr class="printRow">
+            <td class="printCell" colspan="9">
+                @Html.LabelFor(m => m.Approvals.RequestingEmployeeApproval) <br />
+                <span class="userInput">@Html.DisplayFor(m => m.Approvals.RequestingEmployeeApproval)</span>
+            </td>
+            <td class="printCell" colspan="3">
+                @Html.LabelFor(m => m.Approvals.RequestingEmployeeApprovalDate) <br />
+                @if (Model.Approvals.RequestingEmployeeApprovalDate != "")
+                {
+                    <span class="userInput">@DateTime.Parse(Model.Approvals.RequestingEmployeeApprovalDate).ToString("MM/dd/yyyy")</span>
+                }
+
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $(".employeeApproved").change(function () {
+                if ($(this).val() == "false") {
+                    $("#proofComments").removeAttr("hidden");
+
+                    // This stops the Postback
+                    evt.preventDefault();
+                } else if ($(this).val() == "true") {
+                    $("#proofComments").attr("hidden", "hidden");
+                    $("#proofComments").val("");
+                }
+            });
+
+        });
+
+        function onSubmitButtonClicked() {
+
+            $("#wait").show();
+            $(".button").hide();
+        }
+
+        function onClosedButtonClicked() {
+            $("#wait").hide();
+            $(".button").show();
+        }
+
+        function onDenyButtonClicked() {
+            $("#proofDenialBox").show();
+        }
+
+        function onCancelDeny() {
+            $("#proofDenialBox").hide();
+        }
+
+        function onDenyConfirmation() {
+            document.getElementById("submitDenyButton").type = "submit";
+            $("#proofDenialBox").hide();
+            $("#wait").show();
+            $(".button").hide();
+        }
+
+        document.getElementById("proofComments").addEventListener("keyup", function () {
+            var nameInput = document.getElementById('proofComments').value;
+            if (nameInput != "") {
+                document.getElementById('submitDenyButton').removeAttribute("disabled");
+            } else {
+                document.getElementById('submitDenyButton').setAttribute("disabled", null);
+            }
+        });
+
+
+    </script>
+}

@@ -1,0 +1,224 @@
+﻿@model OnlineForms.ViewModels.SFN60026DisplayViewModel
+
+@{
+    ViewBag.Title = "Stuff";
+}
+<div class="row mb-3">
+    @section topHeader {
+        @Html.Partial("~/Views/Shared/_FormHeader.cshtml", (Dictionary<string, string>)ViewBag.FormInfo)
+    }
+    @*@Html.Partial("~/Views/Shared/_TestStuff.cshtml", (Dictionary<string, string>)ViewBag.CharitableInfo)*@
+</div>
+
+<div class="container-fluid">
+    <div class="container-fluid">
+        <div class="row flex-nowrap">
+            @section sideBarNav {
+                @Html.Partial("~/Views/Forms/SFN60026/Sidebar.cshtml")
+            }
+
+
+            <div>
+                <div class="row row-cols-1 text-start mb-2">
+                    <div>
+                        <h5 class="display-5">
+                            <a href="~/SFN60026/Create" type="button" id="createButton" class="btn btn-dark">Create New Form</a>
+                        </h5>
+                    </div>
+                </div>
+
+                <div id="formView">
+                    @{
+                        int[] counts = new int[10];
+                        for (int idx = 0; idx < Model.BonusRecommendationModels.Count; idx++)
+                        {
+                            ++counts[Model.BonusRecommendationModels[idx].DisplayStatus];
+                        }
+                        string[] Headings = {
+                            "Saved For Submitting",
+                            "For Supervisor Approval",
+                            "For Department Approval",
+                            "For Chief Approval",
+                            "For HR Approval",
+                            "For Committee Approval",
+                            "For Chief Endorsement",
+                            "For Agency Director Endorsement",
+                            "Approved",
+                            "Denied" };
+                        if (ViewBag.Access)
+                        {
+                            for (int bigIdx = 0; bigIdx < 10; ++bigIdx)
+                            {
+                                if (counts[bigIdx] > 0)
+                                {
+                                    <div class="col py-3">
+                                        <div class="text-start mb-2">
+                                            <div id="recentHeading" class="col">
+                                                <h3>@Headings[bigIdx]</h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <table class="table" id="submittedForms">
+                                        <thead>
+                                            <tr>
+                                                <th id="nameSort" style="cursor: pointer; width: 20%" onclick="sortTable(0)">Nominee's Name <img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                                                <th id="nameSort" style="cursor: pointer; width: 20%" onclick="sortTable(1)">Created By <img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                                                <th id="dateSort" style="cursor: pointer; width: 20%" onclick="sortTable(1)">Modified Date <img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                                                <th id="nameSort" style="cursor: pointer; width: 20%" onclick="sortTable(1)">Modified By <img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                                                <th id="nameSort" style="cursor: pointer; width: 15%" onclick="sortTable(1)">Status <img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                                            </tr>
+                                        </thead>
+                                        @for (int i = 0, shown = 0; i < Model.BonusRecommendationModels.Count; i++)
+                                        {
+                                            if (i <= 19 && Model.BonusRecommendationModels[i].DisplayStatus == bigIdx)
+                                            {
+                                                <tbody>
+                                                    @{++shown;}
+                                                    <tr style="height:56px">
+                                                        <td>@Model.BonusRecommendationModels[@i].NomineeName</td>
+                                                        <td>@Model.BonusRecommendationModels[@i].SubmitterName</td>
+                                                        <td>@Model.BonusRecommendationModels[@i].ModifiedDate.ToString("MM/dd/yyyy")</td>
+                                                        <td>@Model.BonusRecommendationModels[@i].ModifiedBy</td>
+                                                        <td>@Model.BonusRecommendationModels[@i].Stages[Model.BonusRecommendationModels[@i].CurrentStatus]</td>
+                                                        @*if ((Model.BonusRecommendationModels[@i].DisplayStatus == 4) || (Model.BonusRecommendationModels[@i].DisplayStatus == 5))*@
+
+                                                        @if ((Model.BonusRecommendationModels[i].SubmitterName == ViewBag.Username) && (Model.BonusRecommendationModels[@i].DisplayStatus == 0))
+                                                        {
+                                                        @*<td>@Model.BonusRecommendationModels[i].Stages[Model.BonusRecommendationModels[i].DisplayStatus] </td>*@
+                                                        <td>@Html.ActionLink("Edit", "Edit", "SFN60026", new { id = Model.BonusRecommendationModels[i].ID }, new { @id = "button", @class = "btn btn-primary" })</td>
+                                                        }
+                                                        else
+                                                        {
+                                                        @*<td>@Model.BonusRecommendationModels[i].Stages[Model.BonusRecommendationModels[i].DisplayStatus] </td>*@
+                                                        <td>@Html.ActionLink("View", "View", "SFN60026", new { id = Model.BonusRecommendationModels[i].ID }, new { @id = "button", @class = "btn btn-primary" })</td>
+                                                        }
+
+                                                    </tr>
+                                                </tbody>
+                                            }
+                                        }
+                                    </table>
+                                }
+                            }
+                        }
+                        else
+                        {
+                                    <div class="col py-3">
+                                        <div class="text-start mb-2">
+                                            <div id="recentHeading" class="col">
+                                                <h3>Current @ViewBag.FormInfo["Info"] Forms</h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <table class="table" id="submittedForms">
+                                        <thead>
+                                            <tr>
+                                                <th id="nameSort" style="cursor: pointer; width: 20%" onclick="sortTable(0)">Nominee's Name <img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                                                <th id="nameSort" style="cursor: pointer; width: 20%" onclick="sortTable(1)">Created By <img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                                                <th id="dateSort" style="cursor: pointer; width: 20%" onclick="sortTable(2)">Modified Date <img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                                                <th id="nameSort" style="cursor: pointer; width: 20%" onclick="sortTable(3)">Modified By <img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                                                <th id="nameSort" style="cursor: pointer; width: 15%" onclick="sortTable(4)">Status <img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                                                <th style="cursor: pointer; width: 5%"/>
+
+                                            </tr>
+                                        </thead>
+                                        @for (int i = 0; i < Model.BonusRecommendationModels.Count; i++)
+                                        {
+                                            if (i <= 19)
+                                            {
+                                                <tbody>
+                                                    <tr style="height:56px">
+                                                        <td>@Model.BonusRecommendationModels[@i].NomineeName</td>
+                                                        <td>@Model.BonusRecommendationModels[@i].SubmitterName</td>
+                                                        <td>@Model.BonusRecommendationModels[@i].ModifiedDate.ToString("MM/dd/yyyy")</td>
+                                                        <td>@Model.BonusRecommendationModels[@i].ModifiedBy</td>
+                                                        @if (Model.BonusRecommendationModels[@i].CurrentStatus == 0)
+                                                        {
+                                                            <td>@Model.BonusRecommendationModels[@i].Stages[Model.BonusRecommendationModels[@i].CurrentStatus] </td>
+                                                            <td>@Html.ActionLink("Edit", "Edit", "SFN60026", new { id = Model.BonusRecommendationModels[@i].ID }, new { @id = "button", @class = "btn btn-primary" })</td>
+                                                        }
+                                                        else
+                                                        {
+                                                            if (Model.BonusRecommendationModels[@i].CurrentStatus == Model.BonusRecommendationModels[@i].DisplayStatus && !Model.BonusRecommendationModels[@i].StepCompleted)
+                                                            {
+                                                                <td> @Model.BonusRecommendationModels[@i].Stages[Model.BonusRecommendationModels[@i].CurrentStatus] </td>
+                                                                <td> @Html.ActionLink("View", "View", "SFN60026", new { id = Model.BonusRecommendationModels[@i].ID }, new { @id = "button", @class = "btn btn-primary" }) </td>
+                                                            }
+                                                            else
+                                                            {
+                                                                <td> Completed </td>
+                                                                <td />
+                                                            }
+                                                        }
+                                                    </tr>
+                                                </tbody>
+                                            }
+                                        }
+                                    </table>
+                        }
+                    @* Show more forms or hide the extras *@
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+        //var moreButton = { false, false, false, false, false, false, false, false, false};
+
+    function onMoreButtonClicked(element) {
+        var index = element.value;
+        element.hidden = (!element.hidden);
+        alert("Element index " + index + " is now " + element.hidden);
+    }
+
+    function sortTable(n) {
+        var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+        table = document.getElementById("submittedForms");
+        switching = true;
+
+        // Sort direction ascending
+        dir = "asc";
+
+        while (switching) {
+            switching = false;
+            rows = table.rows;
+
+            for (i = 1; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("TD")[n];
+                y = rows[i + 1].getElementsByTagName("TD")[n];
+
+                if (dir == "asc") {
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dir == "desc") {
+                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+            if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+
+                switchcount++;
+            } else {
+                if (switchcount == 0 && dir == "asc") {
+                    dir = "desc";
+                    switching = true;
+                }
+            }
+        }
+
+    }
+
+    </script>
+}

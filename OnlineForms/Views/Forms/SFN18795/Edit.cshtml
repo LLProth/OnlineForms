@@ -1,0 +1,331 @@
+﻿@model OnlineForms.ViewModels.SFN18795DisplayViewModel
+
+@{
+    ViewBag.Title = "View";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@Html.Partial("~/Views/Shared/_FormHeader.cshtml", (Dictionary<string, string> )ViewBag.FormInfo)
+<div>
+    
+    @section sideBarNav {
+        @Html.Partial("~/Views/Forms/SFN18795/Sidebar.cshtml")
+    }
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div id="wait">
+            <h4>Please wait...</h4>
+            <input id="closeButton" class="w-100" type="button" value="Close" onclick="onClosedButtonClicked()" />
+        </div>
+
+        <div class="row row-cols-1 text-center mb-2">
+            <div class="col bg-dark text-white fw-bold">
+                Please complete the form and submit for approval.
+            </div>
+        </div>
+
+        <div class="row row-cols-3 mb-2">
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.RequisitionModel.Department, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "reqDepartment", @Value = Model.RequisitionModel.Department } })
+                @Html.LabelFor(m => m.RequisitionModel.Department, htmlAttributes: new { @for = "reqDepartment", @class = "fw-bold" })
+
+            </div>
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.RequisitionModel.Name, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @Value = Model.RequisitionModel.Name, @id = "reqName", @readonly = "readonly" } })
+                @Html.LabelFor(m => m.RequisitionModel.Name, htmlAttributes: new { @for = "reqName", @class = "fw-bold" })
+            </div>
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.RequisitionModel.DateSubmitted, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.RequisitionModel.DateSubmitted), @id = "reqDate", @type = "date", @Value = DateTime.Today.ToString("yyyy-MM-dd"), @readonly = "readonly" } })
+                @Html.LabelFor(m => m.RequisitionModel.DateSubmitted, htmlAttributes: new { @for = "reqDate", @class = "fw-bold" })
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col-8 form-floating">
+                @Html.EditorFor(m => m.RequisitionModel.Contractor, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @Value = Model.RequisitionModel.Contractor, @id = "reqContractor" } })
+                @Html.LabelFor(m => m.RequisitionModel.Contractor, htmlAttributes: new { @for = "reqContractor", @class = "fw-bold" })
+            </div>
+            <div class="col-4 form-floating">
+                @if (ViewBag.JobTitle == "Procurement Officer")
+                {
+                    @Html.EditorFor(m => m.RequisitionModel.RequisitionID, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "reqID" } })
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.RequisitionModel.RequisitionID, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @id = "reqID", @readonly = "readonly" } })
+                }
+                @Html.LabelFor(m => m.RequisitionModel.RequisitionID, htmlAttributes: new { @for = "reqID", @class = "fw-bold" })
+            </div>
+        </div>
+
+        <div class="row row-cols-3 mb-5">
+            <div class="col form-floating">
+                <div class="form-control" radio-button-control>
+                    <label class="pe-4">@Html.RadioButtonFor(m => m.RequisitionModel.SoftwareHardware, "true") Yes</label>
+                    <label>@Html.RadioButtonFor(m => m.RequisitionModel.SoftwareHardware, "false") No</label>
+                </div>
+                @Html.LabelFor(m => m.RequisitionModel.SoftwareHardware, htmlAttributes: new { @for = "", @class = "fw-bold req-form-long-label" })
+            </div>
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.RequisitionModel.EstimatedStartDate, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @Value = Model.RequisitionModel.EstimatedStartDate.Value.ToString("yyyy-MM-dd"), @type = "date", @id = "reqStartDate" } })
+                @Html.LabelFor(m => m.RequisitionModel.EstimatedStartDate, htmlAttributes: new { @for = "reqStartDate", @class = "fw-bold" })
+            </div>
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.RequisitionModel.EstimatedCompleteDate, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @Value = Model.RequisitionModel.EstimatedCompleteDate.Value.ToString("yyyy-MM-dd"), @type = "date", @id = "reqCompletedDate" } })
+                @Html.LabelFor(m => m.RequisitionModel.EstimatedCompleteDate, htmlAttributes: new { @for = "reqCompletedDate", @class = "fw-bold" })
+            </div>
+        </div>
+
+        <div class="row mb-1">
+            <div class="col-2 text-center fw-bold req-item-form-header">
+                Quantity
+            </div>
+            <div class="col-2 text-center fw-bold req-item-form-header">
+                Item Number
+            </div>
+            <div class="col-4 text-center fw-bold req-item-form-header">
+                Description/Scope of Work
+            </div>
+            <div class="col-2 text-center fw-bold req-item-form-header">
+                Price
+            </div>
+            <div class="col-2 text-center fw-bold req-item-form-header">
+                Estimated Cost
+            </div>
+        </div>
+
+        for (int i = 0; i < Model.RequisitionItems.Count; i++)
+        {
+            var hide = "";
+            if (i > 0)
+            {
+                hide = "display: block;";
+            }
+            else
+            {
+                hide = "display: none;";
+            }
+            <div class="row mb-3" requisition-item="@(i + 1)">
+                <div class="col-2">
+                    @Html.EditorFor(m => m.RequisitionItem.Quantity, new { htmlAttributes = new { @class = "form-control fw-bold req-item-quantity bg-white", @Value = Model.RequisitionItems[@i].Quantity, @onfocus = "this.select()", @onkeyup = "calculateRequisitionItemRow(event); return false;" } })
+                </div>
+                <div class="col-1">
+                    @Html.EditorFor(m => m.RequisitionItem.ItemNumber, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @Value = Model.RequisitionItems[@i].ItemNumber, @onfocus = "this.select()", } })
+                </div>
+                <div class="col-4">
+                    @Html.EditorFor(m => m.RequisitionItem.Description, new { htmlAttributes = new { @class = "form-control fw-bold bg-white", @Value = Model.RequisitionItems[@i].Description, @onfocus = "this.select()", } })
+                </div>
+                <div class="col-2">
+                    <span class="prefix fw-bold">$</span>
+                    @Html.EditorFor(m => m.RequisitionItem.Price, new { htmlAttributes = new { @class = "form-control fw-bold bg-white text-end", @Value = Model.RequisitionItems[@i].Price, @currencyprice = "true", @onfocus = "this.select()", @onkeyup = "calculateRequisitionItemRow(event); return false;" } })
+                </div>
+                <div class="col-2">
+                    <span class="prefix fw-bold">$</span>
+                    @Html.EditorFor(m => m.RequisitionItem.EstimatedCost, new { htmlAttributes = new { @class = "form-control fw-bold bg-white text-end", @Value = Model.RequisitionItems[@i].EstimatedCost, @currencymask = "true", @readonly = "readonly" } })
+                </div>
+                <img src="~/Content/icons/trash-fill-1.svg" class="delete-req-icon" style="position: initial; @hide" onclick="deleteRequisitionRow(event); return false;" />
+            </div>
+        }
+
+        <div class="row mb-3">
+            <div class="col-2 d-flex">
+                <span onclick="addRequisitionRow(); return false;">
+                    <img src="~/Content/icons/plus-circle-fill.svg" class="add-req-icon" />
+                </span>
+            </div>
+            <div class="col-6"></div>
+            <div class="col-2 text-center fw-bold req-item-form-header d-flex align-items-center justify-content-center">
+                Total
+            </div>
+            <div class="col-2 fw-bold">
+                <span class="prefix fw-bold">$</span>
+                <input type="text" class="form-control fw-bold bg-white text-end" readonly="readonly" name="RequisitionModel.TotalPrice" currencymask="true" value='@decimal.Parse(ViewBag.TotalPrice).ToString("n2")' total-price />
+
+            </div>
+        </div>
+
+        if (Model.RequisitionModel.FormRevised == true)
+        {
+            <div class="row mb-1">
+                <div class="col-12 form-floating">
+                    @Html.TextAreaFor(m => m.RequisitionModel.RevisedComment, new { @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.RequisitionModel.RevisedComment), @id = "Comments", style = "height: auto", @maxlength = "2000" })
+                    @Html.LabelFor(m => m.RequisitionModel.RevisedComment, htmlAttributes: new { @for = "Comments", @class = "fw-bold" })
+                </div>
+            </div>
+        }
+
+        <div class="row">
+            <div class="col-2">
+                <input class="btn btn-blue button w-100" onclick="this.form.submited=this.value;" id="submit" type="submit" name="command" value="Submit" />
+            </div>
+            <div class="col-2">
+                <input class="btn btn-blue button w-100" onclick="this.form.submited=this.value;" formnovalidate id="save" type="submit" name="command" value="Save" />
+            </div>
+            <div class="col-2">
+                <button class="btn btn-blue button w-100" id="cancel-button" onclick="togggleModal()" type="button" name="command" data-toggle="modal" data-target="#cancelModal">Cancel</button>
+            </div>
+        </div>
+
+        <div class="modal" id="cancelModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <p>Form has not been saved. Any changes will be lost. Are you sure that you want to close?”</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" onclick="this.form.submited=this.value;" formnovalidate id="cancel" name="command" value="Cancel" class="btn btn-primary">Yes</button>
+                        <button type="button" onclick="togggleModal()" class="btn btn-secondary" data-dismiss="modal">No</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <partial name="_ValidationScriptsPartial" />
+
+    <script type="text/javascript">
+        var numReqItems = 1;
+
+        $(function () {
+            $("[currencymask]").inputmask({ alias: "currency", groupSeparator: "," });
+            $("[currencyprice]").inputmask({ alias: "currency", groupSeparator: "" });
+        });
+
+        window.onload = function () {
+            $('#reqStartDate').rules("remove", "required");
+            $('#reqCompletedDate').rules("remove", "required");
+        };
+
+        $("form").on("submit", function () {
+            var canSubmit = true;
+            if (this.submited === "Submit" || this.submited === "Save") {
+                //checking if the additional items added are valid
+                var rowsToValidate = $("[requisition-item]").filter(function () {
+                    return parseInt($(this).attr("requisition-item")) > 1;
+                });
+                var requiredFields = $("[data-val-required]");
+                var dataLengthVal = $("[data-val-length-max]");
+                var numberRegEx = /^\s*(\+|-)?((\d+(\.\d+)?)|(\.\d+))\s*$/;
+                requiredFields.each(function (i) {
+                    if ($(this).attr("type") === "number" && numberRegEx.test($(this).val()) && $(this).val() > 0) {
+                        if (!$(this).hasClass("input-validation-error")) {
+                            $(this).removeClass("input-validation-error");
+                        }
+                    }
+                    else if ($(this).attr("type") === "text" && $(this).val().length > 0) {
+                        if (!$(this).hasClass("input-validation-error")) {
+                            $(this).removeClass("input-validation-error");
+                        }
+                    }
+                    else if ($(this).attr("type") === "date" && $(this).val().length > 0) {
+                        if (!$(this).hasClass("input-validation-error")) {
+                            $(this).removeClass("input-validation-error");
+                        }
+                    }
+                    else if ($(this).attr("type") === "radio") {
+                        if (!$(this).hasClass("input-validation-error")) {
+                            $(this).removeClass("input-validation-error");
+                        }
+                    }
+                    else {
+                        canSubmit = false;
+
+                        if (!$(this).hasClass("input-validation-error")) {
+                            $(this).addClass("input-validation-error");
+                        }
+                    }
+                });
+
+                dataLengthVal.each(function (i) {
+                    if ($(this).attr("data-val-length-max") > $(this).val().length) {
+                        if (!$(this).hasClass("input-validation-error")) {
+                            $(this).removeClass("input-validation-error");
+                        }
+                    } else {
+                        canSubmit = false;
+
+                        if (!$(this).hasClass("input-validation-error")) {
+                            $(this).addClass("input-validation-error");
+                        }
+                    }
+                });
+
+                //checking if the radio button is checked because validation isn't working
+                var radioButtonControl = $("[radio-button-control]");
+                var radioButtons = radioButtonControl.find("input");
+                console.log(radioButtons);
+                if (!radioButtons.first().is(":checked") && !radioButtons.last().is(":checked")) {
+                    canSubmit = false;
+
+                    if (!radioButtonControl.hasClass("input-validation-error")) {
+                        radioButtonControl.addClass("input-validation-error");
+                    }
+                }
+                else {
+                    if (radioButtonControl.hasClass("input-validation-error")) {
+                        radioButtonControl.removeClass("input-validation-error");
+                    }
+                }
+            }
+            if (canSubmit == true) {
+                $("#wait").show();
+                $(".button").hide();
+            }
+            return canSubmit;
+        });
+
+        function togggleModal() {
+            $('#cancelModal').toggle();
+        }
+
+        function addRequisitionRow() {
+            var oldReqItemRow = $("[requisition-item=1]");
+            var newReqItemRow = oldReqItemRow.clone();
+            numReqItems++;
+            newReqItemRow.attr("requisition-item", numReqItems);
+            newReqItemRow.find("input").val("").removeAttr("aria-invalid").removeAttr("aria-describedby").removeClass("input-validation-error");
+            newReqItemRow.find("[currencymask]").inputmask({ alias: "currency", groupSeparator: "," });
+            newReqItemRow.find("[currencyprice]").inputmask({ alias: "currency", groupSeparator: "" });
+            newReqItemRow.find(".delete-req-icon").css("display", "block");
+            newReqItemRow.insertAfter($("form").find("[requisition-item]").last());
+        };
+
+        function deleteRequisitionRow(e) {
+            e.target.parentElement.remove();
+            calculateTotalPrice();
+        };
+
+        function calculateRequisitionItemRow(e) {
+            var reqItemRow = $(e.target).parent().parent();
+
+            var quantity = parseFloat(reqItemRow.find("input").first().val().replace(/,/g, ''));
+            var price = parseFloat(reqItemRow.find("input").eq(3).val().replace(/,/g, ''));
+            reqItemRow.find("input").last().val(quantity * price);
+
+            calculateTotalPrice();
+        }
+
+        function calculateTotalPrice() {
+            let totalPrice = 0;
+
+            $("[requisition-item]").each(function (i, obj) {
+                totalPrice += Number($(obj).find("input").last().val().replace(/,/g, ''));
+            });
+
+            $("[total-price]").val(totalPrice.toFixed(2));
+        }
+        function onClosedButtonClicked() {
+            $("#wait").hide();
+            $(".button").show();
+
+            if ($("form").valid() == true) {
+                $(".button").prop('disabled', true);
+            }
+        }
+    </script>
+}

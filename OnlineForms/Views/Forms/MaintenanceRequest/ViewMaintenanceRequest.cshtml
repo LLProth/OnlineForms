@@ -1,0 +1,83 @@
+﻿@model OnlineForms.ViewModels.MaintenanceRequestViewModel
+@{
+    ViewBag.Title = "MaintenanceRequestView";
+}
+
+<div class="row">
+    @section sideBarNav {
+        @Html.Partial("~/Views/Forms/MaintenanceRequest/_Sidebar.cshtml")
+    }
+</div>
+<div class="col-9">
+    <main>
+
+        <h1 class="d-flex justify-content-center mb-5">Maintenance Request #@Model.MaintenanceRequest.Id </h1>
+      
+        <div class=" mb-5">
+            @Html.LabelFor(m => m.MaintenanceRequest.Subject)
+            @Html.TextBoxFor(m => m.MaintenanceRequest.Subject, new { @disabled = "disabled", @class = "form-control", @readonly = true, @Value = Model.MaintenanceRequest.Subject })
+        </div>
+        <div class="mb-5">
+            @Html.LabelFor(m => m.MaintenanceRequest.Description)
+            @Html.TextAreaFor(m => m.MaintenanceRequest.Description, new
+            {
+           @disabled = "disabled",
+                @class = "form-control",
+                @readonly = true,
+                @style = "height: 150px",
+           @Value = Model.MaintenanceRequest.Description
+            })
+
+        </div>
+        <div class="mb-5">
+            @Html.LabelFor(m => m.MaintenanceRequest.EmployeeName)
+            @Html.TextBoxFor(m => m.MaintenanceRequest.EmployeeName, new { @disabled = "disabled", @class = "form-control", @readonly = true, @Value = Model.MaintenanceRequest.EmployeeName })
+
+        </div>
+        <div class="mb-5">
+            @Html.LabelFor(m => m.MaintenanceRequest.Email)
+            @Html.TextBoxFor(m => m.MaintenanceRequest.Email, new { @disabled = "disabled", @class = "form-control", @readonly = true, @Value = Model.MaintenanceRequest.Email })
+
+        </div>
+        <div class="mb-5">
+            @Html.LabelFor(m => m.MaintenanceRequest.Phonenumber)
+            @Html.TextBoxFor(m => m.MaintenanceRequest.Phonenumber, new { @disabled = "disabled", @class = "form-control ", @readonly = true, @Value = Model.MaintenanceRequest.Phonenumber })
+
+        </div>
+        <div class="mb-5">
+            @Html.LabelFor(m => m.MaintenanceRequest.Agency)
+            @Html.TextBoxFor(m => m.MaintenanceRequest.Agency, new { @disabled = "disabled", @class = "form-control ", @readonly = true, @Value = Model.MaintenanceRequest.Agency })
+
+        </div>
+        <div class="mb-5">
+            @Html.LabelFor(m => m.MaintenanceRequest.EnteredDate)
+            @Html.TextBoxFor(m => m.MaintenanceRequest.EnteredDate, new { @disabled = "disabled", @class = "form-control", @readonly = true, @Value = Model.MaintenanceRequest.EnteredDate.ToShortDateString() })
+
+            @Html.HiddenFor(m => m.MaintenanceRequest.CompletedDate)
+          
+            
+            @Html.HiddenFor(m => m.MaintenanceRequest.Id)
+
+        </div>
+        @if (Model.MaintenanceRequest.CompletedDate == DateTime.MinValue)
+        {
+            <div class="mb-5">
+                    @Html.ActionLink("Complete", "UpdateMaintenanceRequest","MaintenanceRequest", new { @Id = Model.MaintenanceRequest.Id }, new { @class = "btn btn-primary" })
+            </div>
+        }
+        else
+        {
+    <div class="mb-5">
+        
+            @Html.ActionLink("Completed on:"+ Model.MaintenanceRequest.CompletedDate.ToShortDateString(), "UpdateMaintenanceRequest", "MaintenanceRequest", new { @Id = Model.MaintenanceRequest.Id }, new { @class = "btn btn-primary disabled" })
+        
+    </div>
+        }
+
+
+
+        
+
+    </main>
+</div>
+

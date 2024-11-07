@@ -1,0 +1,13 @@
+﻿
+@{
+    ViewBag.Title = "ListView";
+}
+
+@section sideBarNav {
+    @Html.Partial("~/Views/Forms/ESCRF/_Sidebar.cshtml")
+}
+
+<h1>Check off List for @Model..Name()</h1>
+<h2>Change type: @Model.CreateHolder.ChangeType()</h2>
+<h2>Date Created: @Model.CreateHolder.</h2>
+

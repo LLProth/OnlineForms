@@ -1,0 +1,48 @@
+﻿@model OnlineForms.ViewModels.LogOnViewModel
+
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="mb-5">
+    @section topHeader {
+        @Html.Partial("~/Views/Shared/_LoginHeader.cshtml", (Dictionary<string, string>)ViewBag.FormInfo)
+    }
+</div>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div id="card">
+        <div class="card cardHeader">
+            <div id="cardHeader" class="card-header">
+                <h3>Login</h3>
+            </div>
+            @Html.ValidationSummary(true, "Login was unsuccessful.User name or Password provided User name is incorrect", new { @class = "text-center p-2 text-danger" })
+            <div id="cardBody" class="card-body">
+                <div class="row row-cols-2 mb-2 formRow">
+                    <div class="col form-floating">
+                        @Html.EditorFor(m => m.LogOnModel.UserName, new { htmlAttributes = new { @name = "Name", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.LogOnModel.UserName), @id = "reqName" } })
+                        @Html.LabelFor(m => m.LogOnModel.UserName, htmlAttributes: new { @for = "reqName", @class = "fw-bold" })
+                    </div>
+
+                </div>
+                <div class="row row-cols-2 mb-3 formRow">
+
+                    <div class="col form-floating">
+                        @Html.EditorFor(m => m.LogOnModel.Password, new { htmlAttributes = new { @name = "DateSubmitted", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.LogOnModel.Password), @id = "reqDate", @type = "password" } })
+                        @Html.LabelFor(m => m.LogOnModel.Password, htmlAttributes: new { @for = "reqDate", @class = "fw-bold" })
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <button type="submit" id="button" class="btn button">Login</button>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+}

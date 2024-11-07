@@ -1,0 +1,563 @@
+﻿@model  OnlineForms.ViewModels.SFN52712ViewModel
+
+
+@{
+    ViewBag.Title = "Authorization for Out of State Travel";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div>
+    @section topHeader {
+        @Html.Partial("~/Views/Shared/_FormHeader.cshtml", (Dictionary<string, string>)ViewBag.FormInfo)
+    }
+    @section sideBarNav {
+        @Html.Partial("~/Views/Forms/SFN52712/Sidebar.cshtml")
+    }
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div id="wait">
+            <h4>Please wait...</h4>
+            <input id="closeButton" class="w-100" type="button" value="Close" onclick="onClosedButtonClicked()" />
+        </div>
+
+        <div class="row row-cols-2 mb-2">
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.TravelAuthoriztionModel.Name, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.TravelAuthoriztionModel.Name), @id = "travelName", @Value = ViewBag.UserName, @readonly = "readonly" } })
+                @Html.LabelFor(m => m.TravelAuthoriztionModel.Name, htmlAttributes: new { @for = "travelName", @class = "fw-bold" })
+            </div>
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.TravelAuthoriztionModel.Title, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.TravelAuthoriztionModel.Title), @id = "travelTitle", @Value = ViewBag.JobTitle, @readonly = "readonly" } })
+                @Html.LabelFor(m => m.TravelAuthoriztionModel.Title, htmlAttributes: new { @for = "travelTitle", @class = "fw-bold" })
+            </div>
+        </div>
+
+        <div class="row row-cols-2 mb-2">
+            <div class="col form-floating">
+                @Html.DropDownListFor(m => m.TravelAuthoriztionModel.DepartmentBudget, ViewBag.Departments as SelectList,
+               new { @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.TravelAuthoriztionModel.DepartmentBudget), @id = "departmentBudget" })
+                @Html.LabelFor(m => m.TravelAuthoriztionModel.DepartmentBudget, htmlAttributes: new { @for = "departmentBudget", @class = "fw-bold" })
+            </div>
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.TravelAuthoriztionModel.Email, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.TravelAuthoriztionModel.Email), @id = "travelEmail", @Value = ViewBag.Email, @readonly = "readonly" } })
+                @Html.LabelFor(m => m.TravelAuthoriztionModel.Email, htmlAttributes: new { @for = "travelEmail", @class = "fw-bold" })
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col-12 fw-bold">Destinations(s) (City and State)</div>
+            @for (int i = 0; i < Model.SFN52712Destinations.Count; i++)
+            {
+                var hide = "";
+                if (i > 0)
+                {
+                    hide = "display: block;";
+                }
+                else
+                {
+                    hide = "display: none;";
+                }
+                <div class="row mb-2" destination-item="@(i + 1)">
+                    <div class="col-7 form-floating">
+                        @Html.EditorFor(m => m.SFN52712Destination.City, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.SFN52712Destinations[@i].City), @id = "travelCity", @Value = Model.SFN52712Destinations[@i].City } })
+                        @Html.LabelFor(m => m.SFN52712Destination.City, htmlAttributes: new { @for = "travelCity", @class = "fw-bold" })
+                    </div>
+                    <div class="col-4 form-floating">
+                        @Html.DropDownListFor(m => m.SFN52712Destination.State, new SelectList(ViewBag.States, "Value", "Text", Model.SFN52712Destinations[@i].State),
+                    new { @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.SFN52712Destinations[@i].State), @id = "State", @Value = Model.SFN52712Destinations[@i].State })
+                        @Html.LabelFor(m => m.SFN52712Destination.State, htmlAttributes: new { @for = "travelState", @class = "fw-bold" })
+                    </div>
+                    <img src="~/Content/icons/trash-fill-1.svg" class="delete-req-icon" style="position: initial; @hide" onclick="deleteRequisitionRow(event); return false;" />
+                </div>
+            }
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-2 d-flex">
+                <span onclick="addDestinationRow(); return false;">
+                    <img src="~/Content/icons/plus-circle-fill.svg" class="add-req-icon" />
+                </span>
+                <span class="ps-2">
+                    Insert Destination
+                </span>
+            </div>
+        </div>
+
+        string EventStartDate = "";
+        string PreferredDepartureDate = "";
+        string EventEndDate = "";
+        string PreferredReturnDate = "";
+
+        if (Model.TravelAuthoriztionModel.PreferredDepartureDate.ToString("yyyy-MM-dd") == "1111-01-01")
+        {
+            PreferredDepartureDate = "";
+        }
+        else
+        {
+            PreferredDepartureDate = Model.TravelAuthoriztionModel.PreferredDepartureDate.ToString("yyyy-MM-dd");
+        }
+        if (Model.TravelAuthoriztionModel.EventStartDate.ToString("yyyy-MM-dd") == "1111-01-01")
+        {
+            EventStartDate = "";
+        }
+        else
+        {
+            EventStartDate = Model.TravelAuthoriztionModel.EventStartDate.ToString("yyyy-MM-dd");
+        }
+        if (Model.TravelAuthoriztionModel.EventEndDate.ToString("yyyy-MM-dd") == "1111-01-01")
+        {
+            EventEndDate = "";
+        }
+        else
+        {
+            EventEndDate = Model.TravelAuthoriztionModel.EventEndDate.ToString("yyyy-MM-dd");
+        }
+        if (Model.TravelAuthoriztionModel.PreferredReturnDate.ToString("yyyy-MM-dd") == "1111-01-01")
+        {
+            PreferredReturnDate = "";
+        }
+        else
+        {
+            PreferredReturnDate = Model.TravelAuthoriztionModel.PreferredReturnDate.ToString("yyyy-MM-dd");
+        }
+
+        <div class="row row-cols-6 mb-2">
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.TravelAuthoriztionModel.PreferredDepartureDate, new { htmlAttributes = new { @class = "form-control fw-bold", @id = "preferredDepartureDate", @Value = PreferredDepartureDate, @type = "date" } })
+                @Html.LabelFor(m => m.TravelAuthoriztionModel.PreferredDepartureDate, htmlAttributes: new { @for = "PreferredDepartureDate", @class = "fw-bold" })
+                @Html.ValidationMessageFor(m => m.TravelAuthoriztionModel.PreferredDepartureDate)
+            </div>
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.TravelAuthoriztionModel.EventStartDate, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.TravelAuthoriztionModel.EventStartDate), @id = "EventStartDate", @Value = EventStartDate, @type = "date" } })
+                @Html.LabelFor(m => m.TravelAuthoriztionModel.EventStartDate, htmlAttributes: new { @for = "EventStartDate", @class = "fw-bold" })
+                @Html.ValidationMessageFor(m => m.TravelAuthoriztionModel.EventStartDate)
+            </div>
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.TravelAuthoriztionModel.EventStartTime, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.TravelAuthoriztionModel.EventStartTime), @id = "EventStartTime", @type = "time" } })
+                @Html.LabelFor(m => m.TravelAuthoriztionModel.EventStartTime, htmlAttributes: new { @for = "EventStartTime", @class = "fw-bold" })
+            </div>
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.TravelAuthoriztionModel.EventEndDate, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.TravelAuthoriztionModel.EventEndDate), @id = "EventEndDate", @Value = EventEndDate, @type = "date" } })
+                @Html.LabelFor(m => m.TravelAuthoriztionModel.EventEndDate, htmlAttributes: new { @for = "EventEndDate", @class = "fw-bold" })
+                @Html.ValidationMessageFor(m => m.TravelAuthoriztionModel.EventEndDate)
+            </div>
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.TravelAuthoriztionModel.EventEndTime, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.TravelAuthoriztionModel.EventEndTime), @id = "EventEndTime", @type = "time" } })
+                @Html.LabelFor(m => m.TravelAuthoriztionModel.EventEndTime, htmlAttributes: new { @for = "EventEndTime", @class = "fw-bold" })
+            </div>
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.TravelAuthoriztionModel.PreferredReturnDate, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.TravelAuthoriztionModel.PreferredReturnDate), @id = "PreferredReturnDate", @Value = PreferredReturnDate, @type = "date" } })
+                @Html.LabelFor(m => m.TravelAuthoriztionModel.PreferredReturnDate, htmlAttributes: new { @for = "PreferredReturnDate", @class = "fw-bold" })
+                @Html.ValidationMessageFor(m => m.TravelAuthoriztionModel.PreferredReturnDate)
+            </div>
+        </div>
+
+        <div class="row row-cols-2 mb-2">
+            <div class="col form-floating">
+                @if (Model.TravelAuthoriztionModel.IncludeVacationDays == false)
+                {
+                    <div class="form-control" radio-button-control>
+                        <label class="pe-4">@Html.RadioButtonFor(m => m.TravelAuthoriztionModel.IncludeVacationDays, "true") Yes</label>
+                        <label>@Html.RadioButtonFor(m => m.TravelAuthoriztionModel.IncludeVacationDays, "false", new { @checked = "checked" }) No</label>
+                    </div>
+                }
+                else
+                {
+                    <div class="form-control" radio-button-control>
+                        <label class="pe-4">@Html.RadioButtonFor(m => m.TravelAuthoriztionModel.IncludeVacationDays, "true", new { @checked = "checked" }) Yes</label>
+                        <label>@Html.RadioButtonFor(m => m.TravelAuthoriztionModel.IncludeVacationDays, "false") No</label>
+                    </div>
+                }
+
+                @Html.LabelFor(m => m.TravelAuthoriztionModel.IncludeVacationDays, htmlAttributes: new { @for = "", @class = "fw-bold req-form-long-label" })
+            </div>
+            <div class="col form-floating">
+                @Html.DropDownListFor(m => m.TravelAuthoriztionModel.MethodOfTravel, ViewBag.MethodofTravel as SelectList,
+               new { @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.TravelAuthoriztionModel.MethodOfTravel), @id = "travelMethod", @Value = Model.TravelAuthoriztionModel.MethodOfTravel, @onChange = "otherMethod()" })
+                @Html.LabelFor(m => m.TravelAuthoriztionModel.MethodOfTravel, htmlAttributes: new { @for = "travelMethod", @class = "fw-bold" })
+                @Html.ValidationMessageFor(m => m.TravelAuthoriztionModel.MethodOfTravel)
+            </div>
+        </div>
+
+        <div id="othersection" class="row row-cols-1 mb-2">
+            <div class="col form-floating">
+                @Html.TextArea("OtherTravel", new { @class = "form-control fw-bold", @style = "height: 250px", @id = "otherTravelMethod" })
+                @Html.Label("Other Explain", htmlAttributes: new { @for = "otherTravelMethod", @class = "fw-bold" })
+            </div>
+        </div>
+
+        string dob;
+        if (ViewBag.FlightExist == true)
+        {
+            dob = Model.FlightInfo.DateofBirth.ToString("yyyy-MM-dd");
+        }
+        else
+        {
+            dob = "";
+        }
+
+        <div id="flightsection" class="row row-cols-1 mb-2 p-4">
+            <div class="col form-control">
+                <div class="col form-floating mb-1">
+                    @Html.DropDownListFor(m => m.FlightInfo.EmpBookFlight, new List<SelectListItem>
+                        {
+                            new SelectListItem {Text = "", Value = ""},
+                            new SelectListItem {Text = "No", Value = "false"},
+                            new SelectListItem {Text = "Yes", Value = "true"}                            
+                        }, new { @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.FlightInfo.EmpBookFlight), @id = "empBookFlight", @onChange = "otherMethod()" })
+                    @Html.LabelFor(m => m.FlightInfo.EmpBookFlight, htmlAttributes: new { @for = "", @class = "fw-bold" })
+                </div>
+                <div id="employeeFlightsection">
+                    <div class="col form-floating mb-1">
+                        @Html.EditorFor(m => m.FlightInfo.FreqFlierNumber, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.FlightInfo.FreqFlierNumber), @id = "FreqFlierNumber" } })
+                        @Html.LabelFor(m => m.FlightInfo.FreqFlierNumber, htmlAttributes: new { @for = "", @class = "fw-bold" })
+                    </div>
+                    <div class="col form-floating mb-1">
+                        @Html.EditorFor(m => m.FlightInfo.GovernemtIdName, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.FlightInfo.GovernemtIdName), @id = "GovernemtIdName" } })
+                        @Html.LabelFor(m => m.FlightInfo.GovernemtIdName, htmlAttributes: new { @for = "", @class = "fw-bold" })
+                    </div>
+                    <div class="col form-floating mb-1">
+                        @Html.EditorFor(m => m.FlightInfo.DateofBirth, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.FlightInfo.DateofBirth), @id = "DateofBirth", @Value = dob, @type = "date" } })
+                        @Html.LabelFor(m => m.FlightInfo.DateofBirth, htmlAttributes: new { @for = "", @class = "fw-bold" })
+                    </div>
+                    <div class="col form-floating mb-1">
+                        @Html.EditorFor(m => m.FlightInfo.TravelContactNumber, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.FlightInfo.TravelContactNumber), @id = "TravelContactNumber" } })
+                        @Html.LabelFor(m => m.FlightInfo.TravelContactNumber, htmlAttributes: new { @for = "", @class = "fw-bold" })
+                    </div>
+                    <div class="col form-floating mb-1">
+                        @Html.DropDownListFor(m => m.FlightInfo.SeatPreference, new SelectList(ViewBag.SeatPreference, "Value", "Text"),
+                        new { @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.FlightInfo.SeatPreference), @id = "SeatPreference" })
+                        @Html.LabelFor(m => m.FlightInfo.SeatPreference, htmlAttributes: new { @for = "", @class = "fw-bold" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row row-cols-1 mb-2">
+            <div class="col form-floating">
+                @Html.TextAreaFor(m => m.TravelAuthoriztionModel.PurposeOfTrip, new { @class = "form-control fw-bold", @style = "height: 250px", @placeholder = @Html.DisplayNameFor(m => m.TravelAuthoriztionModel.PurposeOfTrip), @id = "PurposeOfTrip", @maxlength = "1000" })
+                @Html.LabelFor(m => m.TravelAuthoriztionModel.PurposeOfTrip, htmlAttributes: new { @for = "PurposeOfTrip", @class = "fw-bold" })
+            </div>
+        </div>
+
+        <div class="row row-cols-1 mb-2">
+            <div class="col form-floating">
+                @Html.TextAreaFor(m => m.TravelAuthoriztionModel.NumberOfPersons, new { @class = "form-control fw-bold", @style = "height: 100px", @placeholder = @Html.DisplayNameFor(m => m.TravelAuthoriztionModel.NumberOfPersons), @id = "NumberOfPersons", @maxlength = "2000" })
+                @Html.LabelFor(m => m.TravelAuthoriztionModel.NumberOfPersons, htmlAttributes: new { @for = "NumberOfPersons", @class = "fw-bold" })
+            </div>
+        </div>
+
+        <div class="row row-cols-6 mb-1">
+            <div class="col-2 text-center fw-bold req-item-form-header">
+                Transportation
+            </div>
+            <div class="col-2 text-center fw-bold req-item-form-header">
+                Per Diem
+            </div>
+            <div class="col-2 text-center fw-bold req-item-form-header">
+                Lodging
+            </div>
+            <div class="col-2 text-center fw-bold req-item-form-header">
+                Registration
+            </div>
+            <div class="col-2 text-center fw-bold req-item-form-header">
+                Rental Car/Taxi
+            </div>
+            <div class="col-2 text-center fw-bold req-item-form-header">
+                Estimated Total Cost
+            </div>
+        </div>
+
+        <div class="row row-cols-6 mb-2">
+            <div class="col">
+                <span class="prefix fw-bold">$</span>
+                @Html.EditorFor(m => m.TravelAuthoriztionModel.Transportation, new { htmlAttributes = new { @class = "form-control fw-bold", @currencymask = "true", @onkeyup = "calculateTotalCost(event); return false;", @id = "Transportation" } })
+                @Html.ValidationMessageFor(m => m.TravelAuthoriztionModel.Transportation)
+            </div>
+            <div class="col">
+                <span class="prefix fw-bold">$</span>
+                @Html.EditorFor(m => m.TravelAuthoriztionModel.PerDiem, new { htmlAttributes = new { @class = "form-control fw-bold", @currencymask = "true", @onkeyup = "calculateTotalCost(event); return false;", @id = "PerDiem" } })
+                @Html.ValidationMessageFor(m => m.TravelAuthoriztionModel.PerDiem)
+            </div>
+            <div class="col">
+                <span class="prefix fw-bold">$</span>
+                @Html.EditorFor(m => m.TravelAuthoriztionModel.Lodging, new { htmlAttributes = new { @class = "form-control fw-bold", @currencymask = "true", @onkeyup = "calculateTotalCost(event); return false;", @id = "Lodging" } })
+                @Html.ValidationMessageFor(m => m.TravelAuthoriztionModel.Lodging)
+            </div>
+            <div class="col ">
+                <span class="prefix fw-bold">$</span>
+                @Html.EditorFor(m => m.TravelAuthoriztionModel.Registration, new { htmlAttributes = new { @class = "form-control fw-bold", @currencymask = "true", @onkeyup = "calculateTotalCost(event); return false;", @id = "Registration" } })
+                @Html.ValidationMessageFor(m => m.TravelAuthoriztionModel.Registration)
+
+            </div>
+            <div class="col">
+                <span class="prefix fw-bold">$</span>
+                @Html.EditorFor(m => m.TravelAuthoriztionModel.RentalCarTaxi, new { htmlAttributes = new { @class = "form-control fw-bold", @currencymask = "true", @onkeyup = "calculateTotalCost(event); return false;", @id = "RentalCarTaxi" } })
+                @Html.ValidationMessageFor(m => m.TravelAuthoriztionModel.RentalCarTaxi)
+
+            </div>
+            <div class="col">
+                <span class="prefix fw-bold">$</span>
+                @Html.EditorFor(m => m.TravelAuthoriztionModel.EstimatedTotalCost, new { htmlAttributes = new { @class = "form-control fw-bold", @currencymask = "true", @placeholder = "0.00", @id = "EstimatedTotalCost", @readonly = "readonly" } })
+            </div>
+        </div>
+
+        <div class="row row-cols-1 mb-2">
+            <div class="col form-floating">
+                @Html.TextAreaFor(m => m.TravelAuthoriztionModel.Comments, new { @class = "form-control fw-bold", @style = "height: 250px", @placeholder = @Html.DisplayNameFor(m => m.TravelAuthoriztionModel.Comments), @id = "Comments", @maxlength = "2000" })
+                @Html.LabelFor(m => m.TravelAuthoriztionModel.Comments, htmlAttributes: new { @for = "Comments", @class = "fw-bold" })
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-2">
+                <input class="btn btn-blue button w-100" onclick="this.form.submited=this.value;" id="submit" type="submit" name="command" value="Submit" />
+            </div>
+            <div class="col-2">
+                <input class="btn btn-blue button w-100" onclick="this.form.submited=this.value;" formnovalidate id="save" type="submit" name="command" value="Save" />
+            </div>
+            <div class="col-2">
+                <button class="btn btn-blue button w-100" id="cancel-button" onclick="togggleModal()" type="button" name="command" data-toggle="modal" data-target="#cancelModal">Cancel</button>
+            </div>
+        </div>
+
+        <div class="modal" id="cancelModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <p>Form has not been saved. Any changes will be lost. Are you sure that you want to close?”</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" onclick="this.form.submited=this.value;" formnovalidate id="cancel" name="command" value="Cancel" class="btn btn-primary">Yes</button>
+                        <button type="button" onclick="togggleModal()" class="btn btn-secondary" data-dismiss="modal">No</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <partial name="_ValidationScriptsPartial" />
+
+    <script type="text/javascript">
+        numDestItems = 1;
+        $(function () {
+            $("[currencymask]").inputmask({ alias: "currency", groupSeparator: "," });
+        });
+
+        $("#otherTravelMethod").html("@ViewBag.OtherMethodofTravel");
+
+        window.onload = function () {
+            otherMethod();
+        };
+
+        function otherMethod() {
+            if ($('#travelMethod').val() == "Other (Explain)") {
+                $('#othersection').show();
+            } else {
+                $('#othersection').hide();
+            }
+
+            if ($('#travelMethod').val() == "Commercial Air") {
+                $('#flightsection').show();
+            } else {
+                $('#flightsection').hide();
+            }
+
+            if ($('#empBookFlight').val() == "false") {
+                $('#employeeFlightsection').show();
+            } else {
+                $('#employeeFlightsection').hide();
+            }
+        }
+
+        function togggleModal() {
+            $('#cancelModal').toggle();
+        }
+
+        $("form").on("submit", function (e) {
+            var canSubmit = true;
+            var form = $('form');
+            if (this.submited === "Submit") {
+                //checking if the additional items added are valid
+                var rowsToValidate = $("[requisition-item]").filter(function () {
+                    return parseInt($(this).attr("requisition-item")) > 1;
+                });
+
+                var numberRegEx = /^\s*(\+|-)?((\d+(\.\d+)?)|(\.\d+))\s*$/;
+                rowsToValidate.find("[data-val-required]").each(function (i) {
+                    if ($(this).attr("type") === "number" && numberRegEx.test($(this).val()) && $(this).val() > 0) {
+                        if (!$(this).hasClass("input-validation-error")) {
+                            $(this).removeClass("input-validation-error");
+                        }
+                    }
+                    else if ($(this).attr("type") === "text" && $(this).val().length > 0) {
+                        if (!$(this).hasClass("input-validation-error")) {
+                            $(this).removeClass("input-validation-error");
+                        }
+                    }
+                    else {
+                        canSubmit = false;
+
+                        if (!$(this).hasClass("input-validation-error")) {
+                            $(this).addClass("input-validation-error");
+                        }
+                    }
+                });
+
+                //Check if Dates are in the correct order
+                var prefDepaturedate = $("#preferredDepartureDate");
+                var eventStartDate = $("#EventStartDate");
+                var EventEndDate = $("#EventEndDate");
+                var prefReturnDate = $("#PreferredReturnDate");
+
+                if (prefDepaturedate.val() > eventStartDate.val()) {
+                    canSubmit = false;
+                    var classes = prefDepaturedate.attr("class");
+                    prefDepaturedate.attr("class", classes + ' input-validation-error');
+                }
+
+                //checking if the radio button is checked because validation isn't working
+                var radioButtonControl = $("[radio-button-control]");
+                var travelAuthoriztionradioButtons = radioButtonControl.find("input#TravelAuthoriztionModel_IncludeVacationDays");
+                var flightInforadioButtons = radioButtonControl.find("input#FlightInfo_EmpBookFlight");
+                var empflight = $("#empBookFlight");
+                var GovernemtIdName = $("#GovernemtIdName");
+                var TravelContactNumber = $("#TravelContactNumber");
+                var DateofBirth = $("#DateofBirth");
+                var travelMethod = $("#travelMethod");
+
+
+                if (!travelAuthoriztionradioButtons.first().is(":checked") && !travelAuthoriztionradioButtons.last().is(":checked")) {
+                    canSubmit = false;
+
+                    if (!radioButtonControl.hasClass("input-validation-error")) {
+                        radioButtonControl.addClass("input-validation-error");
+                    }
+                }
+                else {
+                    if (radioButtonControl.hasClass("input-validation-error")) {
+                        radioButtonControl.removeClass("input-validation-error");
+                    }
+                }
+
+                if (travelMethod.val() == 'Commercial Air') {
+                    if (empflight.val() != 'true') {
+                        GovernemtIdName.attr("data_val_required", "Name is required");
+                        DateofBirth.attr("data_val_required", "Date of Birth is required");
+                        TravelContactNumber.attr("data_val_required", "Cell Phone Number is required");
+
+                        if (GovernemtIdName.val() == '') {
+                            canSubmit = false;
+                            GovernemtIdName.addClass("input-validation-error")
+                        } else {
+                            GovernemtIdName.removeClass("input-validation-error")
+                        }
+
+                        if (DateofBirth.val() == '') {
+                            DateofBirth.removeClass("valid");
+                            canSubmit = false;
+                            $("#DateofBirth").addClass("input-validation-error");
+                        } else {
+                            $("#DateofBirth").removeClass("input-validation-error");
+                        }
+
+                        if (TravelContactNumber.val() == '') {
+                            canSubmit = false;
+                            TravelContactNumber.addClass("input-validation-error")
+                        } else {
+                            TravelContactNumber.removeClass("input-validation-error")
+                        }
+                    } else {
+                        GovernemtIdName.removeAttr("data_val_required");
+                        $("#DateofBirth").rules("remove", "required");
+                        DateofBirth.removeAttr("data_val_required");
+                        TravelContactNumber.removeAttr("data_val_required");
+                        GovernemtIdName.removeClass("input-validation-error");
+                        DateofBirth.removeClass("input-validation-error");
+                        TravelContactNumber.removeClass("input-validation-error");
+                    }
+                }
+
+                if (!form.valid()) {
+                    canSubmit = false;
+                }
+                if (canSubmit == true) {
+                    $("#wait").show();
+                    $(".button").hide();
+                } else {
+                    e.preventDefault();
+                }
+            }           
+
+            return canSubmit;
+        });
+
+        function onClosedButtonClicked() {
+            $("#wait").hide();
+            $(".button").show();
+
+            if ($("form").valid() == true) {
+                $(".button").prop('disabled', true);
+            }
+        }
+
+        function calculateTotalCost() {
+            let total = 0;
+            var transportation = parseFloat($('#Transportation').val().replace(/,/g, ''));
+            var perDiem = parseFloat($('#PerDiem').val().replace(/,/g, ''));
+            var lodging = parseFloat($('#Lodging').val().replace(/,/g, ''));
+            var registration = parseFloat($('#Registration').val().replace(/,/g, ''));
+            var rentalcartaxi = parseFloat($('#RentalCarTaxi').val().replace(/,/g, ''));
+
+            if (isNaN(transportation)) {
+                transportation = 0.00;
+                return;
+            }
+            if (isNaN(perDiem)) {
+                perDiem = 0.00;
+                return;
+            }
+            if (isNaN(lodging)) {
+                lodging = 0.00;
+                return;
+            }
+            if (isNaN(registration)) {
+                registration = 0.00;
+                return;
+            }
+            if (isNaN(rentalcartaxi)) {
+                rentalcartaxi = 0.00;
+                return;
+            }
+            total = perDiem + transportation + lodging + registration + rentalcartaxi;
+
+            $('#EstimatedTotalCost').val(total);
+
+        }
+
+        function deleteRequisitionRow(e) {
+            e.target.parentElement.remove();
+        };
+
+        function addDestinationRow() {
+            var oldDestItemRow = $("[destination-item=1]");
+            var newDestItemRow = oldDestItemRow.clone();
+            numDestItems++;
+            newDestItemRow.attr("destination-item", numDestItems);
+            newDestItemRow.find("input").val("").removeAttr("aria-invalid").removeAttr("aria-describedby").removeClass("input-validation-error");
+            newDestItemRow.find("[currencymask]").inputmask({ alias: "currency", groupSeparator: "" });
+            newDestItemRow.find(".delete-req-icon").css("display", "block");
+            newDestItemRow.insertAfter($("form").find("[destination-item]").last());
+        }
+    </script>
+    <style>
+        #flightsection, #othersection {
+            display: none;
+        }
+    </style>
+}

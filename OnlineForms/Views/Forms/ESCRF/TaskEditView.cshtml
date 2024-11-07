@@ -1,0 +1,82 @@
+﻿@model OnlineForms.ViewModels.ESCRFViewModel
+@{
+
+    IDictionary<string, string> FormInfo = new Dictionary<string, string>();
+    FormInfo.Add("FormName", "Employee Status Change Request Form");
+    FormInfo.Add("Division", "Human Resource Division");
+    FormInfo.Add("Info", "Edit Task");
+    ViewBag.Header = FormInfo;
+}
+<div class="row mb-4">
+    @Html.Partial("~/Views/Shared/_FormHeader.cshtml", (Dictionary<string, string>)ViewBag.Header)
+</div>
+
+
+@section sideBarNav {
+    @Html.Partial("~/Views/Forms/ESCRF/_Sidebar.cshtml")
+}
+<div id="recentHeading" class="p-1">
+    <h2>Task for: @Model.ChangeListInfo.EmployeeName</h2>
+    <h2>Change Type: @Model.ChangeListInfo.ChangeType</h2>
+</div>
+
+
+@using (Html.BeginForm("EditTaskListItem", "ESCRF", new { id = Model.TaskListItem.ID }))
+{
+    <div class="mb-5 my-5">
+        <div class="row py-3">
+            <div class="form-group col-12 form-floating">
+                @Html.EditorFor(m => m.TaskListItem.Task, new { htmlAttributes = new { @class = "form-control fw-bold", @placeholder = Html.DisplayNameFor(m => m.TaskListItem.Task), @required = "required" } })
+                @Html.LabelFor(m => m.TaskListItem.Task, htmlAttributes: new { @class = "fw-bold" })
+                @Html.ValidationMessageFor(m => m.TaskListItem.Task, "", new { @class = "validationText" })
+            </div>
+        </div>
+        <div class="row py-3">
+            <div class="form-group col-12 form-floating">
+                @Html.EditorFor(m => m.TaskListItem.Deputy, new { htmlAttributes = new { @class = "form-control fw-bold Validation", @placeholder = Html.DisplayNameFor(m => m.TaskListItem.Deputy), @maxlength = "207", @required = "required", @list = "names" } })
+                @Html.LabelFor(m => m.TaskListItem.Deputy, htmlAttributes: new { @class = "fw-bold" })
+                @Html.ValidationMessageFor(m => m.TaskListItem.Deputy, "", new { @class = "validationText" })
+            </div>
+        </div>
+        <datalist id="names">
+            <option></option>
+        </datalist>
+        @Html.HiddenFor(m => m.TaskListItem.ID, new { @Value = Model.TaskListItem.ID })
+    </div>
+    if (Model.TaskListItem.SignedOn == DateTime.MinValue)
+    {
+    <div class=" row">
+        <div class="col-2">
+            <button id="submitButton" type="submit" class="btn w-100">Save Task</button>
+        </div>
+        <div class="col-2">
+            @Html.ActionLink("Cancel", "ListRouter", "ESCRF", new { @id = "button", @class = "btn button w-100" })
+        </div>
+    </div>
+    }
+}
+
+@section scripts
+    {
+    <script type="text/javascript">
+        var names = [];
+        $('.Validation').on("keypress", function () {
+            $.ajax({
+                //url: "/api/Validation/?query=" + $('.Validation').val().trim(),
+                url: '@ViewBag.Validation' + $('.Validation').val().trim(),
+                method: 'GET',
+                success: function (data) {
+                    data.forEach(function (name) {
+                        if (!names.includes(name)) {
+                            names.push(name);
+                            var option = document.createElement('option')
+                            option.value = name
+                            document.getElementById('names').appendChild(option)
+                        }
+                    })
+                }
+            })
+        })
+    </script>
+
+}

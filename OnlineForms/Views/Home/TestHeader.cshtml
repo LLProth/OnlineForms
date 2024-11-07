@@ -1,0 +1,45 @@
+﻿
+@{
+    ViewBag.Title = "TestHeader";
+    Layout = "~/Views/Shared/Template_Layout.cshtml";
+}
+
+<div class="disTable formTable">
+    @Html.Partial("~/Views/Shared/_FormHeader.cshtml", (Dictionary<string, string>) ViewBag.FormInfo)
+    <div class="tr r4">
+        <div class="td">
+            One
+        </div>
+        <div class="td">
+            Two
+        </div>
+        <div class="td">
+            Three
+        </div>
+        <div class="td">
+            four
+        </div>
+    </div>
+    <div class="tr r3">
+        <div class="td">
+            One
+        </div>
+        <div class="td">
+            Two
+        </div>
+        <div class="td">
+            Three
+        </div>
+    </div>
+    <div class="tr r3">
+        <div class="td">
+            One
+        </div>
+        <div class="td">
+            Two
+        </div>
+        <div class="td">
+            Three
+        </div>
+    </div>
+</div>

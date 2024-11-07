@@ -1,0 +1,114 @@
+﻿@model OnlineForms.ViewModels.SFN18795IndexViewModel
+@using System.Data;
+
+@{
+    ViewBag.Title = "ViewAllTeamMembers";
+}
+
+@section topHeader {
+    @Html.Partial("~/Views/Shared/_FormHeader.cshtml", (Dictionary<string, string>)ViewBag.FormInfo)
+}
+
+<div class="container-fluid">
+    <div class="container-fluid">
+        <div class="row flex-nowrap">
+            @section sideBarNav {
+                @Html.Partial("~/Views/Forms/SFN18795/Sidebar.cshtml")
+            }
+            <div>
+                <div id="recentHeading" class="col">
+                    <h3>Team Members Forms</h3>
+                </div>
+                <table class="table" id="working-on">
+                    <thead>
+                        <tr>
+                            <th id="dateSort" style="cursor: pointer; width: 10%" onclick="sortTable(0)">Submitted Date<img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                            <th id="dateSort" style="cursor: pointer; width: 15%" onclick="sortTable(1)">Name<img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                            <th id="nameSort" style="cursor: pointer; width: 20%" onclick="sortTable(2)">Description Scope Of Work<img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                            <th id="numberSort" style="cursor: pointer; width: 10%" onclick="sortTable(3, 'numbersort')">Total<img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                            <th id="nameSort" style="cursor: pointer; width: 10%" class="text-sm-center" onclick="sortTable(4, 'checkSort')">Submitted<img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                            <th id="nameSort" style="cursor: pointer; width: 10%" class="text-sm-center" onclick="sortTable(5, 'checkSort')">Approved<img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                            <th id="nameSort" style="cursor: pointer; width: 10%" class="text-sm-center" onclick="sortTable(6, 'checkSort')">Processed by Procurement<img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                            <th id="nameSort" style="cursor: pointer; width: 10%" class="text-sm-center" onclick="sortTable(7, 'checkSort')">Form Denied<img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                            <th id="nameSort" style="cursor: pointer; width: 15%" class="text-sm-center" onclick="sortTable(8, 'checkSort')">Form Revised<img src="~/Content/icons/sort-alpha-down.svg" /></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="submittedForms">
+                        @for (int i = 0; i < Model.SFN18795s.Count; i++)
+                        {
+                            foreach (var name in ViewBag.teamMembers)
+                            {
+                                if (@name == Model.SFN18795s[@i].EmplID)
+                                {
+                                    <tr>
+                                        <td>@Html.DisplayFor(m => m.SFN18795s[@i].DateSubmitted)</td>
+                                        <td>@Html.DisplayFor(m => m.SFN18795s[@i].Name)</td>
+                                        @for (int x = 0; x < Model.RequisitionItems.Count; x++)
+                                        {
+                                            if (Model.SFN18795s[@i].ID == Model.RequisitionItems[@x].ID)
+                                            {
+                                                <td>@Html.DisplayFor(m => m.RequisitionItems[@x].Description)</td>
+                                            }
+                                        }
+                                        <td><span>$</span><span currencymask="true">@Html.DisplayFor(m => m.SFN18795s[@i].ReqItemsTotal)</span></td>
+                                        <td class="text-sm-center check-container">@Html.DisplayFor(m => m.SFN18795s[@i].FormSubmitted)<span class="checkmark"></span></td>
+                                        <td class="text-sm-center check-container">@Html.DisplayFor(m => m.SFN18795s[@i].FormCompleted)<span class="checkmark"></span></td>
+                                        <td class="text-sm-center check-container">@Html.DisplayFor(m => m.SFN18795s[@i].ProcurementProcessing)<span class="checkmark"></span></td>
+                                        <td class="text-sm-center check-container">@Html.DisplayFor(m => m.SFN18795s[@i].FormDenied)<span class="checkmark"></span></td>
+                                        <td class="text-sm-center check-container">@Html.DisplayFor(m => m.SFN18795s[@i].FormRevised)<span class="checkmark"></span></td>
+                                        <td>
+                                            @Html.ActionLink("View", "Details", "SFN18795", new { ID = Model.SFN18795s[@i].ID }, new { @id = "button", @class = "btn button" })
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    </tbody>
+                </table>
+
+                <button type="button" onclick="sectionId = 'working-on'; expandList(sectionId);" id="working-on-button" class="btn button mb-1">More</button>
+
+                <style>
+                    th {
+                        font-size: 12px;
+                    }
+                </style>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/Scripts/commonScripts.js")
+    <partial name="_ValidationScriptsPartial" />
+
+    <script type="text/javascript">
+        function expandList(sectionId) {
+            sectionRows = sectionId + " tbody tr:nth-child(n+21)";
+            if ($('#' + sectionId).hasClass('expanded')) {
+                $('#' + sectionRows).css('display', 'none');
+                $('#' + sectionId).removeClass('expanded');
+                $('#' + sectionId + '-button').html('More');
+            }
+            else {
+                $('#' + sectionRows).css('display', 'table-row');
+                $('#' + sectionId).addClass('expanded');
+                $('#' + sectionId + '-button').html('Less');
+            }
+        }
+
+        $(function () {
+            $("[currencymask]").inputmask({ alias: "currency", groupSeparator: "," });
+        });
+
+
+    </script>
+    <style>
+        .table tbody tr:nth-child(n+21) {
+            display: none;
+        }
+    </style>
+}

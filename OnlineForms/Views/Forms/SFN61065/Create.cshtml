@@ -1,0 +1,317 @@
+﻿@model OnlineForms.ViewModels.SFN61065ViewModel
+
+
+@{
+    ViewBag.Title = "Business Card Request";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    @section topHeader {
+        @Html.Partial("~/Views/Shared/_FormHeader.cshtml", (Dictionary<string, string>)ViewBag.FormInfo)
+    }
+
+    @section sideBarNav {
+        @Html.Partial("~/Views/Forms/SFN61579/Sidebar.cshtml")
+    }
+
+    @using (Html.BeginForm("SFN61065", "SFN61065", FormMethod.Post, new { name = "BusinessCard", id = "businessCard" }))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div id="wait">
+        <h4>Please wait...</h4>
+        <input id="closeButton" class="w-100" type="button" value="Close" onclick="onClosedButtonClicked()" />
+    </div>
+
+        <div>
+            <h5>Section 1 - Requestor Information</h5>
+        </div>
+
+        <div class="row row-cols-3 mb-2 formRow">
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.BusinessCardModel.Name, new { htmlAttributes = new { @name = "Name", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.BusinessCardModel.Name), @id = "reqName", @Value = ViewBag.Username, @readonly = "readonly" } })
+                @Html.LabelFor(m => m.BusinessCardModel.Name, htmlAttributes: new { @for = "reqName", @class = "fw-bold label" })
+
+            </div>
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.BusinessCardModel.DateSubmitted, new { htmlAttributes = new { @name = "DateSubmitted", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.BusinessCardModel.DateSubmitted), @id = "reqDate", @type = "date", @Value = DateTime.Today.ToString("yyyy-MM-dd"), @readonly = "readonly" } })
+                @Html.LabelFor(m => m.BusinessCardModel.DateSubmitted, htmlAttributes: new { @for = "reqDate", @class = "fw-bold label" })
+            </div>
+            <div class="col-4 form-floating">
+                @Html.EditorFor(m => m.BusinessCardModel.Department, new { htmlAttributes = new { @name = "Department", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.BusinessCardModel.Department), @id = "reqDepartment", @Value = ViewBag.Department, @readonly = "readonly" } })
+                @Html.LabelFor(m => m.BusinessCardModel.Department, htmlAttributes: new { @for = "reqDepartment", @class = "fw-bold label" })
+            </div>
+        </div>
+
+        <div class="row row-cols-3 mb-4 formRow">
+            <div class="col-4 form-floating">
+                @Html.EditorFor(m => m.BusinessCardModel.Phone, new { htmlAttributes = new { @name = "Phone", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.BusinessCardModel.Phone), @id = "reqDepartment", @Value = ViewBag.Phone, @readonly = "readonly", @required = "required" } })
+                @Html.LabelFor(m => m.BusinessCardModel.Phone, htmlAttributes: new { @for = "reqPhone", @class = "fw-bold label" })
+            </div>
+        </div>
+
+        <div>
+            <h5>Section 2 - Business Card Order Information</h5>
+        </div>
+
+        <div class="row row-cols-3 mb-4 formRow">
+            <div class="col-7 form-floating">
+                <div id="requestTypeSelection" class="form-control" radio-button-control>
+                    <label class="pe-4">@Html.RadioButtonFor(m => m.BusinessCardModel.RequestType, "New Business Card", new { @class = "requestType", @required = "required" }) New Business Card</label>
+                    <label class="pe-4">@Html.RadioButtonFor(m => m.BusinessCardModel.RequestType, "Reorder - Changes", new { @class = "requestType" }) Reorder - Changes to existing</label>
+                    <label class="pe-4">@Html.RadioButtonFor(m => m.BusinessCardModel.RequestType, "Reorder - No Changes", new { @class = "requestType" }) Reorder - No Changes</label>
+                </div>
+                @Html.LabelFor(m => m.BusinessCardModel.RequestType, htmlAttributes: new { @for = "reqRequestType", @class = "fw-bold label" })
+                @Html.ValidationMessageFor(m => m.BusinessCardModel.RequestType, "", new { @class = "validationText" })
+            </div>
+
+            <div class="col-5 form-floating">
+                <div class="form-control" radio-button-control>
+                    <label class="pe-4">@Html.RadioButtonFor(m => m.BusinessCardModel.NumOfCards, "200", new { @required = "required" }) 200</label>
+                    <label class="pe-4">@Html.RadioButtonFor(m => m.BusinessCardModel.NumOfCards, "250") 250</label>
+                    <label class="pe-4">@Html.RadioButtonFor(m => m.BusinessCardModel.NumOfCards, "500") 500</label>
+                </div>
+                @Html.LabelFor(m => m.BusinessCardModel.NumOfCards, htmlAttributes: new { @for = "reqNumOfCards", @class = "fw-bold label" })
+                @Html.ValidationMessageFor(m => m.BusinessCardModel.NumOfCards, "", new { @class = "validationText" })
+            </div>
+        </div>
+
+        <h5>Section 3 - Business Card Information</h5>
+
+        <div class="row row-cols-3 mb-2 formRow">
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.BusinessCardInfo.FirstName, new { htmlAttributes = new { @name = "FirstName", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.BusinessCardInfo.FirstName), @id = "firstName", @maxlength = "100", @required = "required" } })
+                @Html.LabelFor(m => m.BusinessCardInfo.FirstName, htmlAttributes: new { @for = "reqFirstName", @class = "fw-bold label" })
+                @Html.ValidationMessageFor(m => m.BusinessCardInfo.FirstName, "", new { @class = "validationText" })
+            </div>
+
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.BusinessCardInfo.LastName, new { htmlAttributes = new { @name = "LastName", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.BusinessCardInfo.LastName), @id = "lastName", @maxlength = "100", @required = "required" } })
+                @Html.LabelFor(m => m.BusinessCardInfo.LastName, htmlAttributes: new { @for = "reqLastName", @class = "fw-bold label" })
+                @Html.ValidationMessageFor(m => m.BusinessCardInfo.LastName, "", new { @class = "validationText" })
+            </div>
+
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.BusinessCardInfo.Credentials, new { htmlAttributes = new { @name = "Credentails", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.BusinessCardInfo.Credentials), @id = "credentials", @maxlength = "100" } })
+                @Html.LabelFor(m => m.BusinessCardInfo.Credentials, htmlAttributes: new { @for = "reqCredentials", @class = "fw-bold label" })
+            </div>
+        </div>
+
+        <div class="row row-cols-3 mb-2 formRow">
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.BusinessCardInfo.Title, new { htmlAttributes = new { @name = "Title", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.BusinessCardInfo.Title), @id = "title", @maxlength = "100", @required = "required" } })
+                @Html.LabelFor(m => m.BusinessCardInfo.Title, htmlAttributes: new { @for = "reqTitle", @class = "fw-bold label" })
+                @Html.ValidationMessageFor(m => m.BusinessCardInfo.Title, "", new { @class = "validationText" })
+            </div>
+
+            <div class="col-4 form-floating">
+                @Html.EditorFor(m => m.BusinessCardInfo.Email, new { htmlAttributes = new { @name = "Email", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.BusinessCardInfo.Email), @id = "email", @required = "required", @maxlength = "100" } })
+                @Html.LabelFor(m => m.BusinessCardInfo.Email, htmlAttributes: new { @for = "reqEmail", @class = "fw-bold label" })
+                @Html.ValidationMessageFor(m => m.BusinessCardInfo.Email, "", new { @class = "validationText" })
+            </div>
+        </div>
+
+        <div class="row row-cols-3 mb-4 formRow">
+            <div class="col-4 form-floating">
+                @Html.EditorFor(m => m.BusinessCardInfo.TelephoneNum, new { htmlAttributes = new { @name = "TelephoneNum", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.BusinessCardInfo.TelephoneNum), @id = "telephoneNum", @required = "required" } })
+                @Html.LabelFor(m => m.BusinessCardInfo.TelephoneNum, htmlAttributes: new { @for = "reqTelephoneNum", @class = "fw-bold label" })
+                @Html.ValidationMessageFor(m => m.BusinessCardInfo.TelephoneNum, "", new { @class = "validationText" })
+            </div>
+
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.BusinessCardInfo.CellNum, new { htmlAttributes = new { @name = "CellNum", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.BusinessCardInfo.CellNum), @id = "cellNum" } })
+                @Html.LabelFor(m => m.BusinessCardInfo.CellNum, htmlAttributes: new { @for = "reqCellNum", @class = "fw-bold label" })
+                @Html.ValidationMessageFor(m => m.BusinessCardInfo.CellNum, "", new { @class = "validationText" })
+            </div>
+
+            <div class="col-4 form-floating" select-list-control>
+                @Html.DropDownListFor(m => m.BusinessCardInfo.FaxNumType, new List<SelectListItem>
+                   {
+                       new SelectListItem {Text = "Bismarck", Value = "Bismarck"},
+                       new SelectListItem {Text = "Other", Value = "Other"}
+                   }, new { @id = "faxOther", @class = "form-control", @name = "Fax" })
+
+                @Html.LabelFor(m => m.BusinessCardInfo.FaxNumType, htmlAttributes: new { @for = "reqStartDate", @class = "fw-bold label" })
+                @Html.ValidationMessageFor(m => m.BusinessCardInfo.FaxNumType, "", new { @class = "validationText" })
+            </div>
+        </div>
+
+        <div class="row row-cols-3 mb-4 formRow justify-content-end">
+            <div class="col form-floating">
+                @Html.EditorFor(m => m.BusinessCardInfo.FaxNum, new { htmlAttributes = new { @name = "FaxNum", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.BusinessCardInfo.FaxNum), @id = "faxNum", @Value = "(701) 328-3820", @required = "required", @readonly = "readonly" } })
+                @Html.LabelFor(m => m.BusinessCardInfo.FaxNum, htmlAttributes: new { @for = "reqFaxNum", @class = "fw-bold label" })
+                @Html.ValidationMessageFor(m => m.BusinessCardInfo.FaxNum, "", new { @class = "validationText" })
+            </div>
+        </div>
+
+        <h5>Section 4 - Additonal Comments</h5>
+        <div class="row row-cols-3 mb-4 formRow">
+            <div class="col-12 form-floating">
+                @Html.EditorFor(m => m.BusinessCardModel.AdditionalComments, new { htmlAttributes = new { @name = "AdditionalComments", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.BusinessCardModel.AdditionalComments), @id = "additionalComments", @maxlength = "1000" } })
+                @Html.LabelFor(m => m.BusinessCardModel.AdditionalComments, htmlAttributes: new { @for = "reqAdditionalComments", @class = "fw-bold label" })
+            </div>
+        </div>
+
+        <div hidden>
+            <h5>Section 5 - Signatures</h5>
+
+            <div class="row row-cols-3 mb-2 formRow">
+                <div class="col-8 form-floating">
+                    @Html.EditorFor(m => m.BusinessCardModel.SubmittedBy, new { htmlAttributes = new { @name = "SubmittedBy", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.BusinessCardModel.SubmittedBy), @id = "reqSubmittedBy", @Value = ViewBag.Username, @required = "required", @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.BusinessCardModel.SubmittedBy, htmlAttributes: new { @for = "reqSubmittedBy", @class = "fw-bold label" })
+                </div>
+                <div class="col-4 form-floating">
+                    @Html.EditorFor(m => m.BusinessCardModel.SubmittedDate, new { htmlAttributes = new { @name = "SubmittedDate", @class = "form-control fw-bold", @placeholder = @Html.DisplayNameFor(m => m.BusinessCardModel.SubmittedDate), @id = "reqSubmittedDate", @Value = DateTime.Today.ToString("MM/dd/yyyy"), @required = "required", @readonly = "readonly" } })
+                    @Html.LabelFor(m => m.BusinessCardModel.SubmittedDate, htmlAttributes: new { @for = "reqSubmittedDate", @class = "fw-bold label" })
+                </div>
+            </div>
+
+
+        </div>
+        <div class="row formRow">
+            <div class="col-2">
+                <input id="submitButton" class="w-100 button" type="button" value="Submit" onclick="onSubmitButtonClicked()" />
+            </div>
+
+            <div class="col-2">
+                <input id="cancelButton" class="w-100 button" type="button" value="Close" onclick="onCancelButtonClicked()" />
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+<script type="text/javascript">
+    var numReqItems = 1;
+
+        $(document).ready(function () {
+            //Attach the change event
+            $("#faxOther").change(function (evt) {
+                //check if value is not equal to Select or not
+                if ($(this).val() != "Bismarck") {
+                    //Enable the textbox
+                    $("#faxNum").attr("readonly", false);
+                    $("#faxNum").val("");
+                    // This stops the Postback
+                    evt.preventDefault();
+                } else if ($(this).val() == "Bismarck") {
+                    $("#faxNum").attr("readonly", true);
+                    $("#faxNum").val("(701) 328-3820");
+                }
+            });
+        });
+
+        var firstName = @Html.Raw(Json.Encode(ViewBag.FirstName));
+        var lastName = @Html.Raw(Json.Encode(ViewBag.LastName));
+        var credentials = @Html.Raw(Json.Encode(ViewBag.Credentials));
+        var title = @Html.Raw(Json.Encode(ViewBag.RequestorTitle));
+        var email = @Html.Raw(Json.Encode(ViewBag.CurrentEmail));
+        var telephoneNum = @Html.Raw(Json.Encode(ViewBag.Telephone));
+        var cellNum = @Html.Raw(Json.Encode(ViewBag.Cell));
+        var faxNum = @Html.Raw(Json.Encode(ViewBag.Fax));
+
+        $("#additionalComments").val("");
+
+        $(document).ready(function () {
+
+            $(".requestType").change(function () {
+                if ($(this).val() == "New Business Card") {
+                    //Enable the textbox
+                    $("#firstName").val("").attr("readonly", false);
+                    $("#lastName").val("").attr("readonly", false);
+                    $("#credentials").val("").attr("readonly", false);
+                    $("#title").val("").attr("readonly", false);
+                    $("#email").val("").attr("readonly", false);
+                    $("#telephoneNum").val("").attr("readonly", false);
+                    $("#cellNum").val("").attr("readonly", false);
+                    $("#faxNum").val("(701) 328-3820").attr("readonly", true);
+                    $("#faxOther").val("Bismarck").attr("readonly", false);
+
+                    // This stops the Postback
+                    evt.preventDefault();
+                } else if ($(this).val() == "Reorder - No Changes") {
+                    $("#firstName").val(firstName).attr("readonly", true);
+                    $("#lastName").val(lastName).attr("readonly", true);
+                    $("#credentials").val(credentials).attr("readonly", true);
+                    $("#title").val(title).attr("readonly", true);
+                    $("#email").val(email).attr("readonly", true);
+                    $("#telephoneNum").val(telephoneNum).attr("readonly", true);
+                    $("#cellNum").val(cellNum).attr("readonly", true);
+                    $("#faxNum").val(faxNum).attr("readonly", true);
+                    if (faxNum == "(701) 328-3820") {
+                        $("#faxOther").val("Bismarck").attr("readonly", true);
+                    } else if (faxNum != "(701) 328-3820") {
+                        $("#faxOther").val("Other").attr("readonly", true);
+                    }
+                } else if ($(this).val() == "Reorder - Changes") {
+                    $("#firstName").val(firstName).attr("readonly", false);
+                    $("#lastName").val(lastName).attr("readonly", false);
+                    $("#credentials").val(credentials).attr("readonly", false);
+                    $("#title").val(title).attr("readonly", false);
+                    $("#email").val(email).attr("readonly", false);
+                    $("#telephoneNum").val(telephoneNum).attr("readonly", false);
+                    $("#cellNum").val(cellNum).attr("readonly", false);
+                    $("#faxNum").val(faxNum);
+                    if (faxNum == "(701) 328-3820") {
+                        $("#faxOther").val("Bismarck").attr("readonly", false);
+                        $("faxNum").attr("readonly", true);
+                    } else if (faxNum != "(701) 328-3820") {
+                        $("#faxOther").val("Other").attr("readonly", false);
+                        $("#faxNum").attr("readonly", false);
+                    }
+                }
+            });
+
+        });
+
+        var faxDropdown = document.getElementById("faxNum").value;
+        if (faxDropdown == "Other") {
+            document.getElementById("otherFax").removeAttribute("hidden");
+        }
+
+        document.getElementById('telephoneNum').addEventListener('input', function (e) {
+            var x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+            e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+        });
+
+        document.getElementById('cellNum').addEventListener('input', function (e) {
+            var x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+            e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+        });
+
+        document.getElementById('faxNum').addEventListener('input', function (e) {
+            var x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+            e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+        });
+   
+        function onCancelButtonClicked() {
+            var cancel = confirm("All data will be lost if the form is closed. Are you sure that you want to close? Click OK to proceed.");
+            if (cancel) {
+                window.location.href = "Index";
+            }
+        }
+
+
+
+        function onSubmitButtonClicked() {
+            //var submit = confirm("Are you sure you want to submit this form?");
+            //var requestType = document.getElementById("BusinessCardModel_RequestType").value;
+            
+            document.getElementById("submitButton").type = "submit";
+                $("#wait").show();
+                $(".button").hide();
+    }
+
+    function onClosedButtonClicked() {
+        $("#wait").hide();
+        $(".button").show();
+    }
+
+
+</script>
+}

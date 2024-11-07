@@ -1,0 +1,18 @@
+﻿@model Dictionary<string, string>
+
+<div id="topHeader" class="row mb-4">
+    <div id="wsiLogo" class="col-4 text-start">
+        <div>
+            <img class="imgwsilogo" src="~/Content/images/WSIInfopathFormsLogo.jpg" />
+        </div>
+    </div>
+    <div  class="col-6">
+        <p>
+            <div class="d-flex justify-content-center" id="escrfFormName">@Model["FormName"]</div>
+            <br />
+            <div class="d-flex justify-content-center" id="escrfDivision">@Model["Division"]</div><br />
+            <div class="d-flex justify-content-center" id="escrfSfnNum">@Model["Info"]</div>
+        </p>
+    </div>
+   
+</div>
